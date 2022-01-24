@@ -1,0 +1,50 @@
+version: "3"
+services:
+  # Container with mysql base for vikta
+  # Remember to set/check/have proper encoding settings(utf8mb4). See https://mathiasbynens.be/notes/mysql-utf8mb4
+  vikta-mysql:
+    image: mysql:5.7
+    container_name: 'vikta-mysql'
+    hostname: 'vikta-mysql'
+    # Expose ports. Either specify both ports (HOST:CONTAINER), or just the
+    # container port (a random host port will be chosen).
+    ports:
+      - '3306:3306'
+    networks:
+      - vikta
+    # Set mysql environments
+    environment:
+      MYSQL_ROOT_PASSWORD: ROOpass
+      MYSQL_USER: vikta
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: vikta_db
+    volumes:
+      - vikta-mysql-data-volume:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+
+  vikta:
+    image: eng_qe-practice-dev/vikta:latest
+    container_name: vikta
+    hostname: vikta
+    # Expose ports. Either specify both ports (HOST:CONTAINER), or just the
+    # container port (a random host port will be chosen).
+    ports:
+      - '5054:5054'
+    networks:
+      - vikta
+    depends_on:
+      - 'vikta-mysql'
+    environment:
+      MYSQL_HOST: vikta-mysql
+      MYSQL_PORT: 3306
+      # Override/define env vars required by the image
+      DB: mysql_create
+      PREGENERATED_DATA: 'yes'
+
+volumes:
+  vikta-mysql-data-volume:
+
+networks:
+  vikta:
+    driver: bridge
+

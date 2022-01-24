@@ -1,0 +1,13 @@
+Windows <10> only!
+
+1. Install SQL Client e.g. DBeaver: https://dbeaver.io/download/
+2. Install Java 8: https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html
+3. Install Maven: https://maven.apache.org/guides/getting-started/windows-prerequisites.html
+4. Install InteliJIdea Community: https://www.jetbrains.com/idea/download/index.html#section=windows
+5. Install Postman: https://www.getpostman.com/downloads/
+6. Install Slack: https://slack.com/intl/en-ru/
+7. Install Firefox and/or Chrome 
+8. Install Git: https://git-scm.com/download/win  Ensure Git Bash is enabled.
+9. Install vscode (optional, Notepad is an option).
+10. Install Bash Shell and Ubuntu: https://itsfoss.com/install-bash-on-windows/
+11. Install Docker Desktop: https://docs.docker.com/docker-for-windows/install/
