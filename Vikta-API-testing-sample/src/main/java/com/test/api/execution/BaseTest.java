@@ -29,8 +29,13 @@ public abstract class BaseTest {
                 .setAccept(ContentType.JSON).build();
     }
 
-    protected ResponseSpecification defaultResponseSpec() {
+    protected ResponseSpecification defaultResponseJsonSpec() {
         return new ResponseSpecBuilder()
                 .expectContentType(ContentType.JSON).build();
+    }
+
+    protected ResponseSpecification defaultResponseTxtSpec() {
+        return new ResponseSpecBuilder()
+                .expectContentType("text/html;charset=UTF-8").build();
     }
 }
