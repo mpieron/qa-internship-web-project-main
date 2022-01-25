@@ -1,12 +1,10 @@
 package com.test.api.category;
 
-import com.test.api.config.TestEnvironment;
 import com.test.api.dto.CategoryDTO;
 import com.test.api.execution.BaseTest;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -70,7 +68,7 @@ public class CategoryTest extends BaseTest {
                 .when()
                 .get(getTestEnvironment().getCategoriesPath())
                 .then()
-                .spec(defaultResponseJsonSpec())
+                .spec(defaultResponseSpec())
                 .extract()
                 .as(CategoryDTO[].class);
 
@@ -79,62 +77,89 @@ public class CategoryTest extends BaseTest {
                 hasItem(equalTo(expectedCategory)));
     }
 
-
-
     /**
      *  Test with entity search
      */
-    // it's weird, when extract.as(CategoryDTO[].class) return empty array, at http://localhost:5054/swagger-ui.html it works
-    // when extract.response the status code equals 200
+    // city is empty list
     @Test
     public void checkIfCanFindEntity(){
         final String termQueryParam = "term";
         final String term = "Wolf%20N8%20%2F%20Dynamic%20Marketing%20Officer";
 
-        CategoryDTO[] city = given().spec(defaultRequestSpec())
+        List<CategoryDTO> city;
+        city = given().spec(defaultRequestSpec())
                 .queryParam(termQueryParam, term)
                 .when()
                 .log().all()
                 .get(getTestEnvironment().getCategoryPath() + "/search")
                 .then()
                 .log().all()
-                .spec(defaultResponseJsonSpec())
+                .spec(defaultResponseSpec())
                 .extract()
-                .as(CategoryDTO[].class);
+                .body().jsonPath().getList(".", CategoryDTO.class);
 
-        assertThat(city[0].getTitle()).isEqualTo("City");
+        assertThat(city).isNotEmpty();
     }
 
     /**
      *  Test with posting new category
      */
-    // Intellij returns status code = 500
-    // "Could not commit JPA transaction; nested exception is javax.persistence.RollbackException: Error while committing the transaction"
-    // When using queryParam instead of CategoryDTO objects, returns code = 400 - same in postman
-
     @Test
     public void tryPostNewCategory(){
+        Set<Long> set = new HashSet<>();
+        set.add(1000L);
+
         CategoryDTO newCategory = new CategoryDTO();
         newCategory.setDescription("This is new category");
         newCategory.setTitle("New Category");
+        newCategory.setPathToCatImage("new");
+        newCategory.setImageItemIds(set);
 
-        Response response = getResponseFromPostNewCategory(newCategory);
+        CategoryDTO createdCategory = given().spec(defaultRequestSpec())
+                        .body(newCategory)
+                        .log().all()
+                        .when()
+                        .post(getTestEnvironment().getCategoryPath())
+                        .then()
+                        .log().all()
+                        .spec(defaultResponseSpec())
+                        .extract().as(CategoryDTO.class);
 
-        assertThat(response.getStatusCode()).isEqualTo(200);
+        Response responseGet = getResponseFromCategoryById((int)createdCategory.getId());
+
+        assertThat(createdCategory).usingRecursiveComparison()
+                .ignoringFields("id", "imageItemIds")
+                .isEqualTo(newCategory);
+        assertThat(responseGet.getStatusCode()).isEqualTo(200);
     }
 
     /**
      *
      * Test deleting category
      */
-    // there should be created new category, posted and then deleted, but post is not working (previous test, code = 400)
     @Test
     public void checkIfCanDeleteCategory(){
-        int id = 100;
-        String idQueryParam = "id";
+        Set<Long> set = new HashSet<>();
+        set.add(1000L);
+
+        CategoryDTO newCategory = new CategoryDTO();
+        newCategory.setDescription("This is new category");
+        newCategory.setTitle("New Category");
+        newCategory.setPathToCatImage("new");
+        newCategory.setImageItemIds(set);
+
+        CategoryDTO createdCategory = given().spec(defaultRequestSpec())
+                .body(newCategory)
+                .log().all()
+                .when()
+                .post(getTestEnvironment().getCategoryPath())
+                .then()
+                .log().all()
+                .spec(defaultResponseSpec())
+                .extract().as(CategoryDTO.class);
 
         Response responseDelete = given().spec(defaultRequestSpec())
-                .queryParam(idQueryParam, id)
+                .queryParam("id", createdCategory.getId())
                 .log().all()
                 .when()
                 .delete(getTestEnvironment().getCategoryPath())
@@ -142,7 +167,7 @@ public class CategoryTest extends BaseTest {
                 .log().all()
                 .extract().response();
 
-        Response responseGetDeleted = getResponseFromCategoryById(id);
+        Response responseGetDeleted = getResponseFromCategoryById((int)createdCategory.getId());
 
         assertThat(responseDelete.getStatusCode()).isEqualTo(200);
         assertThat(responseGetDeleted.getStatusCode()).isEqualTo(404);
@@ -169,6 +194,51 @@ public class CategoryTest extends BaseTest {
     }
 
     /**
+     *  Test updating category
+     */
+    @Test
+    public void verifyUpdatingExistingCategory(){
+        Set<Long> set = new HashSet<>();
+        set.add(1000L);
+        String newTitle = "Updated Category";
+        int id;
+
+        CategoryDTO category = new CategoryDTO();
+        category.setDescription("This is new category");
+        category.setTitle("New Category");
+        category.setPathToCatImage("new");
+        category.setImageItemIds(set);
+
+        CategoryDTO createdCategory = given().spec(defaultRequestSpec())
+                .body(category)
+                .log().all()
+                .when()
+                .post(getTestEnvironment().getCategoryPath())
+                .then()
+                .log().all()
+                .spec(defaultResponseSpec())
+                .extract().as(CategoryDTO.class);
+
+        id = (int)createdCategory.getId();
+        category.setTitle(newTitle);
+        category.setId(id);
+
+        Response response = given().spec(defaultRequestSpec())
+                .body(category)
+                .log().all()
+                .when()
+                .put(getTestEnvironment().getCategoryPath())
+                .then()
+                .log().all()
+                .spec(defaultResponseSpec())
+                .extract().response();
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat(getExistingCategoryById(id).getTitle())
+                .isEqualTo(newTitle);
+    }
+
+    /**
      * Method returns Category and expects that category exist
      *
      * @param id category identifier
@@ -181,7 +251,7 @@ public class CategoryTest extends BaseTest {
                 .when().queryParam(idQueryParam, id)
                 .get(getTestEnvironment().getCategoryPath())
                 .then()
-                .spec(defaultResponseJsonSpec())
+                .spec(defaultResponseSpec())
                 .extract()
                 .as(CategoryDTO.class);
     }
@@ -199,42 +269,8 @@ public class CategoryTest extends BaseTest {
                 .when().queryParam(idQueryParam, id)
                 .get(getTestEnvironment().getCategoryPath())
                 .then()
-                .spec(defaultResponseJsonSpec())
+                .spec(defaultResponseSpec())
                 .extract()
                 .response();
-    }
-
-    /**
-     * Method accepts Category amd returns Response
-     *
-     * @param newCategory category to create
-     * @return Response object
-     */
-    private Response getResponseFromPostNewCategory(CategoryDTO newCategory){
-
-        return given().spec(defaultRequestSpec())
-                .body(newCategory)
-                .when()
-                .log().all()
-                .post(getTestEnvironment().getCategoryPath())
-                .then()
-                .log().all()
-                .spec(defaultResponseTxtSpec())
-                .extract()
-                .response();
-    }
-
-    // only for own use, to remove later
-    private void printAllCategories(){
-        CategoryDTO[] categories = given().spec(defaultRequestSpec())
-                .when()
-                .get(getTestEnvironment().getCategoriesPath())
-                .then()
-                .spec(defaultResponseJsonSpec())
-                .extract()
-                .as(CategoryDTO[].class);
-
-        for(CategoryDTO cat : categories)
-            System.out.println(cat);
     }
 }
