@@ -126,6 +126,7 @@ public class CategoryTest extends BaseTest {
                         .extract().as(CategoryDTO.class);
 
         Response responseGet = getResponseFromCategoryById((int)createdCategory.getId());
+        cleanAfterTest((int)createdCategory.getId());
 
         assertThat(createdCategory).usingRecursiveComparison()
                 .ignoringFields("id", "imageItemIds")
@@ -236,6 +237,8 @@ public class CategoryTest extends BaseTest {
         assertThat(response.getStatusCode()).isEqualTo(200);
         assertThat(getExistingCategoryById(id).getTitle())
                 .isEqualTo(newTitle);
+
+        cleanAfterTest(id);
     }
 
     /**
@@ -272,5 +275,19 @@ public class CategoryTest extends BaseTest {
                 .spec(defaultResponseSpec())
                 .extract()
                 .response();
+    }
+
+    /**
+     * Method used to clean after test that creates new Category
+     *
+     * @param id category identifier
+     */
+    private void cleanAfterTest(int id){
+        final String idQueryParam = "id";
+
+        given().spec(defaultRequestSpec())
+                .queryParam(idQueryParam , id)
+                .when()
+                .delete(getTestEnvironment().getCategoryPath());
     }
 }
