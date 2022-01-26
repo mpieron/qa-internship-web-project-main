@@ -3,7 +3,8 @@ package com.test.api.category;
 import com.test.api.dto.CategoryDTO;
 import com.test.api.execution.BaseTest;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Tag;
 import java.util.*;
 
 import static io.restassured.RestAssured.given;
@@ -11,44 +12,44 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-/**
- * Test for Category API
- */
 public class CategoryTest extends BaseTest {
 
-    /**
-     * Test ob category title verification
-     */
-    @Test
-    public void verifyGetCategory() {
+    private int idCategoryToClean = 0;
+    private final String idQueryParam = "id";
 
+    @AfterEach
+    void cleanup(TestInfo testInfo) {
+        if (testInfo.getTags().contains("needs-cleanup")) {
+                given().spec(defaultRequestSpec())
+                        .queryParam(idQueryParam , idCategoryToClean)
+                        .when()
+                        .delete(getTestEnvironment().getCategoryPath());
+        }
+    }
+
+
+    @Test
+    public void canGetCategoryByCorrectId() {
         final int categoryId = 5;
         final String expectedTitle = "Street";
 
-        assertThat("Category title is unexpected",
+        assertThat("Category title should be %s, but is %s",
                 getExistingCategoryById(categoryId).getTitle(),
                 equalTo(expectedTitle));
     }
 
-    /**
-     * Test with wrong id given
-     */
     @Test
-    public void verifyGetCategoryWithUnexpectedId() {
+    public void canNotGetCategoryWithUnexpectedId() {
         final  int categoryId = 0;
 
         Response response = getResponseFromCategoryById(categoryId);
 
-        assertThat("Category id is correct, excepted wrong", response.getStatusCode(), equalTo(404));
-        assertThat(response.getBody().asString(), containsString("No such Category entity"));
+        assertThat(String.format("Category id: %s is correct, excepted wrong" ,categoryId), response.getStatusCode(), equalTo(404));
+        assertThat("There shouldn't be such a category" + categoryId, response.getBody().asString(), containsString("No such Category entity"));
     }
 
-    /**
-     * Test with wrong description given
-     */
     @Test
-    public void verifyGetCategoryWithUnexpectedDescription() {
+    public void canNotGetCategoryWithUnexpectedDescription() {
         final int categoryId = 5;
         final String expectedDescription = "Hammm";
         String desc = getExistingCategoryById(categoryId).getDescription();
@@ -56,11 +57,8 @@ public class CategoryTest extends BaseTest {
         assertThat(desc).isNotEqualTo(expectedDescription);
     }
 
-    /**
-     * Test with category verification in list of categories
-     */
     @Test
-    public void checkCategoryInAllCategoriesList() {
+    public void canGetCategoryInAllCategoriesList() {
         final int categoryId = 7;
         final CategoryDTO expectedCategory = getExistingCategoryById(categoryId);
 
@@ -72,40 +70,35 @@ public class CategoryTest extends BaseTest {
                 .extract()
                 .as(CategoryDTO[].class);
 
-        assertThat("Category wasn't found in all categories list",
+        assertThat(String.format("Category %s wasn't found in all categories list", categoryId),
                 Arrays.asList(categories),
                 hasItem(equalTo(expectedCategory)));
     }
 
-    /**
-     *  Test with entity search
-     */
-    // city is empty list
     @Test
-    public void checkIfCanFindEntity(){
+    public void canFindEntity(){
         final String termQueryParam = "term";
-        final String term = "Wolf%20N8%20%2F%20Dynamic%20Marketing%20Officer";
+        final String searchPath = getTestEnvironment().getCategoryPath() + "/search";
+        final String term = "City|Tech|service|admin|To4ka";
 
         List<CategoryDTO> city;
         city = given().spec(defaultRequestSpec())
                 .queryParam(termQueryParam, term)
                 .when()
                 .log().all()
-                .get(getTestEnvironment().getCategoryPath() + "/search")
+                .get(searchPath)
                 .then()
                 .log().all()
                 .spec(defaultResponseSpec())
                 .extract()
                 .body().jsonPath().getList(".", CategoryDTO.class);
 
-        assertThat(city).isNotEmpty();
+        assertThat("Couldn't find entities: " + term, city.size() > 0);
     }
 
-    /**
-     *  Test with posting new category
-     */
     @Test
-    public void tryPostNewCategory(){
+    @Tag("needs-cleanup")
+    public void canPostNewCategory(){
         Set<Long> set = new HashSet<>();
         set.add(1000L);
 
@@ -125,21 +118,17 @@ public class CategoryTest extends BaseTest {
                         .spec(defaultResponseSpec())
                         .extract().as(CategoryDTO.class);
 
-        Response responseGet = getResponseFromCategoryById((int)createdCategory.getId());
-        cleanAfterTest((int)createdCategory.getId());
+        Response responseGet = getResponseFromCategoryById(createdCategory.getId());
+        idCategoryToClean = createdCategory.getId();
 
         assertThat(createdCategory).usingRecursiveComparison()
-                .ignoringFields("id", "imageItemIds")
+                .ignoringFields(idQueryParam, "imageItemIds")
                 .isEqualTo(newCategory);
         assertThat(responseGet.getStatusCode()).isEqualTo(200);
     }
 
-    /**
-     *
-     * Test deleting category
-     */
     @Test
-    public void checkIfCanDeleteCategory(){
+    public void canDeleteCategory(){
         Set<Long> set = new HashSet<>();
         set.add(1000L);
 
@@ -160,7 +149,7 @@ public class CategoryTest extends BaseTest {
                 .extract().as(CategoryDTO.class);
 
         Response responseDelete = given().spec(defaultRequestSpec())
-                .queryParam("id", createdCategory.getId())
+                .queryParam(idQueryParam, createdCategory.getId())
                 .log().all()
                 .when()
                 .delete(getTestEnvironment().getCategoryPath())
@@ -168,19 +157,15 @@ public class CategoryTest extends BaseTest {
                 .log().all()
                 .extract().response();
 
-        Response responseGetDeleted = getResponseFromCategoryById((int)createdCategory.getId());
+        Response responseGetDeleted = getResponseFromCategoryById(createdCategory.getId());
 
         assertThat(responseDelete.getStatusCode()).isEqualTo(200);
-        assertThat(responseGetDeleted.getStatusCode()).isEqualTo(404);
+        assertThat(String.format("Category with id %s should be deleted", createdCategory.getId()), responseGetDeleted.getStatusCode() == 404);
     }
 
-    /**
-     * Test check deleting non-existing Category
-     */
     @Test
-    public void verifyDeletingNonExistingCategory(){
+    public void canNotDeleteNonExistingCategory(){
         int id = 0;
-        String idQueryParam = "id";
 
         Response response = given().spec(defaultRequestSpec())
                 .queryParam(idQueryParam, id)
@@ -194,11 +179,9 @@ public class CategoryTest extends BaseTest {
         assertThat(response.getStatusCode()).isEqualTo(404);
     }
 
-    /**
-     *  Test updating category
-     */
     @Test
-    public void verifyUpdatingExistingCategory(){
+    @Tag("needs-cleanup")
+    public void canUpdateExistingCategory(){
         Set<Long> set = new HashSet<>();
         set.add(1000L);
         String newTitle = "Updated Category";
@@ -220,7 +203,7 @@ public class CategoryTest extends BaseTest {
                 .spec(defaultResponseSpec())
                 .extract().as(CategoryDTO.class);
 
-        id = (int)createdCategory.getId();
+        id = createdCategory.getId();
         category.setTitle(newTitle);
         category.setId(id);
 
@@ -234,11 +217,10 @@ public class CategoryTest extends BaseTest {
                 .spec(defaultResponseSpec())
                 .extract().response();
 
-        assertThat(response.getStatusCode()).isEqualTo(200);
-        assertThat(getExistingCategoryById(id).getTitle())
-                .isEqualTo(newTitle);
+        idCategoryToClean = id;
 
-        cleanAfterTest(id);
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat("Title %s wasn't changed to %s", getExistingCategoryById(id).getTitle().equals(newTitle));
     }
 
     /**
@@ -248,7 +230,6 @@ public class CategoryTest extends BaseTest {
      * @return Category object
      */
     private CategoryDTO getExistingCategoryById(int id) {
-        final String idQueryParam = "id";
 
         return given().spec(defaultRequestSpec())
                 .when().queryParam(idQueryParam, id)
@@ -266,7 +247,6 @@ public class CategoryTest extends BaseTest {
      * @return Response object
      */
     private Response getResponseFromCategoryById(int id) {
-        final String idQueryParam = "id";
 
         return given().spec(defaultRequestSpec())
                 .when().queryParam(idQueryParam, id)
@@ -275,19 +255,5 @@ public class CategoryTest extends BaseTest {
                 .spec(defaultResponseSpec())
                 .extract()
                 .response();
-    }
-
-    /**
-     * Method used to clean after test that creates new Category
-     *
-     * @param id category identifier
-     */
-    private void cleanAfterTest(int id){
-        final String idQueryParam = "id";
-
-        given().spec(defaultRequestSpec())
-                .queryParam(idQueryParam , id)
-                .when()
-                .delete(getTestEnvironment().getCategoryPath());
     }
 }
