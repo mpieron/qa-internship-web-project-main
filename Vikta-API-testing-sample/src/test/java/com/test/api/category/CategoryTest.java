@@ -11,17 +11,19 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 public class CategoryTest extends BaseTest {
 
     private final List<Integer> idCategoryToClean = new ArrayList<>();
     private final String idQueryParam = "id";
+    private static final Logger logger = LogManager.getLogger(CategoryTest.class);
 
     @AfterEach
     void cleanup(TestInfo testInfo) {
@@ -41,52 +43,24 @@ public class CategoryTest extends BaseTest {
         final int categoryId = 5;
         final String expectedTitle = "Street";
 
-        assertThat("Category title should be %s, but is %s",
-                getExistingCategoryById(categoryId).getTitle(),
-                equalTo(expectedTitle));
+        assertThat(getExistingCategoryById(categoryId).getTitle())
+                .as(() -> String.format("Category title should be %s, but is %s",getExistingCategoryById(categoryId).getTitle(), expectedTitle))
+                .isEqualTo(expectedTitle);
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {Integer.MIN_VALUE, -20, 0, Integer.MAX_VALUE})
-    public void canNotGetCategoryWithUnexpectedId(int id) {
-        Response response = getResponseFromCategoryById(id);
+    @ValueSource(longs = {Long.MIN_VALUE, -20, (long) 0, Long.MAX_VALUE})
+    public void canNotGetCategoryWithUnexpectedId(long id) {
+        Response response = getResponseFromCategoryById((int)id);
 
-        assertThat(String.format("Category id: %s is correct, expected wrong" ,id), response.getStatusCode(), equalTo(404));
-        assertThat("There shouldn't be such a category" + id, response.getBody().asString(), containsString("No such Category entity"));
-    }
-
-    // This test was here, I don't think it makes sense. Maybe checking if  description is correct, but I think it isn't necessary
-    @ParameterizedTest
-    @ValueSource(strings = {"Hamm", "1", "city"})
-    public void canNotGetCategoryWithUnexpectedDescription(String expectedDescription) {
-        final int categoryId = 5;
-        String desc = getExistingCategoryById(categoryId).getDescription();
-
-        assertThat(desc).isNotEqualTo(expectedDescription);
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {1,5,7})
-    public void canGetCategoryInAllCategoriesList(int categoryId) {
-        CategoryDTO expectedCategory = getExistingCategoryById(categoryId);
-
-        CategoryDTO[] categories = given().spec(defaultRequestSpec())
-                .when()
-                .get(getTestEnvironment().getCategoriesPath())
-                .then()
-                .spec(defaultResponseSpec())
-                .extract()
-                .as(CategoryDTO[].class);
-
-        assertThat(String.format("Category %s wasn't found in all categories list", categoryId),
-                Arrays.asList(categories),
-                hasItem(equalTo(expectedCategory)));
+        assertThat(response.getStatusCode()).isEqualTo(404);
+        assertThat(response.getBody().asString())
+                .withFailMessage("There shouldn't be such a category entity")
+                .contains("No such Category entity");
     }
 
     @Test
     public void canListAllCategories(){
-        String pathList = getTestEnvironment().getCategoryPath() + "/list";
-
         CategoryDTO[] categories = given().spec(defaultRequestSpec())
                 .when()
                 .get(getTestEnvironment().getCategoriesPath())
@@ -95,23 +69,22 @@ public class CategoryTest extends BaseTest {
                 .extract()
                 .as(CategoryDTO[].class);
 
-        CategoryDTO[] listOfCategories = given().spec(defaultRequestSpec())
-                .when()
-                .get(pathList)
-                .then()
-                .spec(defaultResponseSpec())
-                .extract()
-                .as(CategoryDTO[].class);
+        assertThat(categories).as(() -> "Category list shouldn't be empty").isNotEmpty();
 
-        assertThat(listOfCategories).isEqualTo(categories);
+        for(CategoryDTO category : categories){
+            assertThat(category).as(() -> "Category don't have title field").hasFieldOrProperty("title");
+            assertThat(category).as(() -> "Category don't have description field").hasFieldOrProperty("description");
+            assertThat(category).as(() -> "Category don't have pathToCatImage field").hasFieldOrProperty("pathToCatImage");
+        }
     }
 
+    // when size = 1 and term = Empty, then Category search result list is empty, no idea why
+    // when size is bigger than 1 and term contains Empty, then everything is correct
     @Test
     public void canFindEntity(){
         final String pathList = getTestEnvironment().getCategoryPath() + "/list";
         final String searchPath = getTestEnvironment().getCategoryPath() + "/search";
         final String termQueryParam = "term";
-        final int size = 3;
         Random random = new Random();
 
         List <CategoryDTO> listOfCategories = given().spec(defaultRequestSpec())
@@ -122,13 +95,15 @@ public class CategoryTest extends BaseTest {
                 .extract()
                 .body().jsonPath().getList(".", CategoryDTO.class);
 
-        StringBuilder termBuilder = new StringBuilder();
-        for(int i=0; i<size; i++){
-            termBuilder.append(listOfCategories.get(random.nextInt(listOfCategories.size())).getTitle());
-            if(i<size-1)
-                termBuilder.append("|");
-        }
-        String term = termBuilder.toString().replaceAll(" ", "~");
+        assert listOfCategories.size() > 0;
+
+        int size = random.nextInt(listOfCategories.size()) + 1;
+
+        String term =  listOfCategories.stream()
+                .map(CategoryDTO::getTitle)
+                .limit(size)
+                .map(x -> x.replaceAll(" ", "~"))
+                .collect(Collectors.joining("|"));
 
         List<CategoryDTO> city;
         city = given().spec(defaultRequestSpec())
@@ -141,17 +116,31 @@ public class CategoryTest extends BaseTest {
                 .spec(defaultResponseSpec())
                 .extract()
                 .body().jsonPath().getList(".", CategoryDTO.class);
+        System.out.println(size);
         System.out.println(term);
+        System.out.println(listOfCategories.size());
+        for(CategoryDTO cat : listOfCategories)
+            System.out.println(cat.getTitle());
+        System.out.println(city.size());
         for(CategoryDTO cat : city)
             System.out.println(cat.getTitle());
 
-        assertThat(String.format("Couldn't find all entities. Found only %d", city.size()), city.size() == size);
+        assertThat(listOfCategories)
+                .as("Category list is empty, can't check if can find entity")
+                .isNotEmpty();
+        assertThat(city)
+                .as("Category search result list shouldn't be empty")
+                .isNotEmpty();
+        assertThat(city.size())
+                .as("Couldn't find all entities")
+                .isEqualTo(size);
     }
 
-    @ParameterizedTest(name = "{index} => title={0}, description={1}, pathToCatImage={2}, imageItemIds={3}")
+    @ParameterizedTest()
     @MethodSource("goodParametersForPost")
     @Tag("needs-cleanup")
-    public void canPostNewCategory(String title, String description, String pathToCatImage, long imageItemIds){
+    public void canPostNewCategory(String title, String description, String pathToCatImage, long imageItemIds, String message){
+        logger.info(message);
         HashSet<Long> set = new HashSet<>();
         set.add(imageItemIds);
 
@@ -181,7 +170,8 @@ public class CategoryTest extends BaseTest {
 
     @ParameterizedTest(name = "{index} => title={0}, description={1}, pathToCatImage={2}, imageItemIds={3}")
     @MethodSource("wrongParametersForPost")
-    public void canNotPostNewCategoryWithWrongParameters(String title, String description, String pathToCatImage, long imageItemIds){
+    public void canNotPostNewCategoryWithWrongParameters(String title, String description, String pathToCatImage, long imageItemIds, String message){
+        logger.error(message);
         HashSet<Long> set = new HashSet<>();
         set.add(imageItemIds);
 
@@ -236,7 +226,9 @@ public class CategoryTest extends BaseTest {
         Response responseGetDeleted = getResponseFromCategoryById(createdCategory.getId());
 
         assertThat(responseDelete.getStatusCode()).isEqualTo(200);
-        assertThat(String.format("Category with id %s should be deleted", createdCategory.getId()), responseGetDeleted.getStatusCode() == 404);
+        assertThat(responseGetDeleted.getStatusCode())
+                .as(() -> "Category should be deleted")
+                .isEqualTo(404);
     }
 
     @Test
@@ -296,7 +288,9 @@ public class CategoryTest extends BaseTest {
         idCategoryToClean.add(id);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
-        assertThat("Title %s wasn't changed to %s", getExistingCategoryById(id).getTitle().equals(newTitle));
+        assertThat(getExistingCategoryById(id).getTitle())
+                .as(() -> String.format("Title %s wasn't changed to %s", getExistingCategoryById(id).getTitle(), newTitle))
+                .isEqualTo(newTitle);
     }
 
     /**
@@ -335,26 +329,26 @@ public class CategoryTest extends BaseTest {
 
     private static Stream<Arguments> goodParametersForPost() {
         return Stream.of(
-                Arguments.of(RandomStringUtils.random(1),"This is new category", "new", 1000L),
-                Arguments.of(RandomStringUtils.random(729),"This is new category", "new", 1000L),
-                Arguments.of("New Category",RandomStringUtils.random(4096), "new", 1000L),
-                Arguments.of("New Category",RandomStringUtils.random(1000), "new", 1000L),
-                Arguments.of("New Category","This is new category", RandomStringUtils.random(1000), 1000L),
-                Arguments.of("New Category","This is new category", RandomStringUtils.random(4096), 1000L),
-                Arguments.of("New Category", "This is new category", "new", 0)
+                Arguments.of(RandomStringUtils.random(1),"This is new category", "new", 1000L, "Case with min value of title length"),
+                Arguments.of(RandomStringUtils.random(729),"This is new category", "new", 1000L, "Case with max value of title length"),
+                Arguments.of("New Category", RandomStringUtils.random(4096), "new", 1000L, "Case with max value of description length"),
+                Arguments.of("New Category", RandomStringUtils.random(1000), "new", 1000L, "Case with correct value of description length"),
+                Arguments.of("New Category", "This is new category", RandomStringUtils.random(1000), 1000L, "Case with correct value of pathToCatImage length"),
+                Arguments.of("New Category", "This is new category", RandomStringUtils.random(4096), 1000L, "Case with max value of pathToCatImage length"),
+                Arguments.of("New Category", "This is new category", "new", 0, "Case with all correct")
         );
     }
 
     private static Stream<Arguments> wrongParametersForPost() {
         return Stream.of(
-                Arguments.of("", "This is new category", "new", 1000L),
-                Arguments.of(RandomStringUtils.random(730),"This is new category", "new", 1000L),
-                Arguments.of(RandomStringUtils.random(1000),"This is new category", "new", 1000L),
-                Arguments.of("New Category",RandomStringUtils.random(4097), "new", 1000L),
-                Arguments.of("New Category",RandomStringUtils.random(5000), "new", 1000L),
-                Arguments.of("New Category", "This is new category", "", 1000L),
-                Arguments.of("New Category","This is new category", RandomStringUtils.random(4097), 1000L),
-                Arguments.of("New Category","This is new category", RandomStringUtils.random(5000), 1000L)
+                Arguments.of("", "This is new category", "new", 1000L, "Case with empty title"),
+                Arguments.of(RandomStringUtils.random(730),"This is new category", "new", 1000L, "Case with too long title"),
+                Arguments.of(RandomStringUtils.random(1000),"This is new category", "new", 1000L, "Case with too much long title"),
+                Arguments.of("New Category",RandomStringUtils.random(4097), "new", 1000L, "Case with too long description"),
+                Arguments.of("New Category",RandomStringUtils.random(5000), "new", 1000L, "Case with too much long description"),
+                Arguments.of("New Category", "This is new category", "", 1000L, "Case with empty pathToCatImage"),
+                Arguments.of("New Category","This is new category", RandomStringUtils.random(4097), 1000L, "Case with too long pathToCatImage"),
+                Arguments.of("New Category","This is new category", RandomStringUtils.random(5000), 1000L, "Case with too much pathToCatImage")
         );
     }
 }
