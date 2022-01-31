@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Data
 public class CategoryDTO {
-    private long id;
+    private int id;
     private String pathToCatImage;
     private String title;
     private String description;
