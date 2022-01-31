@@ -92,10 +92,9 @@ public class CategoryTest extends BaseTest {
 
         assertThat(listOfCategories.size()).isGreaterThan(0);
 
-        int size = random.nextInt(listOfCategories.size()) + 1;
+        int size = random.nextInt(listOfCategories.size()) + 2;
 
         String term =  listOfCategories.stream()
-                .filter(category -> !category.getImageItemIds().isEmpty())
                 .map(CategoryDTO::getTitle)
                 .limit(size)
                 .map(category  -> category.replaceAll(" ", "~"))
