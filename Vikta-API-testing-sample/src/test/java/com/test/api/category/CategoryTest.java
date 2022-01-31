@@ -44,7 +44,7 @@ public class CategoryTest extends BaseTest {
         final String expectedTitle = "Street";
 
         assertThat(getExistingCategoryById(categoryId).getTitle())
-                .as(() -> String.format("Category title should be %s, but is %s",getExistingCategoryById(categoryId).getTitle(), expectedTitle))
+                .as(String.format("Category title should be %s, but is %s",getExistingCategoryById(categoryId).getTitle(), expectedTitle))
                 .isEqualTo(expectedTitle);
     }
 
@@ -69,17 +69,12 @@ public class CategoryTest extends BaseTest {
                 .extract()
                 .as(CategoryDTO[].class);
 
-        assertThat(categories).as(() -> "Category list shouldn't be empty").isNotEmpty();
-
-        for(CategoryDTO category : categories){
-            assertThat(category).as(() -> "Category don't have title field").hasFieldOrProperty("title");
-            assertThat(category).as(() -> "Category don't have description field").hasFieldOrProperty("description");
-            assertThat(category).as(() -> "Category don't have pathToCatImage field").hasFieldOrProperty("pathToCatImage");
-        }
+        assertThat(categories).as("Category list shouldn't be empty").isNotEmpty();
+        assertThat(categories).as("Category don't have title field").allMatch(category -> !category.getTitle().isEmpty());
+        assertThat(categories).as("Category don't have description field").allMatch(category -> !category.getDescription().isEmpty());
+        assertThat(categories).as("Category don't have pathToCatImage field").allMatch(category -> !category.getPathToCatImage().isEmpty());
     }
 
-    // when size = 1 and term = Empty, then Category search result list is empty, no idea why
-    // when size is bigger than 1 and term contains Empty, then everything is correct
     @Test
     public void canFindEntity(){
         final String pathList = getTestEnvironment().getCategoryPath() + "/list";
@@ -95,18 +90,19 @@ public class CategoryTest extends BaseTest {
                 .extract()
                 .body().jsonPath().getList(".", CategoryDTO.class);
 
-        assert listOfCategories.size() > 0;
+        assertThat(listOfCategories.size()).isGreaterThan(0);
 
         int size = random.nextInt(listOfCategories.size()) + 1;
 
         String term =  listOfCategories.stream()
+                .filter(category -> !category.getImageItemIds().isEmpty())
                 .map(CategoryDTO::getTitle)
                 .limit(size)
-                .map(x -> x.replaceAll(" ", "~"))
+                .map(category  -> category.replaceAll(" ", "~"))
                 .collect(Collectors.joining("|"));
 
-        List<CategoryDTO> city;
-        city = given().spec(defaultRequestSpec())
+        List<CategoryDTO> resultList;
+        resultList = given().spec(defaultRequestSpec())
                 .queryParam(termQueryParam, term)
                 .when()
                 .log().all()
@@ -116,23 +112,15 @@ public class CategoryTest extends BaseTest {
                 .spec(defaultResponseSpec())
                 .extract()
                 .body().jsonPath().getList(".", CategoryDTO.class);
-        System.out.println(size);
-        System.out.println(term);
-        System.out.println(listOfCategories.size());
-        for(CategoryDTO cat : listOfCategories)
-            System.out.println(cat.getTitle());
-        System.out.println(city.size());
-        for(CategoryDTO cat : city)
-            System.out.println(cat.getTitle());
 
         assertThat(listOfCategories)
                 .as("Category list is empty, can't check if can find entity")
                 .isNotEmpty();
-        assertThat(city)
+        assertThat(resultList)
                 .as("Category search result list shouldn't be empty")
                 .isNotEmpty();
-        assertThat(city.size())
-                .as("Couldn't find all entities")
+        assertThat(resultList.size())
+                .as(String.format("Should find %s, but find only %s Categories", size, resultList.size()))
                 .isEqualTo(size);
     }
 
@@ -168,10 +156,10 @@ public class CategoryTest extends BaseTest {
         assertThat(responseGet.getStatusCode()).isEqualTo(200);
     }
 
-    @ParameterizedTest(name = "{index} => title={0}, description={1}, pathToCatImage={2}, imageItemIds={3}")
+    @ParameterizedTest()
     @MethodSource("wrongParametersForPost")
     public void canNotPostNewCategoryWithWrongParameters(String title, String description, String pathToCatImage, long imageItemIds, String message){
-        logger.error(message);
+        logger.info(message);
         HashSet<Long> set = new HashSet<>();
         set.add(imageItemIds);
 
@@ -227,7 +215,7 @@ public class CategoryTest extends BaseTest {
 
         assertThat(responseDelete.getStatusCode()).isEqualTo(200);
         assertThat(responseGetDeleted.getStatusCode())
-                .as(() -> "Category should be deleted")
+                .as("Category should be deleted")
                 .isEqualTo(404);
     }
 
@@ -253,7 +241,6 @@ public class CategoryTest extends BaseTest {
         Set<Long> set = new HashSet<>();
         set.add(1000L);
         String newTitle = "Updated Category";
-        int id;
 
         CategoryDTO category = new CategoryDTO();
         category.setDescription("This is new category");
@@ -271,7 +258,7 @@ public class CategoryTest extends BaseTest {
                 .spec(defaultResponseSpec())
                 .extract().as(CategoryDTO.class);
 
-        id = createdCategory.getId();
+        int id = createdCategory.getId();
         category.setTitle(newTitle);
         category.setId(id);
 
@@ -289,7 +276,7 @@ public class CategoryTest extends BaseTest {
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         assertThat(getExistingCategoryById(id).getTitle())
-                .as(() -> String.format("Title %s wasn't changed to %s", getExistingCategoryById(id).getTitle(), newTitle))
+                .as(String.format("Title %s wasn't changed to %s", getExistingCategoryById(id).getTitle(), newTitle))
                 .isEqualTo(newTitle);
     }
 
