@@ -22,4 +22,7 @@ public final class TestEnvironment {
 
     @Value("${categoriesPath}")
     private String categoriesPath;
+
+    @Value("${categoriesSearchPath}")
+    private String categoriesSearchPath;
 }
