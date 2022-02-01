@@ -25,4 +25,16 @@ public final class TestEnvironment {
 
     @Value("${userPath}")
     private String userPath;
+
+    @Value("${usersListPath}")
+    private String usersListPath;
+
+    @Value("${userLoginPath}")
+    private String userLoginPath;
+
+    @Value("${userSearchPath}")
+    private String userSearchPath;
+
+    @Value("${userSurnamePath}")
+    private String userSurnamePath;
 }
