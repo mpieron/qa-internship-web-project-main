@@ -403,7 +403,7 @@ public class UserTest extends BaseTest {
 
     private static Stream<Arguments> goodParametersForPost() {
         String user = RandomStringUtils.randomAlphabetic(20);
-        String[] domains = new String[]{"@gmail.com", "opoczta.pl", "@op.pl", "poczta.onet.pl"};
+        String[] domains = new String[]{"@gmail.com", "@opoczta.pl", "@op.pl", "@poczta.onet.pl"};
 
         return Stream.of(
                 Arguments.of(RandomStringUtils.randomAlphabetic(1),"password123", "email@123.a", "Jan", "Janusz", "Kowalski", "avatar", new int[]{}, new int[]{}, "Case with min value of loginName length"),
