@@ -23,6 +23,19 @@ public final class TestEnvironment {
     @Value("${categoriesPath}")
     private String categoriesPath;
 
-    @Value("${categoriesSearchPath}")
-    private String categoriesSearchPath;
+    @Value("${userPath}")
+    private String userPath;
+
+    @Value("${usersListPath}")
+    private String usersListPath;
+
+    @Value("${userLoginPath}")
+    private String userLoginPath;
+
+    @Value("${userSearchPath}")
+    private String userSearchPath;
+
+    @Value("${userSurnamePath}")
+    private String userSurnamePath;
+
 }

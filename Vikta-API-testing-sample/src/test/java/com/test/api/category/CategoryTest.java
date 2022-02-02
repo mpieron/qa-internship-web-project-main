@@ -77,12 +77,14 @@ public class CategoryTest extends BaseTest {
 
     @Test
     public void canFindEntity(){
+        final String pathList = getTestEnvironment().getCategoryPath() + "/list";
+        final String searchPath = getTestEnvironment().getCategoryPath() + "/search";
         final String termQueryParam = "term";
         Random random = new Random();
 
         List <CategoryDTO> listOfCategories = given().spec(defaultRequestSpec())
                 .when()
-                .get(getTestEnvironment().getCategoriesPath())
+                .get(pathList)
                 .then()
                 .spec(defaultResponseSpec())
                 .extract()
@@ -103,7 +105,7 @@ public class CategoryTest extends BaseTest {
                 .queryParam(termQueryParam, term)
                 .when()
                 .log().all()
-                .get(getTestEnvironment().getCategoriesSearchPath())
+                .get(searchPath)
                 .then()
                 .log().all()
                 .spec(defaultResponseSpec())
