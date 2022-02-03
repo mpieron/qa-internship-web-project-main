@@ -46,15 +46,7 @@ public class PaymentCardTest extends BaseTest {
 
     @Test
     public void canGetCategoryByCorrectId() {
-        List<PaymentCardDTO> paymentCardsList = given().spec(defaultRequestSpec())
-                .when()
-                .log().all()
-                .get(getTestEnvironment().getPaymentCardListPath())
-                .then()
-                .log().all()
-                .spec(defaultResponseSpec())
-                .extract()
-                .body().jsonPath().getList(".", PaymentCardDTO.class);
+        List<PaymentCardDTO> paymentCardsList = getPaymentCardList();
 
         final long id = paymentCardsList.get(new Random().nextInt(paymentCardsList.size())).getId();
         Response response = getResponseFromGetPaymentCardById(id);
@@ -135,7 +127,7 @@ public class PaymentCardTest extends BaseTest {
     @ParameterizedTest()
     @MethodSource("goodParametersForPost")
     @Tag("needs-cleanup")
-    public void canPostNewPaymentCard(String cardNickName, String cardNumber, String cardCode, String ownerName, String expirationDate, Long userId, String message) {
+    public void canPostNewPaymentCard(String cardNickName, String cardNumber, String cardCode, String ownerName, String expirationDate, String message) {
         logger.info(message);
 
         PaymentCardDTO newPaymentCard = new PaymentCardDTO();
@@ -144,7 +136,7 @@ public class PaymentCardTest extends BaseTest {
         newPaymentCard.setCardCode(cardCode);
         newPaymentCard.setOwnerName(ownerName);
         newPaymentCard.setExpirationDate(expirationDate);
-        newPaymentCard.setUserId(userId);
+        newPaymentCard.setUserId(getExistingUserId());
 
         PaymentCardDTO createdPaymentCard = given().spec(defaultRequestSpec())
                 .body(newPaymentCard)
@@ -168,7 +160,7 @@ public class PaymentCardTest extends BaseTest {
 
     @ParameterizedTest()
     @MethodSource("wrongParametersForPost")
-    public void canNotPostNewPaymentCardWithWrongParameters(String cardNickName, String cardNumber, String cardCode, String ownerName, String expirationDate, Long userId, String message) {
+    public void canNotPostNewPaymentCardWithWrongParameters(String cardNickName, String cardNumber, String cardCode, String ownerName, String expirationDate, String message) {
         logger.info(message);
 
         PaymentCardDTO newPaymentCard = new PaymentCardDTO();
@@ -177,7 +169,7 @@ public class PaymentCardTest extends BaseTest {
         newPaymentCard.setCardCode(cardCode);
         newPaymentCard.setOwnerName(ownerName);
         newPaymentCard.setExpirationDate(expirationDate);
-        newPaymentCard.setUserId(userId);
+        newPaymentCard.setUserId(getExistingUserId());
 
         Response response = given().spec(defaultRequestSpec())
                 .body(newPaymentCard)
@@ -189,6 +181,29 @@ public class PaymentCardTest extends BaseTest {
                 .extract().response();
 
         assertThat(response.getStatusCode()).isEqualTo(500);
+    }
+
+    @Test
+    public void canNotPostNewPaymentCardWithWrongUserId() {
+        long notExistingUserId = 0;
+        PaymentCardDTO newPaymentCard = new PaymentCardDTO();
+        newPaymentCard.setCardNickName("cardNickName");
+        newPaymentCard.setCardNumber(RandomStringUtils.randomNumeric(15));
+        newPaymentCard.setCardCode(RandomStringUtils.randomNumeric(3));
+        newPaymentCard.setOwnerName("Jan");
+        newPaymentCard.setExpirationDate("2022-01-01");
+        newPaymentCard.setUserId(notExistingUserId);
+
+        Response response = given().spec(defaultRequestSpec())
+                .body(newPaymentCard)
+                .log().all()
+                .when()
+                .post(getTestEnvironment().getPaymentCardPath())
+                .then()
+                .log().all()
+                .extract().response();
+
+        assertThat(response.getStatusCode()).isEqualTo(404);
     }
 
     @Test
@@ -231,7 +246,7 @@ public class PaymentCardTest extends BaseTest {
         PaymentCardDTO updatedPaymentCard = getPaymentCardById(id);
 
         assertThat(updatedPaymentCardResponse.getStatusCode()).isEqualTo(200);
-        assertThat(updatedPaymentCard.getCardNickName()).as("Don't updated Payment Card")
+        assertThat(updatedPaymentCard.getCardNickName()).as("Payment card was not updated")
                 .isEqualTo(newCardNickName);
     }
 
@@ -369,48 +384,48 @@ public class PaymentCardTest extends BaseTest {
                 .get(0).getId();
     }
 
-    // here can't use getExistingUserId() method, because is not static and can't make it static because has other methods like getTestEnvironment()
     private static Stream<Arguments> goodParametersForPost() {
-        long userId = 147;
         return Stream.of(
-                Arguments.of(RandomStringUtils.randomAlphabetic(1), RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-12", userId, "Case with min cardNickName length"),
-                Arguments.of(RandomStringUtils.randomAlphabetic(4096), RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-12", userId, "Case with max cardNickName length"),
-                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(14), "123", "Jan", "2022-02-12", userId, "Case with min cardNumber length"),
-                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(16), "123", "Janusz", "2022-02-12", userId, "Case with min cardNumber length"),
-                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), RandomStringUtils.randomNumeric(4), "Jan", "2022-02-12", userId, "Case with max cardCode length"),
-                Arguments.of("Card Nick Name 123", RandomStringUtils.randomNumeric(15), "123", RandomStringUtils.randomAlphabetic(1), "2022-02-12", userId, "Case with min ownerName length"),
-                Arguments.of("Card Nick 123 Name", RandomStringUtils.randomNumeric(15), "123", RandomStringUtils.randomAlphabetic(4096), "2022-02-12", userId, "Case with max ownerName length")
+                Arguments.of(RandomStringUtils.randomAlphabetic(1), RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-12", "Case with min cardNickName length"),
+                Arguments.of(RandomStringUtils.randomAlphabetic(4096), RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-12", "Case with max cardNickName length"),
+                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(14), "123", "Jan", "2022-02-12", "Case with min cardNumber length"),
+                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(16), "123", "Janusz", "2022-02-12", "Case with min cardNumber length"),
+                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), RandomStringUtils.randomNumeric(4), "Jan", "2022-02-12", "Case with max cardCode length"),
+                Arguments.of("Card Nick Name 123", RandomStringUtils.randomNumeric(15), "123", RandomStringUtils.randomAlphabetic(1), "2022-02-12", "Case with min ownerName length"),
+                Arguments.of("Card Nick 123 Name", RandomStringUtils.randomNumeric(15), "123", RandomStringUtils.randomAlphabetic(4096), "2022-02-12", "Case with max ownerName length")
         );
     }
 
-    //same as above
-    // card code accepts negative numbers, shouldn't
+
     // owner name can be a number, should be?
     // expiration date don't have any requirements, can be empty, string, number - should be some pattern for that
     // when userId is negative, then created card has this field equals null - interesting :)
     private static Stream<Arguments> wrongParametersForPost() {
-        long correctUserId = 147;
-//        long wrongUserId = -123;
         return Stream.of(
-                Arguments.of("", RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-12", correctUserId, "Case with empty cardNickName"),
-                Arguments.of(RandomStringUtils.randomAlphabetic(4097), RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-12", correctUserId, "Case with too long cardNickName"),
-                Arguments.of(RandomStringUtils.randomAlphabetic(4500), RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-12", correctUserId, "Case with much too long cardNickName"),
-                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(13), "123", "Jan", "2022-02-12", correctUserId, "Case with loo short cardNumber"),
-                Arguments.of("Card Nick Name", "-5", "123", "Jan", "2022-02-12", correctUserId, "Case with negative cardNumber"),
-                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(17), "123", "Janusz", "2022-02-12", correctUserId, "Case with too long cardNumber"),
-                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(50), "123", "Janusz", "2022-02-12", correctUserId, "Case with much too long cardNumber"),
-                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), "", "Jan", "2022-02-12", correctUserId, "Case with empty cardCode"),
+                Arguments.of("", RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-12",  "Case with empty cardNickName"),
+                Arguments.of(RandomStringUtils.randomAlphabetic(4097), RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-12",  "Case with too long cardNickName"),
+                Arguments.of(RandomStringUtils.randomAlphabetic(4500), RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-12",  "Case with much too long cardNickName"),
+                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(13), "123", "Jan", "2022-02-12",  "Case with loo short cardNumber"),
+                Arguments.of("Card Nick Name", "-5", "123", "Jan", "2022-02-12",  "Case with negative cardNumber"),
+                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(17), "123", "Janusz", "2022-02-12",  "Case with too long cardNumber"),
+                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(50), "123", "Janusz", "2022-02-12",  "Case with much too long cardNumber"),
+                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), "", "Jan", "2022-02-12", "Case with empty cardCode"),
+                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), "a", "Jan", "2022-02-12",  "Case with char instead number for cardCode"),
+                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), RandomStringUtils.randomNumeric(15), "Jan", "2022-02-12",  "Case with too long cardCode"),
+                Arguments.of("Card Nick Name 123", RandomStringUtils.randomNumeric(15), "123", "", "2022-02-12",  "Case with empty ownerName"),
+                Arguments.of("Card Nick 123 Name", RandomStringUtils.randomNumeric(15), "123", RandomStringUtils.randomAlphabetic(4097), "2022-02-12",  "Case with too long ownerName"),
+                Arguments.of("Card Nick 123 Name", RandomStringUtils.randomNumeric(15), "123", RandomStringUtils.randomAlphabetic(4500), "2022-02-12", "Case with too much long ownerName")
+//                card code accepts negative number
 //                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), "-10", "Jan", "2022-02-12", correctUserId, "Case with minus cardCode"),
-                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), "a", "Jan", "2022-02-12", correctUserId, "Case with char instead number for cardCode"),
-                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), RandomStringUtils.randomNumeric(15), "Jan", "2022-02-12", correctUserId, "Case with too long cardCode"),
-                Arguments.of("Card Nick Name 123", RandomStringUtils.randomNumeric(15), "123", "", "2022-02-12", correctUserId, "Case with empty ownerName"),
-                Arguments.of("Card Nick 123 Name", RandomStringUtils.randomNumeric(15), "123", RandomStringUtils.randomAlphabetic(4097), "2022-02-12", correctUserId, "Case with too long ownerName"),
-                Arguments.of("Card Nick 123 Name", RandomStringUtils.randomNumeric(15), "123", RandomStringUtils.randomAlphabetic(4500), "2022-02-12", correctUserId, "Case with too much long ownerName")
+//                owner name accepts numeric string
 //                Arguments.of("Card Nick 123 Name", RandomStringUtils.randomNumeric(15), "123", RandomStringUtils.randomNumeric(10), "2022-02-12", userId, "Case with numbers instead ownerName"),
+//                expiration date accepts empty string
 //                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), "123", "Jan", "", userId, "Case with empty date"),
+//                expiration date accepts alphabetic string
 //                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), "123", "Jan", RandomStringUtils.randomAlphabetic(10), userId, "Case with random string instead date"),
+//                expiration date accepts numeric string - no pattern for that
 //                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), "123", "Jan", RandomStringUtils.randomNumeric(10), userId, "Case with random numbers instead date"),
-//                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-12", wrongUserId, "Case with wrong userID")
+//                when userId is negative, then created card has this field equals null
 //                Arguments.of("Card Nick Name", RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-99", Long.MIN_VALUE, "Case with wrong minus userID")
         );
     }
