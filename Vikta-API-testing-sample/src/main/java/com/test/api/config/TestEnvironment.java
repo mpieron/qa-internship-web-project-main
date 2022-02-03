@@ -41,4 +41,13 @@ public final class TestEnvironment {
     @Value("${userSurnamePath}")
     private String userSurnamePath;
 
+    @Value("${paymentCardPath}")
+    private String paymentCardPath;
+
+    @Value("${paymentCardListPath}")
+    private String paymentCardListPath;
+
+    @Value("${paymentCardSearchPath}")
+    private String paymentCardSearchPath;
+
 }
