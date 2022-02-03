@@ -50,4 +50,12 @@ public final class TestEnvironment {
     @Value("${paymentCardSearchPath}")
     private String paymentCardSearchPath;
 
+    @Value("${addressPath}")
+    private String addressPath;
+
+    @Value("${addressListPath}")
+    private String addressListPath;
+
+    @Value("${addressSearchPath}")
+    private String addressSearchPath;
 }
