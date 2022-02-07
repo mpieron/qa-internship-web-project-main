@@ -373,17 +373,6 @@ public class PaymentCardTest extends BaseTest {
                 .extract().jsonPath().getList(".", PaymentCardDTO.class);
     }
 
-    private long getExistingUserId(){
-        return  (long) given().spec(defaultRequestSpec())
-                .when()
-                .get(getTestEnvironment().getUsersListPath())
-                .then()
-                .spec(defaultResponseSpec())
-                .extract()
-                .body().jsonPath().getList(".", UserDTO.class)
-                .get(0).getId();
-    }
-
     private static Stream<Arguments> goodParametersForPost() {
         return Stream.of(
                 Arguments.of(RandomStringUtils.randomAlphabetic(1), RandomStringUtils.randomNumeric(15), "123", "Jan", "2022-02-12", "Case with min cardNickName length"),
