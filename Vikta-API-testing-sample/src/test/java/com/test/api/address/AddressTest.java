@@ -2,7 +2,6 @@ package com.test.api.address;
 
 
 import com.test.api.dto.AddressDTO;
-import com.test.api.dto.UserDTO;
 import com.test.api.execution.BaseTest;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -122,7 +121,7 @@ public class AddressTest extends BaseTest {
 
         assertThat(resultList.size())
                 .as(String.format("Should find %s, but find only %s addresses", size, resultList.size()))
-                .isGreaterThan(size-1);
+                .isGreaterThanOrEqualTo(size);
     }
 
     @ParameterizedTest()
@@ -355,21 +354,7 @@ public class AddressTest extends BaseTest {
                 .extract().response();
     }
 
-    /**
-     * Method returns id existing user
-     *
-     * @return long id
-     */
-    private long getExistingUserId(){
-        return  (long) given().spec(defaultRequestSpec())
-                .when()
-                .get(getTestEnvironment().getUsersListPath())
-                .then()
-                .spec(defaultResponseSpec())
-                .extract()
-                .body().jsonPath().getList(".", UserDTO.class)
-                .get(0).getId();
-    }
+
 
 
     private static Stream<Arguments> goodParametersForPost() {
