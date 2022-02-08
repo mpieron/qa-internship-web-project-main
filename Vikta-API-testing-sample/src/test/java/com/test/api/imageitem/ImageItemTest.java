@@ -112,9 +112,9 @@ public class ImageItemTest extends BaseTest {
         int size = random.nextInt(imageItemsList.size()%10);
 
         List<String> termList = imageItemsList.stream()
-                .limit(size)
                 .map(ImageItemDTO::getTags)
                 .flatMap(Collection::stream)
+                .limit(3)
                 .collect(Collectors.toList());
 
         String term = termList.toString()
