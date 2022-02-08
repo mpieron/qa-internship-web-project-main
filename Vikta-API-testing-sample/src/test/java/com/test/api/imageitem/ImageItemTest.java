@@ -102,14 +102,11 @@ public class ImageItemTest extends BaseTest {
     @Test
     public void canSearchImageItemByTerm() {
         final String termQueryParam = "term";
-        Random random = new Random();
         List<ImageItemDTO> imageItemsList = getImageItemsList();
 
         assertThat(imageItemsList)
                 .as("ImageItem list is empty, can't check if can find ImageItem")
                 .isNotEmpty();
-
-        int size = random.nextInt(imageItemsList.size()%10);
 
         List<String> termList = imageItemsList.stream()
                 .map(ImageItemDTO::getTags)
@@ -132,8 +129,9 @@ public class ImageItemTest extends BaseTest {
                 .spec(defaultResponseSpec())
                 .extract().body().jsonPath().getList(".", ImageItemDTO.class);
 
+
         assertThat(resultList)
-                .as("ImageItem search result list has image item with tag that is not at term list")
+                .as("Result list contains image item that doesn't contain searched tags")
                 .allSatisfy(imageItemDTO -> assertThat(imageItemDTO.getTags()).containsAnyElementsOf(termList));
     }
 
