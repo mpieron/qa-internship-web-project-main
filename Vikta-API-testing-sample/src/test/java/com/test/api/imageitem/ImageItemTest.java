@@ -109,15 +109,17 @@ public class ImageItemTest extends BaseTest {
                 .as("ImageItem list is empty, can't check if can find ImageItem")
                 .isNotEmpty();
 
-        int size = random.nextInt(imageItemsList.size()/10) + 1;
+        int size = random.nextInt(imageItemsList.size()%10);
 
-        String term = imageItemsList.stream()
+        List<String> termList = imageItemsList.stream()
                 .limit(size)
                 .map(ImageItemDTO::getTags)
-                .map(imageItem -> imageItem.toString()
-                        .replaceAll(", ", "|"))
-                .collect(Collectors.toList()).toString()
-                .replaceAll("[\\[\\](){}]","")
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        String term = termList.toString()
+                .replaceAll(", ", "|")
+                .replaceAll("[\\[\\]]","")
                 .replaceAll(" ", "~");
 
         List<ImageItemDTO> resultList = given().spec(defaultRequestSpec())
@@ -131,8 +133,8 @@ public class ImageItemTest extends BaseTest {
                 .extract().body().jsonPath().getList(".", ImageItemDTO.class);
 
         assertThat(resultList)
-                .as("ImageItem search result list shouldn't be empty")
-                .isNotEmpty();
+                .as("ImageItem search result list has image item with tag that is not at term list")
+                .allSatisfy(imageItemDTO -> assertThat(imageItemDTO.getTags()).containsAnyElementsOf(termList));
     }
 
     // not always find everything, but probably there's something wrong with implementation
