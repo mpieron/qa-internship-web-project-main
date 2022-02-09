@@ -20,10 +20,14 @@ public class RegistrationPage extends BasePage {
   @FindBy(id = "tbMiddleName")
   private WebElement tbMiddleName;
 
-  //TODO: Add missing elements.
+  @FindBy(id = "tbEmail")
+  private WebElement tbEmail;
 
   @FindBy(id = "tbPassword")
   private WebElement tbPassword;
+
+  @FindBy(id = "btnRegister")
+  private WebElement btnRegister;
 
   @FindBy(id = "btnSubmitGoToHome")
   private WebElement btnGoToHome;
@@ -31,7 +35,8 @@ public class RegistrationPage extends BasePage {
   @FindBy(id = "tSuccessMessage")
   private WebElement tSuccessMessage;
 
-  //TODO: Add [Register User] button support.
+  @FindBy(id = "lLoginName")
+  private WebElement lLoginName;
 
   public void typeInLoginname(String value) {
     typeIn(value, tbLoginName);
@@ -49,8 +54,16 @@ public class RegistrationPage extends BasePage {
     typeIn(value, tbMiddleName);
   }
 
+  public void typeInEmail(String value) {
+    typeIn(value, tbEmail);
+  }
+
   public void typeInPassword(String value) {
     typeIn(value, tbPassword);
+  }
+
+  public void clickRegisterButton() {
+    btnRegister.click();
   }
 
   private void typeIn(String value, WebElement targetElement) {
@@ -64,5 +77,13 @@ public class RegistrationPage extends BasePage {
 
   public WebElement getMessageWebElement() {
     return tSuccessMessage;
+  }
+
+  public String getRegisteredUserExistMessageText() {
+    return lLoginName.getText();
+  }
+
+  public WebElement getFailedRegistrationMessageWebElement() {
+    return lLoginName;
   }
 }

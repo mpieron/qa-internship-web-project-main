@@ -23,7 +23,8 @@ public class LoginPage {
   @FindBy(xpath = "//div[@class='login']//p[contains(@style, 'color: #FF1C19')]")
   private WebElement lblError;
 
-  //TODO: Add [Sign-up] button.
+  @FindBy(id = "btnSubmitGoToRegistration")
+  private WebElement btnSubmitGoToRegistration;
 
   public HomePage login(String username, String password) {
     tryLogin(username, password);
@@ -44,6 +45,12 @@ public class LoginPage {
     btnGoToHome.click();
 
     return new HomePage();
+  }
+
+  public RegistrationPage gotoRegistrationPage() {
+    btnSubmitGoToRegistration.click();
+
+    return new RegistrationPage();
   }
 
   public String getErrorMessage() {

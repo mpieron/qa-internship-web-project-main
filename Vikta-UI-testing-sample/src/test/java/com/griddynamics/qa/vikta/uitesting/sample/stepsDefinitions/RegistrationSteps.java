@@ -15,6 +15,9 @@ public class RegistrationSteps extends BaseSteps {
   private static String SUCCESSFUL_REGISTRATION_MESSAGE_PREFIX =
     "User has been registered successfully: ";
 
+  private static String FAILED_REGISTRATION_MESSAGE_PREFIX =
+          "There is already a user registered with the loginname provided";
+
   public RegistrationSteps(WebDriver driver) {
     super(driver);
   }
@@ -25,6 +28,7 @@ public class RegistrationSteps extends BaseSteps {
     FIRSTNAME,
     PATRONIM,
     PASSWORD,
+    EMAIL
   }
 
   @Step
@@ -56,7 +60,10 @@ public class RegistrationSteps extends BaseSteps {
         valueToReturn = generateRandomString();
         page().typeInPassword(valueToReturn);
         break;
-      //TODO: Add the rest... .
+      case EMAIL:
+        valueToReturn = String.format("%s@gmail.com", generateRandomString());
+        page().typeInEmail(valueToReturn);
+        break;
       default:
         throw new IllegalArgumentException(
           "Unsupported Registration page field name: " + fieldName
@@ -66,7 +73,17 @@ public class RegistrationSteps extends BaseSteps {
     return valueToReturn;
   }
 
-  //TODO: Add rest of the steps needed.
+  @Step
+  public void clickRegisterButton(){
+    page().clickRegisterButton();
+  }
+
+  @Step
+  public String typeExistingUserNameInto() {
+    String loginName = getData().userName();
+    page().typeInLoginname(loginName);
+    return loginName;
+  }
 
   @Step
   public void verifyCurrentPageIsRegistration() {
@@ -83,6 +100,14 @@ public class RegistrationSteps extends BaseSteps {
     assertThat(page().getMessageText().trim())
       .as("Successful registration message was nor shown or had unexpected content.")
       .startsWith(SUCCESSFUL_REGISTRATION_MESSAGE_PREFIX);
+  }
+
+  @Step
+  public void verifyFailedRegistrationMessageIsDisplayed() {
+    getWait().until(ExpectedConditions.visibilityOf(page().getFailedRegistrationMessageWebElement()));
+    assertThat(page().getRegisteredUserExistMessageText().trim())
+            .as("Failed registration message was nor shown or had unexpected content.")
+            .startsWith(FAILED_REGISTRATION_MESSAGE_PREFIX);
   }
 
   @Step
