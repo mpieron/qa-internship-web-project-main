@@ -26,10 +26,6 @@ public class RegistrationTest extends BaseTest {
     registrationSteps.typeRandomValueInto(RegistrationSteps.FieldName.PATRONIM);
     val password = registrationSteps.typeRandomValueInto(RegistrationSteps.FieldName.PASSWORD);
     registrationSteps.typeRandomValueInto(RegistrationSteps.FieldName.EMAIL);
-    // TODO: uncomment, debug, implement - make it working.
-//    I think that typeRandomValueInto is ok
-//    registrationSteps.typeInto(RegistrationSteps.FieldName.EMAIL);
-//    registrationSteps.typeInto(RegistrationSteps.FieldName.PASSWORD);
     // And user hits the Register User button
     registrationSteps.clickRegisterButton();
     // Then Registration page the current one
@@ -39,10 +35,8 @@ public class RegistrationTest extends BaseTest {
     // Then Successful registration message contains the login name used
     registrationSteps.verifySuccessfulRegistrationMessageContainsNewUsername(loginName);
 
+//    when try login as just registered user, following message will appear: "Login name or Password invalid, please verify"
     // Develop login as new user
-    // when try login as just registered user, following message will appear:
-    // "Login name or Password invalid, please verify", probably account must be verified (by email) or something
-    // same when I try manually - is that ok, should be that communicate?
     loginSteps.openLoginPage();
     loginSteps.login(loginName, password);
     loginSteps.verifyCurrentPageIsHomePageForUser(loginName);

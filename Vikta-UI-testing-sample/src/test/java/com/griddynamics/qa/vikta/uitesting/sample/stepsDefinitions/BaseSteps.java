@@ -54,7 +54,23 @@ abstract class BaseSteps {
     assertThat(currentPage.getCurrentUserName())
       .as("Unexpected current user's name displayed. Expected: %s", username)
       .contains(username);
-    //TODO: Assert displayed role as well.
+
+      assertThat(currentPage.getLoggedRole()).as("Assigned rong role")
+            .contains("USER");
+  }
+
+  void verifyCurrentPageIsHomePageForTheAdmin(String username) {
+    BasePage currentPage = getPage(BasePage.class);
+    getWait().until(ExpectedConditions.visibilityOf(currentPage.getLoggedInName()));
+
+    assertCurrentPageUrl(getData().baseUrl(), "Home page was expected to be the current one.");
+
+    assertThat(currentPage.getCurrentUserName())
+            .as("Unexpected current user's name displayed. Expected: %s", username)
+            .contains(username);
+
+    assertThat(currentPage.getLoggedRole()).as("Assigned wrong role")
+            .contains("ADMIN");
   }
 
   void assertCurrentPageUrl(String expectedUrl, String messageOnFail) {
