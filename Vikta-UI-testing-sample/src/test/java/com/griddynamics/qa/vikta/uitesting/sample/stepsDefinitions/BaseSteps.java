@@ -2,12 +2,11 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.codeborne.selenide.WebDriverRunner;
 import com.griddynamics.qa.vikta.uitesting.sample.config.DataProvider;
 import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataAndProperties;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.BasePage;
+
 import java.util.Objects;
-import java.util.UUID;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -55,7 +54,7 @@ abstract class BaseSteps {
       .as("Unexpected current user's name displayed. Expected: %s", username)
       .contains(username);
 
-      assertThat(currentPage.getLoggedRole()).as("Assigned rong role")
+    assertThat(currentPage.getLoggedRole()).as("Assigned wrong role")
             .contains("USER");
   }
 
@@ -75,20 +74,5 @@ abstract class BaseSteps {
 
   void assertCurrentPageUrl(String expectedUrl, String messageOnFail) {
     assertThat(getDriver().getCurrentUrl()).as(messageOnFail).contains(expectedUrl);
-  }
-
-  //TODO: Make static and move to some Utils.
-  //TODO: Use something like JavaFaker.
-  private String generateRandomString(int maxLength) {
-    String candidate = UUID.randomUUID().toString().replaceAll("\\d", "A");
-    if (candidate.length() >= maxLength) {
-      return candidate.substring(0, maxLength);
-    } else {
-      return candidate;
-    }
-  }
-
-  String generateRandomString() {
-    return generateRandomString(16); //Remember!!! Magic numbers are bad, bad, bad practice!
   }
 }
