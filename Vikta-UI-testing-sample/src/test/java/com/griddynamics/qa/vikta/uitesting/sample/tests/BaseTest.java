@@ -5,8 +5,20 @@ import com.griddynamics.qa.vikta.uitesting.sample.config.DataProvider;
 import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.HomePageSteps;
 import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.LoginSteps;
 import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.RegistrationSteps;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Attachment;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 
 public class BaseTest {
 
@@ -30,7 +42,20 @@ public class BaseTest {
     homePageSteps = new HomePageSteps(driverManager.get());
   }
 
-  // TODO: Do a screenshot at the end upon test failure. Hint: @AfterMethod + Allure.
+  @AfterMethod
+  public void makeScreenshotOnFailure(ITestResult testResult){
+    if (testResult.getStatus() == ITestResult.FAILURE) {
+      try {
+        Allure.addAttachment(testResult.getName(), new ByteArrayInputStream(takeScreenShot()));
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  private byte[] takeScreenShot() throws IOException {
+    return ((TakesScreenshot)driverManager.get()).getScreenshotAs(OutputType.BYTES);
+  }
 
   @AfterClass
   void tearDownClass() {

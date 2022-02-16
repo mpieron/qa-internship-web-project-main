@@ -1,7 +1,5 @@
 package com.griddynamics.qa.vikta.uitesting.sample.pageObjects;
 
-import com.griddynamics.qa.vikta.uitesting.sample.auxiliary.DriverManager;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 

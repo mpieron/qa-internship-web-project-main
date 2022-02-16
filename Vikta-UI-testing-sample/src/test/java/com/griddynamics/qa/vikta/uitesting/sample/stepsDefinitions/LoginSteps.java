@@ -60,7 +60,6 @@ public class LoginSteps extends BaseSteps {
       .contains(text);
   }
 
-  //TODO: Think about generics etc instead of this.
   private LoginPage page() {
     return getPage(LoginPage.class);
   }

@@ -6,6 +6,7 @@ import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.RegistrationPage;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 
 /**
  * Registration functionality related steps.
@@ -38,30 +39,31 @@ public class RegistrationSteps extends BaseSteps {
 
   @Step
   public String typeRandomValueInto(FieldName fieldName) {
+    Utilities utilities = new Utilities();
     String valueToReturn;
     switch (fieldName) {
       case LOGINNAME:
-        valueToReturn = generateRandomString();
+        valueToReturn = utilities.generateLoginName();
         page().typeInLoginname(valueToReturn);
         break;
       case SURNAME:
-        valueToReturn = generateRandomString();
+        valueToReturn = utilities.generateSurname();
         page().typeInSurname(valueToReturn);
         break;
       case FIRSTNAME:
-        valueToReturn = generateRandomString();
+        valueToReturn = utilities.generateName();
         page().typeInFirstname(valueToReturn);
         break;
       case PATRONIM:
-        valueToReturn = generateRandomString();
+        valueToReturn = utilities.generateName();
         page().typeInPatronim(valueToReturn);
         break;
       case PASSWORD:
-        valueToReturn = generateRandomString();
+        valueToReturn = utilities.generatePassword();
         page().typeInPassword(valueToReturn);
         break;
       case EMAIL:
-        valueToReturn = String.format("%s@gmail.com", generateRandomString());
+        valueToReturn = utilities.generateEmail();
         page().typeInEmail(valueToReturn);
         break;
       default:
@@ -118,7 +120,6 @@ public class RegistrationSteps extends BaseSteps {
       .contains(loginnameUsed);
   }
 
-  //TODO: Think about generics etc instead of this.
   private RegistrationPage page() {
     return getPage(RegistrationPage.class);
   }
