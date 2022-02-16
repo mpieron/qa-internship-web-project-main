@@ -29,4 +29,9 @@ public class Utilities {
     public String generatePassword(){
         return faker.regexify("[a-z1-9]{5}");
     }
+
+    public String generateRating(){return String.valueOf(faker.random().nextInt(0,5));}
+
+    public String generatePrice(){return String.valueOf(faker.random().nextDouble());}
+
 }
