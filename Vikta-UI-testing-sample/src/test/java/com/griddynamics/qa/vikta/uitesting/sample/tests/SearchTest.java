@@ -21,7 +21,7 @@ public class SearchTest extends BaseTest{
         homePageSteps.clickSearchBottom();
 
         // Verify if found any image (should find at least one)
-        homePageSteps.verifyFoundImages(title);
+        homePageSteps.verifyImagesFoundByTitle(title);
     }
 
     @Test
@@ -36,8 +36,36 @@ public class SearchTest extends BaseTest{
         homePageSteps.clickSearchBottom();
 
         // Verify if found any image (should find at least one)
-        homePageSteps.verifyFoundImages(tags);
+        homePageSteps.verifyImagesFoundByTags(tags);
     }
 
+    @Test
+    public void canFindImageByPriceFrom(){
+        // Open Home Page
+        homePageSteps.openHomePage();
 
+        // Type min price to search criteria
+        String price = homePageSteps.typeValueInto(HomePageSteps.FieldName.PRICEFROM);
+
+        //Click search bottom
+        homePageSteps.clickSearchBottom();
+
+        // Verify if founded images has good price
+        homePageSteps.verifyImagesFoundByPriceFrom(price);
+    }
+
+    @Test
+    public void canFindImageByPriceTo(){
+        // Open Home Page
+        homePageSteps.openHomePage();
+
+        // Type max price to search criteria
+        String price = homePageSteps.typeValueInto(HomePageSteps.FieldName.PRICETO);
+
+        //Click search bottom
+        homePageSteps.clickSearchBottom();
+
+        // Verify if founded images has good price
+        homePageSteps.verifyImagesFoundByPriceTo(price);
+    }
 }

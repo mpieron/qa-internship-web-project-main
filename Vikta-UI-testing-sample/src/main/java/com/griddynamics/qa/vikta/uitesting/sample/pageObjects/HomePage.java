@@ -1,12 +1,11 @@
 package com.griddynamics.qa.vikta.uitesting.sample.pageObjects;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +34,9 @@ public class HomePage extends BasePage {
     @FindBy(id = "btnResetSearchCriteria")
     private WebElement btnResetSearchCriteria;
 
+    @FindBy(id = "tSelectedCategoryTitle")
+    private WebElement tSelectedCategoryTitle;
+
     @FindBy(id = "divErrorsAndMessages")
     private WebElement divErrorsAndMessages;
 
@@ -46,7 +48,7 @@ public class HomePage extends BasePage {
     private WebElement divCategoryNames;
 
     // same as above
-    @FindBy(className = "products-list")
+    @FindBy(css = ".products-list")
     private WebElement productsList;
 
     public void writeTerm(String term){
@@ -74,25 +76,45 @@ public class HomePage extends BasePage {
         targetElement.sendKeys(value);
     }
 
-    public List<WebElement> getImagesOnCurrentPage(){
-        return productsList.findElements(By.className("product-card"));
+    public WebElement getSelectedCategoryTitle(){
+        return tSelectedCategoryTitle;
     }
 
-    public String getExistingImageTitle(){
-        List<WebElement> productList = productsList.findElements(By.className("product-card__title"));
-        return productList.get(new Random().nextInt(productList.size())).getText();
+    public List<String> getImagesTagsFromCurrentPage(){
+
+        return  productsList.findElements(By.cssSelector(".product-card > .product-card__description > .product-card__text:last-child"))
+                .stream()
+                .map(WebElement::getText)
+//                .map(tag -> tag.split(" "))
+//                .flatMap(Arrays::stream)
+                .map(tag -> tag.replaceAll("[\\[\\]]",""))
+                .collect(Collectors.toList());
     }
 
-    public String getExistingImageTag(){
-        List<WebElement> tagList = productsList.findElements(By.className("product-card__text"));
-        return Arrays.stream(tagList.get(new Random().nextInt(tagList.size())).getText()
-                .split(", "))
-                .limit(3)
-                .collect(Collectors.toList())
-                .toString()
-                .replaceAll(", ", "|")
-                .replaceAll("[\\[\\]]","")
-                .replaceAll(" ", "~");
+    public List<WebElement> getImagesTitlesFromCurrentPage(){
+        return productsList.findElements(By.className("product-card__title"));
+    }
+
+    public String getExistingImageTags(){
+//        String tags = productsList.findElements(By.className(".product-card > .product-card__description > .product-card__text:last-child")).get(0).getText();
+//        return   Arrays.stream(tags
+//                .split(", "))
+//                .limit(3)
+//                .collect(Collectors.toList())
+//                .toString()
+//                .replaceAll(", ", "|")
+//                .replaceAll("[\\[\\]]","")
+//                .replaceAll(" ", "~");
+
+        return "Europe|Cat";
+    }
+
+    public List<String> getImagePricesFromCurrentPage(){
+        return productsList.findElements(By.className("product-card__value"))
+                .stream()
+                .map(WebElement::getText)
+                .map(tag -> tag.replaceAll("[\\[\\]]",""))
+                .collect(Collectors.toList());
     }
 
     public void clickSearchBottom(){
@@ -103,5 +125,4 @@ public class HomePage extends BasePage {
     public void clickResetBottom(){
         btnResetSearchCriteria.click();
     }
-
 }

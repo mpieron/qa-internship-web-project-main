@@ -2,9 +2,12 @@ package com.griddynamics.qa.vikta.uitesting.sample.utils;
 
 import com.github.javafaker.Faker;
 
+import java.util.Random;
+
 public class Utilities {
 
     Faker faker = new Faker();
+    Random random = new Random();
 
     public String generateEmail(){
         return faker.bothify("?????##@gmail.com");
@@ -32,6 +35,7 @@ public class Utilities {
 
     public String generateRating(){return String.valueOf(faker.random().nextInt(0,5));}
 
-    public String generatePrice(){return String.valueOf(faker.random().nextDouble());}
+    public String generatePriceTo(){return String.valueOf(faker.random().nextInt(100) + faker.random().nextDouble());}
 
+    public String generatePriceFrom(){return String.valueOf(faker.random().nextInt(5) + 0.654);}
 }
