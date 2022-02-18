@@ -41,7 +41,7 @@ public class LoginPage {
     btnSubmitLogin.click();
   }
 
-  public HomePage gotoHome() {
+  public HomePage goToHome() {
     btnGoToHome.click();
 
     return new HomePage();
