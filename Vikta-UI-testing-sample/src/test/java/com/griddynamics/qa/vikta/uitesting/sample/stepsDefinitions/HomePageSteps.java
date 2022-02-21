@@ -94,17 +94,13 @@ public class HomePageSteps extends BaseSteps {
     HomePage currentPage = getPage(HomePage.class);
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
 
-    List<String> tagsList = Arrays.stream(tag.replaceAll("~", " ")
-            .split("\\|"))
-            .map(sentence -> sentence.split(" "))
-            .flatMap(Arrays::stream)
-            .collect(Collectors.toList());
+    String cleanTag = tag.replaceAll("\\+", " ");
 
     assertThat(page().getImagesTagsFromCurrentPage().size()).isGreaterThan(0);
 
-    assertThat(page().getImagesTagsFromCurrentPage())
+    assertThat(page().getImagesTagsFromCurrentPage().entrySet())
             .as("Found image item that doesn't contain searched tags")
-            .allSatisfy(image -> assertThat(tagsList).containsAnyOf(image));
+            .allSatisfy(image -> assertThat(image.getValue()).contains(cleanTag));
   }
 
   @Step

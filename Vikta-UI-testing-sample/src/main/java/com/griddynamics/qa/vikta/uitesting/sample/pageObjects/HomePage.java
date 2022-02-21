@@ -1,5 +1,6 @@
 package com.griddynamics.qa.vikta.uitesting.sample.pageObjects;
 
+import java.util.function.Function;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -80,15 +81,12 @@ public class HomePage extends BasePage {
         return tSelectedCategoryTitle;
     }
 
-    public List<String> getImagesTagsFromCurrentPage(){
+    public Map<String, List<String>> getImagesTagsFromCurrentPage(){
 
         return  productsList.findElements(By.cssSelector(".product-card > .product-card__description > .product-card__text:last-child"))
                 .stream()
                 .map(WebElement::getText)
-//                .map(tag -> tag.split(" "))
-//                .flatMap(Arrays::stream)
-                .map(tag -> tag.replaceAll("[\\[\\]]",""))
-                .collect(Collectors.toList());
+                .collect(Collectors.toMap(Function.identity(), tag -> Arrays.stream(tag.split(", ")).collect(Collectors.toList())));
     }
 
     public List<WebElement> getImagesTitlesFromCurrentPage(){
@@ -106,7 +104,7 @@ public class HomePage extends BasePage {
 //                .replaceAll("[\\[\\]]","")
 //                .replaceAll(" ", "~");
 
-        return "Europe|Cat";
+        return "NANDROLONE+DECANOATE";
     }
 
     public List<String> getImagePricesFromCurrentPage(){

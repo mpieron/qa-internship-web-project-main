@@ -30,13 +30,13 @@ public class SearchTest extends BaseTest{
         homePageSteps.openHomePage();
 
         // Type tag as term
-        String tags = homePageSteps.typeValueInto(HomePageSteps.FieldName.TAG);
+        String tag = homePageSteps.typeValueInto(HomePageSteps.FieldName.TAG);
 
         //Click search bottom
         homePageSteps.clickSearchBottom();
 
         // Verify if found any image (should find at least one)
-        homePageSteps.verifyImagesFoundByTags(tags);
+        homePageSteps.verifyImagesFoundByTags(tag);
     }
 
     @Test
