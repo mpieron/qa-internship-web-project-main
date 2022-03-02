@@ -1,18 +1,15 @@
 package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
+import java.util.List;
+import java.util.Random;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Home page related step Definitions
@@ -68,9 +65,7 @@ public class HomePageSteps extends BaseSteps {
         page().writePriceTo(returnValue);
         break;
       default:
-        throw new IllegalArgumentException(
-                "Unsupported search record name: " + fieldName
-        );
+        throw new IllegalArgumentException("Unsupported search record name: " + fieldName);
     }
     return returnValue;
   }
@@ -87,8 +82,6 @@ public class HomePageSteps extends BaseSteps {
             .allSatisfy(image -> assertThat(image.getText()).contains(title));
   }
 
-//  when we search for photos by tag, we also consider those that contain given word in the tag, which is a sentence or two words combined with "/".
-//  Haven't found a way to compare correctly yet
   @Step
   public void verifyImagesFoundByTags(String tag){
     HomePage currentPage = getPage(HomePage.class);
@@ -121,6 +114,21 @@ public class HomePageSteps extends BaseSteps {
     assertThat(page().getImagePricesFromCurrentPage())
             .as("Found image item that's price is greater that search")
             .allSatisfy(imagePrice -> assertThat(Double.parseDouble(imagePrice)).isLessThanOrEqualTo(Double.parseDouble(price)));
+  }
+
+  @Step
+  public void verifySearchedCategory(String categoryName){
+    HomePage currentPage = getPage(HomePage.class);
+    getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
+
+    assertThat(currentPage.getSelectedCategoryTitle().getText())
+            .as("Wrong category found")
+            .contains(categoryName);
+  }
+
+  @Step
+  public String clickAndReturnCategory(){
+    return page().clickAndReturnCategory();
   }
 
   @Step

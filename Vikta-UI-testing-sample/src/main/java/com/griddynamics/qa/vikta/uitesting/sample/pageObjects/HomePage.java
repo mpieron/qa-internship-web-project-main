@@ -1,126 +1,124 @@
 package com.griddynamics.qa.vikta.uitesting.sample.pageObjects;
 
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Page Object of Home page
  */
 public class HomePage extends BasePage {
 
-    @FindBy(id = "tbTerm")
-    private WebElement tbTerm;
+  private final String singleResultTag = "IVA+ANNUA+POLLEN";
 
-    @FindBy(id = "tbRatingFrom")
-    private WebElement tbRatingFrom;
+  @FindBy(id = "tbTerm")
+  private WebElement tbTerm;
 
-    @FindBy(id = "tbRatingTo")
-    private WebElement tbRatingTo;
+  @FindBy(id = "tbRatingFrom")
+  private WebElement tbRatingFrom;
 
-    @FindBy(id = "tbPriceFrom")
-    private WebElement tbPriceFrom;
+  @FindBy(id = "tbRatingTo")
+  private WebElement tbRatingTo;
 
-    @FindBy(id = "tbPriceTo")
-    private WebElement tbPriceTo;
+  @FindBy(id = "tbPriceFrom")
+  private WebElement tbPriceFrom;
 
-    @FindBy(id = "btnSearch")
-    private WebElement btnSearch;
+  @FindBy(id = "tbPriceTo")
+  private WebElement tbPriceTo;
 
-    @FindBy(id = "btnResetSearchCriteria")
-    private WebElement btnResetSearchCriteria;
+  @FindBy(id = "btnSearch")
+  private WebElement btnSearch;
 
-    @FindBy(id = "tSelectedCategoryTitle")
-    private WebElement tSelectedCategoryTitle;
+  @FindBy(id = "btnResetSearchCriteria")
+  private WebElement btnResetSearchCriteria;
 
-    @FindBy(id = "divErrorsAndMessages")
-    private WebElement divErrorsAndMessages;
+  @FindBy(id = "tSelectedCategoryTitle")
+  private WebElement tSelectedCategoryTitle;
 
-    @FindBy(id = "divMsgOrErr")
-    private WebElement divMsgOrErr;
+  @FindBy(id = "divErrorsAndMessages")
+  private WebElement divErrorsAndMessages;
 
-    // I think there shouldn't be included categories separately, because they can be changed, so main should be enough
-    @FindBy(id = "divCategoryNames")
-    private WebElement divCategoryNames;
+  @FindBy(id = "divMsgOrErr")
+  private WebElement divMsgOrErr;
 
-    // same as above
-    @FindBy(css = ".products-list")
-    private WebElement productsList;
+  @FindBy(css = "[id^=category]:first-child")
+  private WebElement divCategoryNames;
 
-    public void writeTerm(String term){
-        typeIn(term, tbTerm);
-    }
+  @FindBy(css = ".products-list")
+  private WebElement productsList;
 
-    public void writeRatingFrom(String rating){
-        typeIn(rating, tbRatingFrom);
-    }
+  public void writeTerm(String term) {
+    typeIn(term, tbTerm);
+  }
 
-    public void writeRatingTo(String rating){
-        typeIn( rating, tbRatingTo);
-    }
+  public void writeRatingFrom(String rating) {
+    typeIn(rating, tbRatingFrom);
+  }
 
-    public void writePriceFrom(String price){
-        typeIn(price, tbPriceFrom);
-    }
+  public void writeRatingTo(String rating) {
+    typeIn(rating, tbRatingTo);
+  }
 
-    public void writePriceTo(String price){
-        typeIn(price, tbPriceTo);
-    }
+  public void writePriceFrom(String price) {
+    typeIn(price, tbPriceFrom);
+  }
 
-    private void typeIn(String value, WebElement targetElement) {
-        targetElement.clear();
-        targetElement.sendKeys(value);
-    }
+  public void writePriceTo(String price) {
+    typeIn(price, tbPriceTo);
+  }
 
-    public WebElement getSelectedCategoryTitle(){
-        return tSelectedCategoryTitle;
-    }
+  private void typeIn(String value, WebElement targetElement) {
+    targetElement.clear();
+    targetElement.sendKeys(value);
+  }
 
-    public Map<String, List<String>> getImagesTagsFromCurrentPage(){
+  public WebElement getSelectedCategoryTitle() {
+    return tSelectedCategoryTitle;
+  }
 
-        return  productsList.findElements(By.cssSelector(".product-card > .product-card__description > .product-card__text:last-child"))
-                .stream()
-                .map(WebElement::getText)
-                .collect(Collectors.toMap(Function.identity(), tag -> Arrays.stream(tag.split(", ")).collect(Collectors.toList())));
-    }
+  public Map<String, List<String>> getImagesTagsFromCurrentPage() {
+    return productsList
+      .findElements(By.cssSelector(".product-card > .product-card__description > .product-card__text:last-child"))
+      .stream()
+      .map(WebElement::getText)
+      .map(tag -> tag.replaceAll("[\\[\\]]", ""))
+      .collect(Collectors.toMap(Function.identity(), tag -> Arrays.stream(tag.split(", ")).collect(Collectors.toList())));
+  }
 
-    public List<WebElement> getImagesTitlesFromCurrentPage(){
-        return productsList.findElements(By.className("product-card__title"));
-    }
+  public List<WebElement> getImagesTitlesFromCurrentPage() {
+    return productsList.findElements(By.className("product-card__title"));
+  }
 
-    public String getExistingImageTags(){
-//        String tags = productsList.findElements(By.className(".product-card > .product-card__description > .product-card__text:last-child")).get(0).getText();
-//        return   Arrays.stream(tags
-//                .split(", "))
-//                .limit(3)
-//                .collect(Collectors.toList())
-//                .toString()
-//                .replaceAll(", ", "|")
-//                .replaceAll("[\\[\\]]","")
-//                .replaceAll(" ", "~");
+  public String getExistingImageTags() {
+    return singleResultTag;
+  }
 
-        return "NANDROLONE+DECANOATE";
-    }
+  public List<String> getImagePricesFromCurrentPage() {
+    return productsList
+      .findElements(By.className("product-card__value"))
+      .stream()
+      .map(WebElement::getText)
+      .map(tag -> tag.replaceAll("[\\[\\]]", ""))
+      .collect(Collectors.toList());
+  }
 
-    public List<String> getImagePricesFromCurrentPage(){
-        return productsList.findElements(By.className("product-card__value"))
-                .stream()
-                .map(WebElement::getText)
-                .map(tag -> tag.replaceAll("[\\[\\]]",""))
-                .collect(Collectors.toList());
-    }
+  public String clickAndReturnCategory(){
+    String category = divCategoryNames.getText();
+    divCategoryNames.click();
+    return category;
+  }
 
-    public void clickSearchBottom(){
-        btnSearch.click();
-    }
+  public void clickSearchBottom() {
+    btnSearch.click();
+  }
 
-    // nothing happens, even when click on the page
-    public void clickResetBottom(){
-        btnResetSearchCriteria.click();
-    }
+  // nothing happens, even when click on the page
+  public void clickResetBottom() {
+    btnResetSearchCriteria.click();
+  }
 }
