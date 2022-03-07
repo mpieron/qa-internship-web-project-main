@@ -39,17 +39,17 @@ public class LoginSteps extends BaseSteps {
 
   @Step
   public void verifyCurrentPageIsHomePageForUser(String userName) {
-    verifyCurrentPageIsHomePageForTheUser(userName, "USER");
+    verifyCurrentPageIsHomePageForTheUser(userName, UserType.USER);
   }
 
   @Step
   public void verifyCurrentPageIsHomePageForTheRegularUser() {
-    verifyCurrentPageIsHomePageForTheUser(getData().userName(), "USER");
+    verifyCurrentPageIsHomePageForTheUser(getData().userName(), UserType.USER);
   }
 
   @Step
   public void verifyCurrentPageIsHomePageForTheAdmin() {
-    verifyCurrentPageIsHomePageForTheUser(getData().adminName(), "ADMIN");
+    verifyCurrentPageIsHomePageForTheUser(getData().adminName(), UserType.ADMIN);
   }
 
   @Step

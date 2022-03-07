@@ -3,10 +3,10 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.RegistrationPage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 
 /**
  * Registration functionality related steps.
@@ -17,7 +17,7 @@ public class RegistrationSteps extends BaseSteps {
     "User has been registered successfully: ";
 
   private static String FAILED_REGISTRATION_MESSAGE_PREFIX =
-          "There is already a user registered with the loginname provided";
+    "There is already a user registered with the loginname provided";
 
   public RegistrationSteps(WebDriver driver) {
     super(driver);
@@ -29,7 +29,7 @@ public class RegistrationSteps extends BaseSteps {
     FIRSTNAME,
     PATRONIM,
     PASSWORD,
-    EMAIL
+    EMAIL,
   }
 
   @Step
@@ -76,7 +76,7 @@ public class RegistrationSteps extends BaseSteps {
   }
 
   @Step
-  public void clickRegisterButton(){
+  public void clickRegisterButton() {
     page().clickRegisterButton();
   }
 
@@ -106,10 +106,11 @@ public class RegistrationSteps extends BaseSteps {
 
   @Step
   public void verifyFailedRegistrationMessageIsDisplayed() {
-    getWait().until(ExpectedConditions.visibilityOf(page().getFailedRegistrationMessageWebElement()));
+    getWait()
+      .until(ExpectedConditions.visibilityOf(page().getFailedRegistrationMessageWebElement()));
     assertThat(page().getRegisteredUserExistMessageText().trim())
-            .as("Failed registration message was nor shown or had unexpected content.")
-            .startsWith(FAILED_REGISTRATION_MESSAGE_PREFIX);
+      .as("Failed registration message was nor shown or had unexpected content.")
+      .startsWith(FAILED_REGISTRATION_MESSAGE_PREFIX);
   }
 
   @Step

@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.griddynamics.qa.vikta.uitesting.sample.config.DataProvider;
 import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataAndProperties;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.BasePage;
-
 import java.time.Duration;
 import java.util.Objects;
 import org.openqa.selenium.WebDriver;
@@ -20,6 +19,11 @@ abstract class BaseSteps {
 
   private WebDriver driver;
   private WebDriverWait wait;
+
+  public enum UserType {
+    USER,
+    ADMIN,
+  }
 
   BaseSteps(WebDriver driver) {
     this.driver = driver;
@@ -45,7 +49,7 @@ abstract class BaseSteps {
     return PageFactory.initElements(getDriver(), pageClass);
   }
 
-  void verifyCurrentPageIsHomePageForTheUser(String username, String userType) {
+  void verifyCurrentPageIsHomePageForTheUser(String username, UserType userType) {
     BasePage currentPage = getPage(BasePage.class);
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getLoggedInName()));
 
@@ -55,7 +59,7 @@ abstract class BaseSteps {
       .as("Unexpected current user's name displayed. Expected: %s", username)
       .contains(username);
 
-    assertThat(currentPage.getLoggedRole()).as("Assigned wrong role").contains(userType);
+    assertThat(currentPage.getLoggedRole()).as("Assigned wrong role").contains(userType.toString());
   }
 
   void assertCurrentPageUrl(String expectedUrl, String messageOnFail) {

@@ -59,27 +59,27 @@ public class BasePage {
     aLogoutTop.click();
   }
 
-  public void clickHomeBottom(){
+  public void clickHomeBottom() {
     aHome.click();
   }
 
-  public void clickAddressBottom(){
+  public void clickAddressBottom() {
     aAddress.click();
   }
 
-  public void clickAddAddressBottom(){
+  public void clickAddAddressBottom() {
     aAddAddress.click();
   }
 
-  public void clickCardsBottom(){
+  public void clickCardsBottom() {
     aCards.click();
   }
 
-  public void clickAddCardBottom(){
+  public void clickAddCardBottom() {
     aAddCard.click();
   }
 
-  public void clickEditProfileBottom(){
+  public void clickEditProfileBottom() {
     aEditProfile.click();
   }
 
