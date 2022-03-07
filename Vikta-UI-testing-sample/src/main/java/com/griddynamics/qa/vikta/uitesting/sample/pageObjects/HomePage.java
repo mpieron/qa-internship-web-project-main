@@ -1,107 +1,124 @@
 package com.griddynamics.qa.vikta.uitesting.sample.pageObjects;
 
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
  * Page Object of Home page
  */
 public class HomePage extends BasePage {
 
-    @FindBy(id = "tbTerm")
-    private WebElement tbTerm;
+  private final String singleResultTag = "IVA+ANNUA+POLLEN";
 
-    @FindBy(id = "tbRatingFrom")
-    private WebElement tbRatingFrom;
+  @FindBy(id = "tbTerm")
+  private WebElement tbTerm;
 
-    @FindBy(id = "tbRatingTo")
-    private WebElement tbRatingTo;
+  @FindBy(id = "tbRatingFrom")
+  private WebElement tbRatingFrom;
 
-    @FindBy(id = "tbPriceFrom")
-    private WebElement tbPriceFrom;
+  @FindBy(id = "tbRatingTo")
+  private WebElement tbRatingTo;
 
-    @FindBy(id = "tbPriceTo")
-    private WebElement tbPriceTo;
+  @FindBy(id = "tbPriceFrom")
+  private WebElement tbPriceFrom;
 
-    @FindBy(id = "btnSearch")
-    private WebElement btnSearch;
+  @FindBy(id = "tbPriceTo")
+  private WebElement tbPriceTo;
 
-    @FindBy(id = "btnResetSearchCriteria")
-    private WebElement btnResetSearchCriteria;
+  @FindBy(id = "btnSearch")
+  private WebElement btnSearch;
 
-    @FindBy(id = "divErrorsAndMessages")
-    private WebElement divErrorsAndMessages;
+  @FindBy(id = "btnResetSearchCriteria")
+  private WebElement btnResetSearchCriteria;
 
-    @FindBy(id = "divMsgOrErr")
-    private WebElement divMsgOrErr;
+  @FindBy(id = "tSelectedCategoryTitle")
+  private WebElement tSelectedCategoryTitle;
 
-    // I think there shouldn't be included categories separately, because they can be changed, so main should be enough
-    @FindBy(id = "divCategoryNames")
-    private WebElement divCategoryNames;
+  @FindBy(id = "divErrorsAndMessages")
+  private WebElement divErrorsAndMessages;
 
-    // same as above
-    @FindBy(className = "products-list")
-    private WebElement productsList;
+  @FindBy(id = "divMsgOrErr")
+  private WebElement divMsgOrErr;
 
-    public void writeTerm(String term){
-        typeIn(term, tbTerm);
-    }
+  @FindBy(css = "[id^=category]:first-child")
+  private WebElement divCategoryNames;
 
-    public void writeRatingFrom(String rating){
-        typeIn(rating, tbRatingFrom);
-    }
+  @FindBy(css = ".products-list")
+  private WebElement productsList;
 
-    public void writeRatingTo(String rating){
-        typeIn( rating, tbRatingTo);
-    }
+  public void writeTerm(String term) {
+    typeIn(term, tbTerm);
+  }
 
-    public void writePriceFrom(String price){
-        typeIn(price, tbPriceFrom);
-    }
+  public void writeRatingFrom(String rating) {
+    typeIn(rating, tbRatingFrom);
+  }
 
-    public void writePriceTo(String price){
-        typeIn(price, tbPriceTo);
-    }
+  public void writeRatingTo(String rating) {
+    typeIn(rating, tbRatingTo);
+  }
 
-    private void typeIn(String value, WebElement targetElement) {
-        targetElement.clear();
-        targetElement.sendKeys(value);
-    }
+  public void writePriceFrom(String price) {
+    typeIn(price, tbPriceFrom);
+  }
 
-    public List<WebElement> getImagesOnCurrentPage(){
-        return productsList.findElements(By.className("product-card"));
-    }
+  public void writePriceTo(String price) {
+    typeIn(price, tbPriceTo);
+  }
 
-    public String getExistingImageTitle(){
-        List<WebElement> productList = productsList.findElements(By.className("product-card__title"));
-        return productList.get(new Random().nextInt(productList.size())).getText();
-    }
+  private void typeIn(String value, WebElement targetElement) {
+    targetElement.clear();
+    targetElement.sendKeys(value);
+  }
 
-    public String getExistingImageTag(){
-        List<WebElement> tagList = productsList.findElements(By.className("product-card__text"));
-        return Arrays.stream(tagList.get(new Random().nextInt(tagList.size())).getText()
-                .split(", "))
-                .limit(3)
-                .collect(Collectors.toList())
-                .toString()
-                .replaceAll(", ", "|")
-                .replaceAll("[\\[\\]]","")
-                .replaceAll(" ", "~");
-    }
+  public WebElement getSelectedCategoryTitle() {
+    return tSelectedCategoryTitle;
+  }
 
-    public void clickSearchBottom(){
-        btnSearch.click();
-    }
+  public Map<String, List<String>> getImagesTagsFromCurrentPage() {
+    return productsList
+      .findElements(By.cssSelector(".product-card > .product-card__description > .product-card__text:last-child"))
+      .stream()
+      .map(WebElement::getText)
+      .map(tag -> tag.replaceAll("[\\[\\]]", ""))
+      .collect(Collectors.toMap(Function.identity(), tag -> Arrays.stream(tag.split(", ")).collect(Collectors.toList())));
+  }
 
-    // nothing happens, even when click on the page
-    public void clickResetBottom(){
-        btnResetSearchCriteria.click();
-    }
+  public List<WebElement> getImagesTitlesFromCurrentPage() {
+    return productsList.findElements(By.className("product-card__title"));
+  }
 
+  public String getExistingImageTags() {
+    return singleResultTag;
+  }
+
+  public List<String> getImagePricesFromCurrentPage() {
+    return productsList
+      .findElements(By.className("product-card__value"))
+      .stream()
+      .map(WebElement::getText)
+      .map(tag -> tag.replaceAll("[\\[\\]]", ""))
+      .collect(Collectors.toList());
+  }
+
+  public String clickAndReturnCategory(){
+    String category = divCategoryNames.getText();
+    divCategoryNames.click();
+    return category;
+  }
+
+  public void clickSearchBottom() {
+    btnSearch.click();
+  }
+
+  // nothing happens, even when click on the page
+  public void clickResetBottom() {
+    btnResetSearchCriteria.click();
+  }
 }

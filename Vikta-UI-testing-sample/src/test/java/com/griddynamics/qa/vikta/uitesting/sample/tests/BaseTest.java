@@ -7,6 +7,10 @@ import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.LoginSteps;
 import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.RegistrationSteps;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Attachment;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -14,11 +18,6 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 
 public class BaseTest {
 

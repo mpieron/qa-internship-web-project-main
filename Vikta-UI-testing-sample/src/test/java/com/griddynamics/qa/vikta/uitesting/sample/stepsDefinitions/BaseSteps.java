@@ -6,6 +6,7 @@ import com.griddynamics.qa.vikta.uitesting.sample.config.DataProvider;
 import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataAndProperties;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.BasePage;
 
+import java.time.Duration;
 import java.util.Objects;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -44,7 +45,7 @@ abstract class BaseSteps {
     return PageFactory.initElements(getDriver(), pageClass);
   }
 
-  void verifyCurrentPageIsHomePageForTheUser(String username) {
+  void verifyCurrentPageIsHomePageForTheUser(String username, String userType) {
     BasePage currentPage = getPage(BasePage.class);
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getLoggedInName()));
 
@@ -54,22 +55,7 @@ abstract class BaseSteps {
       .as("Unexpected current user's name displayed. Expected: %s", username)
       .contains(username);
 
-    assertThat(currentPage.getLoggedRole()).as("Assigned wrong role")
-            .contains("USER");
-  }
-
-  void verifyCurrentPageIsHomePageForTheAdmin(String username) {
-    BasePage currentPage = getPage(BasePage.class);
-    getWait().until(ExpectedConditions.visibilityOf(currentPage.getLoggedInName()));
-
-    assertCurrentPageUrl(getData().baseUrl(), "Home page was expected to be the current one.");
-
-    assertThat(currentPage.getCurrentUserName())
-            .as("Unexpected current user's name displayed. Expected: %s", username)
-            .contains(username);
-
-    assertThat(currentPage.getLoggedRole()).as("Assigned wrong role")
-            .contains("ADMIN");
+    assertThat(currentPage.getLoggedRole()).as("Assigned wrong role").contains(userType);
   }
 
   void assertCurrentPageUrl(String expectedUrl, String messageOnFail) {

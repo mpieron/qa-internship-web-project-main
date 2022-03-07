@@ -35,17 +35,17 @@ public class RegistrationTest extends BaseTest {
     // Then Successful registration message contains the login name used
     registrationSteps.verifySuccessfulRegistrationMessageContainsNewUsername(loginName);
 
-//    when try login as just registered user, following message will appear: "Login name or Password invalid, please verify"
+    //    when try login as just registered user, following message will appear: "Login name or Password invalid, please verify"
     // Develop login as new user
     loginSteps.openLoginPage();
     loginSteps.login(loginName, password);
     loginSteps.verifyCurrentPageIsHomePageForUser(loginName);
-}
+  }
 
   /**
    * Scenario: Guest user is NOT able to register regular user account using some existing user account's name
    */
-  @Test()
+  @Test
   public void testImpossibleToReUseEmailForRegistration() {
     // Given user opens Registration page
     registrationSteps.openRegistrationPage();

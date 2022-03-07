@@ -1,11 +1,15 @@
 package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
+import java.util.List;
+import java.util.Random;
 import org.openqa.selenium.WebDriver;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  * Home page related step Definitions
@@ -36,11 +40,12 @@ public class HomePageSteps extends BaseSteps {
     String returnValue;
     switch (fieldName) {
       case TITLE:
-        returnValue = page().getExistingImageTitle();
-        page().writeTerm(page().getExistingImageTitle());
+        List<WebElement> productList = page().getImagesTitlesFromCurrentPage();
+        returnValue = productList.get(new Random().nextInt(productList.size())).getText();
+        page().writeTerm(returnValue);
         break;
       case TAG:
-        returnValue = page().getExistingImageTag();
+        returnValue = page().getExistingImageTags();
         page().writeTerm(returnValue);
         break;
       case RATINGFROM:
@@ -52,28 +57,78 @@ public class HomePageSteps extends BaseSteps {
         page().writeRatingTo(returnValue);
         break;
       case PRICEFROM:
-        returnValue = utilities.generatePrice();
+        returnValue = utilities.generatePriceFrom();
         page().writePriceFrom(returnValue);
         break;
       case PRICETO:
-        returnValue = utilities.generatePrice();
+        returnValue = utilities.generatePriceTo();
         page().writePriceTo(returnValue);
         break;
       default:
-        throw new IllegalArgumentException(
-                "Unsupported search record name: " + fieldName
-        );
+        throw new IllegalArgumentException("Unsupported search record name: " + fieldName);
     }
     return returnValue;
   }
 
   @Step
-  public void verifyFoundImages(String term){
-    assertThat(page().getImagesOnCurrentPage().size()).isGreaterThan(0);
+  public void verifyImagesFoundByTitle(String title){
+    HomePage currentPage = getPage(HomePage.class);
+    getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
 
-//    to improve - checking if founded images contain term (title/tag)
-//    assertThat(page().getImagesOnCurrentPage())
-//            .allSatisfy(image -> assertThat(image.getText()).contains(term));
+    assertThat(page().getImagesTitlesFromCurrentPage().size()).isGreaterThan(0);
+
+    assertThat(page().getImagesTitlesFromCurrentPage())
+            .as("Found image item that doesn't contain searched title")
+            .allSatisfy(image -> assertThat(image.getText()).contains(title));
+  }
+
+  @Step
+  public void verifyImagesFoundByTags(String tag){
+    HomePage currentPage = getPage(HomePage.class);
+    getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
+
+    String cleanTag = tag.replaceAll("\\+", " ");
+
+    assertThat(page().getImagesTagsFromCurrentPage().size()).isGreaterThan(0);
+
+    assertThat(page().getImagesTagsFromCurrentPage().entrySet())
+            .as("Found image item that doesn't contain searched tags")
+            .allSatisfy(image -> assertThat(image.getValue()).contains(cleanTag));
+  }
+
+  @Step
+  public void verifyImagesFoundByPriceFrom(String price){
+    HomePage currentPage = getPage(HomePage.class);
+    getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
+
+    assertThat(page().getImagePricesFromCurrentPage())
+            .as("Found image item that's price is lower that search")
+            .allSatisfy(imagePrice -> assertThat(Double.parseDouble(imagePrice)).isGreaterThanOrEqualTo(Double.parseDouble(price)));
+  }
+
+  @Step
+  public void verifyImagesFoundByPriceTo(String price){
+    HomePage currentPage = getPage(HomePage.class);
+    getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
+
+    assertThat(page().getImagePricesFromCurrentPage())
+            .as("Found image item that's price is greater that search")
+            .allSatisfy(imagePrice -> assertThat(Double.parseDouble(imagePrice)).isLessThanOrEqualTo(Double.parseDouble(price)));
+  }
+
+  @Step
+  public void verifySearchedCategory(String categoryName){
+    HomePage currentPage = getPage(HomePage.class);
+    getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
+
+    assertThat(currentPage.getSelectedCategoryTitle().getText())
+            .as("Wrong category found")
+            .contains(categoryName);
+  }
+
+  @Step
+  public String clickAndReturnCategory(){
+    return page().clickAndReturnCategory();
   }
 
   @Step

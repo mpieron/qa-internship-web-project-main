@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.LoginPage;
 import io.qameta.allure.Step;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -38,17 +39,17 @@ public class LoginSteps extends BaseSteps {
 
   @Step
   public void verifyCurrentPageIsHomePageForUser(String userName) {
-    verifyCurrentPageIsHomePageForTheUser(userName);
+    verifyCurrentPageIsHomePageForTheUser(userName, "USER");
   }
 
   @Step
   public void verifyCurrentPageIsHomePageForTheRegularUser() {
-    verifyCurrentPageIsHomePageForTheUser(getData().userName());
+    verifyCurrentPageIsHomePageForTheUser(getData().userName(), "USER");
   }
 
   @Step
   public void verifyCurrentPageIsHomePageForTheAdmin() {
-    verifyCurrentPageIsHomePageForTheAdmin(getData().adminName());
+    verifyCurrentPageIsHomePageForTheUser(getData().adminName(), "ADMIN");
   }
 
   @Step
