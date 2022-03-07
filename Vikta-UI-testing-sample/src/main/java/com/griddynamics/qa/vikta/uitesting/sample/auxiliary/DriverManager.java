@@ -100,6 +100,7 @@ public final class DriverManager {
     ops.addArguments("--start-maximized");
     ops.addArguments("--dns-prefetch-disable");
     ops.addArguments("test-type");
+    ops.addArguments("--headless");
     ops.setPageLoadStrategy(PageLoadStrategy.EAGER);
     ops.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
     io.github.bonigarcia.wdm.WebDriverManager.getInstance(WebDriverType.CHROME.name()).setup();

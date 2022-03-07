@@ -42,7 +42,7 @@ public class BaseTest {
   }
 
   @AfterMethod
-  public void makeScreenshotOnFailure(ITestResult testResult){
+  public void makeScreenshotOnFailure(ITestResult testResult) {
     if (testResult.getStatus() == ITestResult.FAILURE) {
       try {
         Allure.addAttachment(testResult.getName(), new ByteArrayInputStream(takeScreenShot()));
@@ -53,7 +53,7 @@ public class BaseTest {
   }
 
   private byte[] takeScreenShot() throws IOException {
-    return ((TakesScreenshot)driverManager.get()).getScreenshotAs(OutputType.BYTES);
+    return ((TakesScreenshot) driverManager.get()).getScreenshotAs(OutputType.BYTES);
   }
 
   @AfterClass

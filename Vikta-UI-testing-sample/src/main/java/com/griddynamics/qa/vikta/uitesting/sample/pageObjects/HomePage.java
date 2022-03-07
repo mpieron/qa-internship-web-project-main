@@ -83,11 +83,20 @@ public class HomePage extends BasePage {
 
   public Map<String, List<String>> getImagesTagsFromCurrentPage() {
     return productsList
-      .findElements(By.cssSelector(".product-card > .product-card__description > .product-card__text:last-child"))
+      .findElements(
+        By.cssSelector(
+          ".product-card > .product-card__description > .product-card__text:last-child"
+        )
+      )
       .stream()
       .map(WebElement::getText)
       .map(tag -> tag.replaceAll("[\\[\\]]", ""))
-      .collect(Collectors.toMap(Function.identity(), tag -> Arrays.stream(tag.split(", ")).collect(Collectors.toList())));
+      .collect(
+        Collectors.toMap(
+          Function.identity(),
+          tag -> Arrays.stream(tag.split(", ")).collect(Collectors.toList())
+        )
+      );
   }
 
   public List<WebElement> getImagesTitlesFromCurrentPage() {
@@ -107,7 +116,7 @@ public class HomePage extends BasePage {
       .collect(Collectors.toList());
   }
 
-  public String clickAndReturnCategory(){
+  public String clickAndReturnCategory() {
     String category = divCategoryNames.getText();
     divCategoryNames.click();
     return category;

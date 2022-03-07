@@ -6,7 +6,8 @@ import java.util.Random;
 public class Utilities {
 
   Faker faker = new Faker();
-  Random random = new Random();
+  String priceFrom = "0.654";
+  String priceTo = "122.03";
 
   public String generateEmail() {
     return faker.bothify("?????##@gmail.com");
@@ -37,10 +38,10 @@ public class Utilities {
   }
 
   public String generatePriceTo() {
-    return String.valueOf(faker.random().nextInt(100) + faker.random().nextDouble());
+    return priceTo;
   }
 
   public String generatePriceFrom() {
-    return String.valueOf(0.654);
+    return priceFrom;
   }
 }

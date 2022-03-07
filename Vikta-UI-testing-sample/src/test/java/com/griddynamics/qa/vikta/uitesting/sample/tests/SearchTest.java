@@ -70,7 +70,7 @@ public class SearchTest extends BaseTest {
   }
 
   @Test
-  public void canSearchCategory(){
+  public void canSearchCategory() {
     // Open Home Page
     homePageSteps.openHomePage();
 

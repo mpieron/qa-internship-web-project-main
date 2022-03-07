@@ -26,7 +26,7 @@ public class HomePageSteps extends BaseSteps {
     RATINGFROM,
     RATINGTO,
     PRICEFROM,
-    PRICETO
+    PRICETO,
   }
 
   @Step
@@ -71,19 +71,19 @@ public class HomePageSteps extends BaseSteps {
   }
 
   @Step
-  public void verifyImagesFoundByTitle(String title){
+  public void verifyImagesFoundByTitle(String title) {
     HomePage currentPage = getPage(HomePage.class);
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
 
     assertThat(page().getImagesTitlesFromCurrentPage().size()).isGreaterThan(0);
 
     assertThat(page().getImagesTitlesFromCurrentPage())
-            .as("Found image item that doesn't contain searched title")
-            .allSatisfy(image -> assertThat(image.getText()).contains(title));
+      .as("Found image item that doesn't contain searched title")
+      .allSatisfy(image -> assertThat(image.getText()).contains(title));
   }
 
   @Step
-  public void verifyImagesFoundByTags(String tag){
+  public void verifyImagesFoundByTags(String tag) {
     HomePage currentPage = getPage(HomePage.class);
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
 
@@ -92,52 +92,59 @@ public class HomePageSteps extends BaseSteps {
     assertThat(page().getImagesTagsFromCurrentPage().size()).isGreaterThan(0);
 
     assertThat(page().getImagesTagsFromCurrentPage().entrySet())
-            .as("Found image item that doesn't contain searched tags")
-            .allSatisfy(image -> assertThat(image.getValue()).contains(cleanTag));
+      .as("Found image item that doesn't contain searched tags")
+      .allSatisfy(image -> assertThat(image.getValue()).contains(cleanTag));
   }
 
   @Step
-  public void verifyImagesFoundByPriceFrom(String price){
+  public void verifyImagesFoundByPriceFrom(String price) {
     HomePage currentPage = getPage(HomePage.class);
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
 
     assertThat(page().getImagePricesFromCurrentPage())
-            .as("Found image item that's price is lower that search")
-            .allSatisfy(imagePrice -> assertThat(Double.parseDouble(imagePrice)).isGreaterThanOrEqualTo(Double.parseDouble(price)));
+      .as("Found image item that's price is lower that search")
+      .allSatisfy(
+        imagePrice ->
+          assertThat(Double.parseDouble(imagePrice))
+            .isGreaterThanOrEqualTo(Double.parseDouble(price))
+      );
   }
 
   @Step
-  public void verifyImagesFoundByPriceTo(String price){
+  public void verifyImagesFoundByPriceTo(String price) {
     HomePage currentPage = getPage(HomePage.class);
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
 
     assertThat(page().getImagePricesFromCurrentPage())
-            .as("Found image item that's price is greater that search")
-            .allSatisfy(imagePrice -> assertThat(Double.parseDouble(imagePrice)).isLessThanOrEqualTo(Double.parseDouble(price)));
+      .as("Found image item that's price is greater that search")
+      .allSatisfy(
+        imagePrice ->
+          assertThat(Double.parseDouble(imagePrice)).isLessThanOrEqualTo(Double.parseDouble(price))
+      );
   }
 
   @Step
-  public void verifySearchedCategory(String categoryName){
+  public void verifySearchedCategory(String categoryName) {
     HomePage currentPage = getPage(HomePage.class);
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
 
     assertThat(currentPage.getSelectedCategoryTitle().getText())
-            .as("Wrong category found")
-            .contains(categoryName);
+      .as("Wrong category found")
+      .contains(categoryName);
   }
 
   @Step
-  public String clickAndReturnCategory(){
+  public String clickAndReturnCategory() {
     return page().clickAndReturnCategory();
   }
 
   @Step
-  public void clickSearchBottom(){
+  public void clickSearchBottom() {
     page().clickSearchBottom();
   }
 
   @Step
-  public void clickResetBottom(){
+  public void clickResetBottom() {
     page().clickResetBottom();
   }
 
