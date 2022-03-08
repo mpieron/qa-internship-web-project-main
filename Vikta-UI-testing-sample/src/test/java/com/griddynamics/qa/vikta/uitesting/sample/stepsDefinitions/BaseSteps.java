@@ -7,6 +7,8 @@ import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataAndProperties;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.BasePage;
 import java.time.Duration;
 import java.util.Objects;
+
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -49,6 +51,7 @@ abstract class BaseSteps {
     return PageFactory.initElements(getDriver(), pageClass);
   }
 
+  @Step
   void verifyCurrentPageIsHomePageForTheUser(String username, UserType userType) {
     BasePage currentPage = getPage(BasePage.class);
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getLoggedInName()));
@@ -62,7 +65,9 @@ abstract class BaseSteps {
     assertThat(currentPage.getLoggedRole()).as("Assigned wrong role").contains(userType.toString());
   }
 
+  @Step
   void assertCurrentPageUrl(String expectedUrl, String messageOnFail) {
     assertThat(getDriver().getCurrentUrl()).as(messageOnFail).contains(expectedUrl);
   }
+
 }

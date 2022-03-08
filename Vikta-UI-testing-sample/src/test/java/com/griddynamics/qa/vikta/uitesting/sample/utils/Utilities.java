@@ -13,8 +13,28 @@ public class Utilities {
     return faker.bothify("?????##@gmail.com");
   }
 
-  public String generateAddress() {
-    return faker.address().fullAddress();
+  public String generateStreetAddress() {
+    return faker.address().streetAddress();
+  }
+
+  public String generateCityAddress() {
+    return faker.address().city();
+  }
+
+  public String generateCountryAddress() {
+    return faker.address().country();
+  }
+
+  public String generatePostalCodeAddress() {
+    return faker.address().zipCode();
+  }
+
+  public String generateAdditionalStreetInfoAddress() {
+    return faker.address().streetAddressNumber();
+  }
+
+  public String generateNicknameAddress() {
+    return faker.regexify("[a-z1-9]{4}");
   }
 
   public String generateName() {
