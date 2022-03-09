@@ -9,7 +9,7 @@ public class Utilities {
   private static final String priceFrom = "0.654";
   private static final String priceTo = "122.03";
 
-  private Utilities(){}
+  private Utilities() {}
 
   public static String generateEmail() {
     return faker.bothify("?????##@gmail.com");
@@ -35,7 +35,7 @@ public class Utilities {
     return faker.address().streetAddressNumber();
   }
 
-  public static String generateNicknameAddress() {
+  public static String generateNickname() {
     return faker.regexify("[a-z1-9]{4}");
   }
 
@@ -65,5 +65,21 @@ public class Utilities {
 
   public static String generatePriceFrom() {
     return priceFrom;
+  }
+
+  public static String generateCardNumber() {
+    return faker.regexify("[1-9]{15}");
+  }
+
+  public static String generateCardCode() {
+    return faker.regexify("[1-9]{3}");
+  }
+
+  public static String generateCardOwner() {
+    return String.format("%s %s", generateName(), generateSurname()).toUpperCase();
+  }
+
+  public static String generateExpirationDate() {
+    return faker.numerify("2022-10-10");
   }
 }

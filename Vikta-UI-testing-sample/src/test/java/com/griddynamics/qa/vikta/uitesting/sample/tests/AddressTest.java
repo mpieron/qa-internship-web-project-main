@@ -99,7 +99,7 @@ public class AddressTest extends BaseTest {
     addressSteps.fillAllFieldsInAddress();
 
     //        Click clear button
-//    addressSteps.clickDeleteOrResetButton();
+    //    addressSteps.clickDeleteOrResetButton();
 
     //        Check if all fields are empty
     addressSteps.verifyIfAllFieldsOnAddPageAreEmpty();
