@@ -24,10 +24,5 @@ public interface TestDataAndProperties extends Config {
   String userName();
   String userPassword();
 
-  String street();
-  String additionalStreetInfo();
-  String city();
-  String region();
-  String postalCode();
   String nickname();
 }

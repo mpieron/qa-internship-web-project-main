@@ -5,63 +5,65 @@ import java.util.Random;
 
 public class Utilities {
 
-  Faker faker = new Faker();
-  String priceFrom = "0.654";
-  String priceTo = "122.03";
+  static Faker faker = new Faker();
+  static String priceFrom = "0.654";
+  static String priceTo = "122.03";
 
-  public String generateEmail() {
+  private Utilities(){}
+
+  public static String generateEmail() {
     return faker.bothify("?????##@gmail.com");
   }
 
-  public String generateStreetAddress() {
+  public static String generateStreetAddress() {
     return faker.address().streetAddress();
   }
 
-  public String generateCityAddress() {
+  public static String generateCityAddress() {
     return faker.address().city();
   }
 
-  public String generateCountryAddress() {
+  public static String generateCountryAddress() {
     return faker.address().country();
   }
 
-  public String generatePostalCodeAddress() {
+  public static String generatePostalCodeAddress() {
     return faker.address().zipCode();
   }
 
-  public String generateAdditionalStreetInfoAddress() {
+  public static String generateAdditionalStreetInfoAddress() {
     return faker.address().streetAddressNumber();
   }
 
-  public String generateNicknameAddress() {
+  public static String generateNicknameAddress() {
     return faker.regexify("[a-z1-9]{4}");
   }
 
-  public String generateName() {
+  public static String generateName() {
     return faker.name().firstName();
   }
 
-  public String generateSurname() {
+  public static String generateSurname() {
     return faker.name().lastName();
   }
 
-  public String generateLoginName() {
+  public static String generateLoginName() {
     return faker.name().username();
   }
 
-  public String generatePassword() {
+  public static String generatePassword() {
     return faker.regexify("[a-z1-9]{5}");
   }
 
-  public String generateRating() {
+  public static String generateRating() {
     return String.valueOf(faker.random().nextInt(0, 5));
   }
 
-  public String generatePriceTo() {
+  public static String generatePriceTo() {
     return priceTo;
   }
 
-  public String generatePriceFrom() {
+  public static String generatePriceFrom() {
     return priceFrom;
   }
 }

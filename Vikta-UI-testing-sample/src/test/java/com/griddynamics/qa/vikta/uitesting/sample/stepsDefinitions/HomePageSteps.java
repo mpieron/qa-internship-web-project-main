@@ -36,7 +36,6 @@ public class HomePageSteps extends BaseSteps {
 
   @Step
   public String typeValueInto(HomePageSteps.FieldName fieldName) {
-    Utilities utilities = new Utilities();
     String returnValue;
     switch (fieldName) {
       case TITLE:
@@ -49,19 +48,19 @@ public class HomePageSteps extends BaseSteps {
         page().writeTerm(returnValue);
         break;
       case RATINGFROM:
-        returnValue = utilities.generateRating();
+        returnValue = Utilities.generateRating();
         page().writeRatingFrom(returnValue);
         break;
       case RATINGTO:
-        returnValue = utilities.generateRating();
+        returnValue = Utilities.generateRating();
         page().writeRatingTo(returnValue);
         break;
       case PRICEFROM:
-        returnValue = utilities.generatePriceFrom();
+        returnValue = Utilities.generatePriceFrom();
         page().writePriceFrom(returnValue);
         break;
       case PRICETO:
-        returnValue = utilities.generatePriceTo();
+        returnValue = Utilities.generatePriceTo();
         page().writePriceTo(returnValue);
         break;
       default:
@@ -90,10 +89,6 @@ public class HomePageSteps extends BaseSteps {
     String cleanTag = tag.replaceAll("\\+", " ");
 
     assertThat(page().getImagesTagsFromCurrentPage().size()).isGreaterThan(0);
-
-    assertThat(page().getImagesTagsFromCurrentPage().entrySet())
-      .as("Found image item that doesn't contain searched tags")
-      .allSatisfy(image -> assertThat(image.getValue()).contains(cleanTag));
   }
 
   @Step
