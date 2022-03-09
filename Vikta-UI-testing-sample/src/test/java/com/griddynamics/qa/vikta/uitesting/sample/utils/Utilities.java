@@ -5,9 +5,9 @@ import java.util.Random;
 
 public class Utilities {
 
-  static Faker faker = new Faker();
-  static String priceFrom = "0.654";
-  static String priceTo = "122.03";
+  private static final Faker faker = new Faker();
+  private static final String priceFrom = "0.654";
+  private static final String priceTo = "122.03";
 
   private Utilities(){}
 
