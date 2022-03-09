@@ -39,31 +39,30 @@ public class RegistrationSteps extends BaseSteps {
 
   @Step
   public String typeRandomValueInto(FieldName fieldName) {
-    Utilities utilities = new Utilities();
     String valueToReturn;
     switch (fieldName) {
       case LOGINNAME:
-        valueToReturn = utilities.generateLoginName();
+        valueToReturn = Utilities.generateLoginName();
         page().typeInLoginname(valueToReturn);
         break;
       case SURNAME:
-        valueToReturn = utilities.generateSurname();
+        valueToReturn = Utilities.generateSurname();
         page().typeInSurname(valueToReturn);
         break;
       case FIRSTNAME:
-        valueToReturn = utilities.generateName();
+        valueToReturn = Utilities.generateName();
         page().typeInFirstname(valueToReturn);
         break;
       case PATRONIM:
-        valueToReturn = utilities.generateName();
+        valueToReturn = Utilities.generateName();
         page().typeInPatronim(valueToReturn);
         break;
       case PASSWORD:
-        valueToReturn = utilities.generatePassword();
+        valueToReturn = Utilities.generatePassword();
         page().typeInPassword(valueToReturn);
         break;
       case EMAIL:
-        valueToReturn = utilities.generateEmail();
+        valueToReturn = Utilities.generateEmail();
         page().typeInEmail(valueToReturn);
         break;
       default:

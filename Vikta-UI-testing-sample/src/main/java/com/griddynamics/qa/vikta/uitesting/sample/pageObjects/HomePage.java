@@ -46,7 +46,7 @@ public class HomePage extends BasePage {
   @FindBy(id = "divMsgOrErr")
   private WebElement divMsgOrErr;
 
-  @FindBy(css = "[id^=category]:first-child")
+  @FindBy(css = "[id^=category]:first-child > a")
   private WebElement divCategoryNames;
 
   @FindBy(css = ".products-list")
@@ -104,7 +104,15 @@ public class HomePage extends BasePage {
   }
 
   public String getExistingImageTags() {
-    return singleResultTag;
+    return productsList
+      .findElements(By.cssSelector(".product-card > .product-card__description > .product-card__text:last-child"))
+      .stream()
+      .map(WebElement::getText)
+      .limit(1)
+      .map(tags -> tags.substring(0, tags.indexOf(", ")))
+      .map(tag -> tag.replaceAll("[\\[\\]]", ""))
+      .collect(Collectors.toList())
+      .get(0);
   }
 
   public List<String> getImagePricesFromCurrentPage() {

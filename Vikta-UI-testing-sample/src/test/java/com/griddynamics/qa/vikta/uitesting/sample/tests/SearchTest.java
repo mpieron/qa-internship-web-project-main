@@ -39,6 +39,7 @@ public class SearchTest extends BaseTest {
     homePageSteps.verifyImagesFoundByTags(tag);
   }
 
+  //  not always finds, depends on vikta
   @Test
   public void canFindImageByPriceFrom() {
     // Open Home Page
@@ -54,6 +55,7 @@ public class SearchTest extends BaseTest {
     homePageSteps.verifyImagesFoundByPriceFrom(price);
   }
 
+  //  not always finds, depends on vikta
   @Test
   public void canFindImageByPriceTo() {
     // Open Home Page

@@ -19,8 +19,8 @@ public class BasePage {
   @FindBy(id = "aHome")
   private WebElement aHome;
 
-  @FindBy(id = "aAddress")
-  private WebElement aAddress;
+  @FindBy(id = "aAddresses")
+  private WebElement aAddresses;
 
   @FindBy(id = "aAddAddress")
   private WebElement aAddAddress;
@@ -63,8 +63,8 @@ public class BasePage {
     aHome.click();
   }
 
-  public void clickAddressBottom() {
-    aAddress.click();
+  public void clickAddressesBottom() {
+    aAddresses.click();
   }
 
   public void clickAddAddressBottom() {
