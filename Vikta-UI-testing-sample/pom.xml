@@ -108,6 +108,16 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.20</version>
                 <configuration>
+                    <systemProperties>
+                        <property>
+                            <name>
+                                allure.results.directory
+                            </name>
+                            <value>
+                                ${project.basedir}/target/allure-results
+                            </value>
+                        </property>
+                    </systemProperties>
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>

@@ -2,8 +2,8 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AddressesCardsListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CardEditAddPage;
+import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CardsListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
@@ -70,7 +70,7 @@ public class CardSteps extends BaseSteps {
 
   @Step
   public void clickAtSecondCardHyperlink() {
-    cardsListPage().clickAtSecondAddressHyperlink(false);
+    cardsListPage().clickAtSecondCardHyperlink();
   }
 
   @Step
@@ -101,7 +101,7 @@ public class CardSteps extends BaseSteps {
 
   @Step
   public void deleteAddedCards() {
-    List<WebElement> allCardsHyperlinksList = cardsListPage().getAllAddressesHyperlinksList(false);
+    List<WebElement> allCardsHyperlinksList = cardsListPage().getAllCardsHyperlinksList();
 
     for (int i = 1; i < allCardsHyperlinksList.size(); i++) {
       allCardsHyperlinksList.get(i).click();
@@ -112,14 +112,14 @@ public class CardSteps extends BaseSteps {
 
   @Step
   public void verifyFirstCardFieldsAreCorrect() {
-    assertThat(cardsListPage().getFirstFromList(false).getText())
+    assertThat(cardsListPage().getFirstCardFromList().getText())
       .as("Default card field is not correct.")
       .contains(getData().cardCode(), getData().cardTag());
   }
 
   @Step
   public void verifyIfChangedAllFieldsCorrectly(String cardInfo) {
-    String cardOnPage = cardsListPage().getSecondFromList(false).getText().substring(2);
+    String cardOnPage = cardsListPage().getSecondACardFromList().getText().substring(2);
     assertThat(cardOnPage)
       .as("Card wasn't changed correctly. Should be %s, but was %s", cardInfo, cardOnPage)
       .isEqualTo(cardInfo);
@@ -127,7 +127,7 @@ public class CardSteps extends BaseSteps {
 
   @Step
   public void verifyIfAddedCardCorrectly(String cardInfo) {
-    String cardAddress = cardsListPage().getLastAddress(false).getText().substring(2);
+    String cardAddress = cardsListPage().getLastCardFromList().getText().substring(2);
     assertThat(cardAddress)
       .as("Card wasn't added correctly. Should be %s, was %s", cardAddress, cardInfo)
       .isEqualTo(cardInfo);
@@ -135,7 +135,7 @@ public class CardSteps extends BaseSteps {
 
   @Step
   public void verifyIfCardWasDeleted() {
-    List<WebElement> allCardsHyperlinksList = cardsListPage().getAllAddressesHyperlinksList(false);
+    List<WebElement> allCardsHyperlinksList = cardsListPage().getAllCardsHyperlinksList();
 
     assertThat(allCardsHyperlinksList.size()).as("Card wasn't deleted").isEqualTo(1);
   }
@@ -155,7 +155,7 @@ public class CardSteps extends BaseSteps {
     return getPage(CardEditAddPage.class);
   }
 
-  private AddressesCardsListPage cardsListPage() {
-    return getPage(AddressesCardsListPage.class);
+  private CardsListPage cardsListPage() {
+    return getPage(CardsListPage.class);
   }
 }

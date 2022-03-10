@@ -14,8 +14,6 @@ import org.openqa.selenium.support.FindBy;
  */
 public class HomePage extends BasePage {
 
-  private final String singleResultTag = "IVA+ANNUA+POLLEN";
-
   @FindBy(id = "tbTerm")
   private WebElement tbTerm;
 
