@@ -40,6 +40,7 @@ public final class DriverManager {
         driver = createFirefoxDriver();
         break;
       case CHROME:
+        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver\\chromedriver.exe");
         driver = createChromeDriver();
         break;
       default:

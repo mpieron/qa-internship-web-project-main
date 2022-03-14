@@ -25,4 +25,7 @@ public interface TestDataAndProperties extends Config {
   String userPassword();
 
   String nickname();
+
+  String cardCode();
+  String cardTag();
 }

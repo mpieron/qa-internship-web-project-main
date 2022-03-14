@@ -1,46 +1,40 @@
 package com.griddynamics.qa.vikta.uitesting.sample.pageObjects;
 
 import java.util.List;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
-public class AddressesListPage extends BasePage {
+public class AddressesListPage extends ResourceListPage {
 
-  @FindBy(css = "#tblAddresses > tbody > tr:first-child > td:nth-child(2) > a")
-  private WebElement firstAddressHyperlink;
+  private final String addressTableId = "#tblAddresses";
+  private final int hyperlinkColumnNumber = 2;
 
-  @FindBy(css = "#tblAddresses > tbody > tr:nth-child(2) > td:nth-child(2) > a")
-  private WebElement secondAddressHyperlink;
-
-  @FindBy(css = "#tblAddresses > tbody > tr:first-child")
-  private WebElement firstAddress;
-
-  @FindBy(css = "#tblAddresses > tbody > tr:nth-child(2)")
-  private WebElement secondAddress;
-
-  @FindBy(css = "#tblAddresses > tbody > tr:last-child")
-  private WebElement lastAddress;
-
-  @FindBy(css = "#tblAddresses > tbody > tr > td:nth-child(2) > a")
-  private List<WebElement> allAddressesHyperlinksList;
-
-  public WebElement getFirstAddress() {
-    return firstAddress;
+  public WebElement getFirstAddressFromList() {
+    String selector = String.format("%s %s", addressTableId, firstFromList);
+    return body.findElement(By.cssSelector(selector));
   }
 
-  public WebElement getSecondAddress() {
-    return secondAddress;
+  public WebElement getSecondAddressFromList() {
+    String selector = String.format("%s %s", addressTableId, secondFromList);
+    return body.findElement(By.cssSelector(selector));
   }
 
-  public WebElement getLastAddress() {
-    return lastAddress;
+  public WebElement getLastAddressFromList() {
+    String selector = String.format("%s %s", addressTableId, lastFromList);
+    return body.findElement(By.cssSelector(selector));
   }
 
   public List<WebElement> getAllAddressesHyperlinksList() {
-    return allAddressesHyperlinksList;
+    String selector = String.format("%s %s", addressTableId, getAllHyperlinksList(hyperlinkColumnNumber));
+    return body.findElements(By.cssSelector(selector));
   }
 
   public void clickAtSecondAddressHyperlink() {
     getAllAddressesHyperlinksList().get(1).click();
+  }
+
+  public void clickAtLastAddressHyperlink() {
+    int size = getAllAddressesHyperlinksList().size();
+    getAllAddressesHyperlinksList().get(size).click();
   }
 }

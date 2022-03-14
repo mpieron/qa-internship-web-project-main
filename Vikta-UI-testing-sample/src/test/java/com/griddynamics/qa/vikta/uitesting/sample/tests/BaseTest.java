@@ -2,10 +2,7 @@ package com.griddynamics.qa.vikta.uitesting.sample.tests;
 
 import com.griddynamics.qa.vikta.uitesting.sample.auxiliary.DriverManager;
 import com.griddynamics.qa.vikta.uitesting.sample.config.DataProvider;
-import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.AddressSteps;
-import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.HomePageSteps;
-import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.LoginSteps;
-import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.RegistrationSteps;
+import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.*;
 import io.qameta.allure.Allure;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -25,6 +22,7 @@ public class BaseTest {
   RegistrationSteps registrationSteps;
   HomePageSteps homePageSteps;
   AddressSteps addressSteps;
+  CardSteps cardSteps;
 
   BaseTest() {
     driverManager = new DriverManager(DataProvider.get());
@@ -38,6 +36,7 @@ public class BaseTest {
     registrationSteps = new RegistrationSteps(driverManager.get());
     homePageSteps = new HomePageSteps(driverManager.get());
     addressSteps = new AddressSteps(driverManager.get());
+    cardSteps = new CardSteps(driverManager.get());
   }
 
   @AfterMethod

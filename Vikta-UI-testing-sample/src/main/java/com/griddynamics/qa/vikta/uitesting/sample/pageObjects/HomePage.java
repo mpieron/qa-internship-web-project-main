@@ -14,8 +14,6 @@ import org.openqa.selenium.support.FindBy;
  */
 public class HomePage extends BasePage {
 
-  private final String singleResultTag = "IVA+ANNUA+POLLEN";
-
   @FindBy(id = "tbTerm")
   private WebElement tbTerm;
 
@@ -105,7 +103,11 @@ public class HomePage extends BasePage {
 
   public String getExistingImageTags() {
     return productsList
-      .findElements(By.cssSelector(".product-card > .product-card__description > .product-card__text:last-child"))
+      .findElements(
+        By.cssSelector(
+          ".product-card > .product-card__description > .product-card__text:last-child"
+        )
+      )
       .stream()
       .map(WebElement::getText)
       .limit(1)
