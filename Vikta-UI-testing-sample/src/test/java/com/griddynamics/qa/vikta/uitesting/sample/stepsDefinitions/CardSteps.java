@@ -85,7 +85,7 @@ public class CardSteps extends BaseSteps {
 
   @Step
   public void clickToTheListOfCards() {
-    cardEditAddPage().clickToTheListOfCards();
+    cardEditAddPage().clickToTheListOfItems();
   }
 
   @Step
@@ -106,7 +106,7 @@ public class CardSteps extends BaseSteps {
     for (int i = 1; i < allCardsHyperlinksList.size(); i++) {
       allCardsHyperlinksList.get(i).click();
       cardEditAddPage().clickDeleteOrResetButton();
-      cardEditAddPage().clickToTheListOfCards();
+      cardEditAddPage().clickToTheListOfItems();
     }
   }
 

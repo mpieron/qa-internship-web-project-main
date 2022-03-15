@@ -82,4 +82,8 @@ public class Utilities {
   public static String generateExpirationDate() {
     return faker.numerify("2022-10-10");
   }
+
+  public static String generateURL(){ return faker.bothify("https://?????/????.jpg");}
+
+  public static String generateTitle(){ return faker.book().title();}
 }

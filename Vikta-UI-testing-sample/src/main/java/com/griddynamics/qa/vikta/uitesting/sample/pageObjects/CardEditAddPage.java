@@ -6,10 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
-public class CardEditAddPage {
-
-  @FindBy(id = "aBack")
-  private WebElement aBack;
+public class CardEditAddPage extends EditAddPage{
 
   @FindBy(id = "tbNumber")
   private WebElement tbNumber;
@@ -26,47 +23,25 @@ public class CardEditAddPage {
   @FindBy(id = "tbNickname")
   private WebElement tbNickname;
 
-  @FindBy(id = "btnSave")
-  private WebElement btnSave;
-
   @FindAll({ @FindBy(id = "btnDelete2"), @FindBy(id = "btnReset") })
   private WebElement btnDeleteOrReset;
 
   public void typeInCardNumber(String value) {
-    typeIn(value, tbNumber);
+    typeIn(tbNumber, value);
   }
 
-  public void typeInCardCode(String value) {
-    typeIn(value, tbCode);
-  }
+  public void typeInCardCode(String value) {typeIn(tbCode, value);}
 
   public void typeInOwner(String value) {
-    typeIn(value, tbOwner);
+    typeIn(tbOwner, value);
   }
 
   public void typeInExpirationDate(String value) {
-    typeIn(value, tbexpirationDate);
+    typeIn(tbexpirationDate, value);
   }
 
   public void typeInNickname(String value) {
-    typeIn(value, tbNickname);
-  }
-
-  private void typeIn(String value, WebElement targetElement) {
-    targetElement.clear();
-    targetElement.sendKeys(value);
-  }
-
-  public void clickToTheListOfCards() {
-    aBack.click();
-  }
-
-  public void clickSaveButton() {
-    btnSave.click();
-  }
-
-  public void clickDeleteOrResetButton() {
-    btnDeleteOrReset.click();
+    typeIn(tbNickname, value);
   }
 
   public List<WebElement> getAllFields() {

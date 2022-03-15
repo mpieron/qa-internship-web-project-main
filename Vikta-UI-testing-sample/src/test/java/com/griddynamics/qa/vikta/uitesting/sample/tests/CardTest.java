@@ -13,7 +13,7 @@ public class CardTest extends BaseTest {
   }
 
   @BeforeMethod(onlyForGroups = "needCard")
-  public void loginAndGenerateNewAddress() {
+  public void generateNewCard() {
     cardSteps.clickAddCardTab();
     cardSteps.fillAllFieldsInCard();
     cardSteps.clickSaveButton();

@@ -25,7 +25,7 @@ public class CardsListPage extends ResourceListPage {
   }
 
   public List<WebElement> getAllCardsHyperlinksList() {
-    String selector = String.format("%s %s", cardsTableId, getAllHyperlinksList(hyperlinkColumnNumber));
+    String selector = String.format("%s %s", cardsTableId, getAllHyperlinksFromColumn(hyperlinkColumnNumber));
     return body.findElements(By.cssSelector(selector));
   }
 

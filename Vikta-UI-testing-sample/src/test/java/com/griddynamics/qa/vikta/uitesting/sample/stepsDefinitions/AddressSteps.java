@@ -90,7 +90,7 @@ public class AddressSteps extends BaseSteps {
 
   @Step
   public void clickToTheListOfAddresses() {
-    addressEditAddPage().clickToTheListOfAddresses();
+    addressEditAddPage().clickToTheListOfItems();
   }
 
   @Step
@@ -136,7 +136,7 @@ public class AddressSteps extends BaseSteps {
     for (int i = 1; i < allAddressesHyperlinksList.size(); i++) {
       allAddressesHyperlinksList.get(i).click();
       addressEditAddPage().clickDeleteOrResetButton();
-      addressEditAddPage().clickToTheListOfAddresses();
+      addressEditAddPage().clickToTheListOfItems();
     }
   }
 
