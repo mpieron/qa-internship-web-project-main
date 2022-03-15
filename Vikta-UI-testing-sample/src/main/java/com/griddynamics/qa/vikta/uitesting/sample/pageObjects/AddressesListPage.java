@@ -25,16 +25,11 @@ public class AddressesListPage extends ResourceListPage {
   }
 
   public List<WebElement> getAllAddressesHyperlinksList() {
-    String selector = String.format("%s %s", addressTableId, getAllHyperlinksList(hyperlinkColumnNumber));
+    String selector = String.format("%s %s", addressTableId, getAllHyperlinksFromColumn(hyperlinkColumnNumber));
     return body.findElements(By.cssSelector(selector));
   }
 
   public void clickAtSecondAddressHyperlink() {
     getAllAddressesHyperlinksList().get(1).click();
-  }
-
-  public void clickAtLastAddressHyperlink() {
-    int size = getAllAddressesHyperlinksList().size();
-    getAllAddressesHyperlinksList().get(size).click();
   }
 }

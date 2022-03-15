@@ -82,11 +82,9 @@ public class HomePageSteps extends BaseSteps {
   }
 
   @Step
-  public void verifyImagesFoundByTags(String tag) {
+  public void verifyImagesFoundByTags() {
     HomePage currentPage = getPage(HomePage.class);
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
-
-    String cleanTag = tag.replaceAll("\\+", " ");
 
     assertThat(page().getImagesTagsFromCurrentPage().size()).isGreaterThan(0);
   }
@@ -136,11 +134,6 @@ public class HomePageSteps extends BaseSteps {
   @Step
   public void clickSearchBottom() {
     page().clickSearchBottom();
-  }
-
-  @Step
-  public void clickResetBottom() {
-    page().clickResetBottom();
   }
 
   private HomePage page() {
