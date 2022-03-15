@@ -6,8 +6,8 @@ import com.griddynamics.qa.vikta.uitesting.sample.config.DataProvider;
 import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataAndProperties;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.BasePage;
 import io.qameta.allure.Step;
-import java.time.Duration;
 import java.util.Objects;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -48,6 +48,12 @@ abstract class BaseSteps {
 
   <P> P getPage(Class<P> pageClass) {
     return PageFactory.initElements(getDriver(), pageClass);
+  }
+
+  @Step
+  void scrollToFooter(){
+    ((JavascriptExecutor) driver)
+            .executeScript("window.scrollTo(0, document.body.scrollHeight)");
   }
 
   @Step
