@@ -90,12 +90,12 @@ public class ImageTest extends BaseTest {
     imageSteps.clickImages();
 
     //       Get number of images on page
-    int numberOfImagesOnPageBeforeDelete = imageSteps.getNumberOfImagesOnPage();
+    imageSteps.getNumberOfImagesOnPage();
 
     //        Delete last image
     imageSteps.deleteAddedImages();
 
     //        Verify if image was deleted
-    imageSteps.verifyIfImageWasDeleted(numberOfImagesOnPageBeforeDelete);
+    imageSteps.verifyIfImageWasDeleted();
   }
 }

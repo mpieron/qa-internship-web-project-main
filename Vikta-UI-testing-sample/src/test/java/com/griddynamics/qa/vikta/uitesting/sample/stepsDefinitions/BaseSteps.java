@@ -51,12 +51,6 @@ abstract class BaseSteps {
   }
 
   @Step
-  void scrollToFooter(){
-    ((JavascriptExecutor) driver)
-            .executeScript("window.scrollTo(0, document.body.scrollHeight)");
-  }
-
-  @Step
   void verifyCurrentPageIsHomePageForTheUser(String username, UserType userType) {
     BasePage currentPage = getPage(BasePage.class);
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getLoggedInName()));

@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.interactions.Actions;
 
 public class ImageSteps extends BaseSteps {
 
@@ -75,6 +75,14 @@ public class ImageSteps extends BaseSteps {
   }
 
   @Step
+  public void scroll(){
+    WebElement lastImage = imagesListPage().getLastImageFromList();
+    Actions scroll = new Actions(getDriver());
+    scroll.moveToElement(lastImage);
+    scroll.perform();
+  }
+
+  @Step
   public void searchImageByTitle(String title) {
     imagesListPage().typeSearchTerm(title);
     clickSearchButton();
@@ -89,8 +97,7 @@ public class ImageSteps extends BaseSteps {
 
   @Step
   public void verifyLastImageUrlAndTitle(String url, String title) {
-    scrollToFooter();
-    getWait().until(ExpectedConditions.visibilityOf(imagesListPage().getLastImageFromList()));
+    scroll();
 
     String lastImage = imagesListPage().getLastImageFromList().getText();
 
@@ -105,27 +112,26 @@ public class ImageSteps extends BaseSteps {
 
   @Step
   public void deleteAddedImages() {
-    scrollToFooter();
+    scroll();
     imagesListPage().removeLastImage();
   }
 
   @Step
-  public int getNumberOfImagesOnPage() {
-    scrollToFooter();
-    return imagesListPage().getAllImagesHyperlinksList().size();
+  public void getNumberOfImagesOnPage() {
+    scroll();
+    imagesListPage().getAllImagesHyperlinksList();
   }
 
   @Step
-  public void verifyIfImageWasDeleted(int numberOfImagesBeforeDelete) {
-    scrollToFooter();
+  public void verifyIfImageWasDeleted() {
     assertThat(imagesListPage().messageDeleteIsDisplayed())
-      .as("The deletion message is not displayed")
+      .as("Deletion message should be displayed")
       .isTrue();
   }
 
   @Step
   public void clickLastImage() {
-    scrollToFooter();
+    scroll();
     List<WebElement> imagesList = imagesListPage().getAllImagesHyperlinksList();
 
     imagesList.get(imagesList.size() - 1).click();
