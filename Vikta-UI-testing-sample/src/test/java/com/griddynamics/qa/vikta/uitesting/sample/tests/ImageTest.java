@@ -7,14 +7,15 @@ import org.testng.annotations.Test;
 
 public class ImageTest extends BaseTest {
 
-  @BeforeMethod
+  @BeforeMethod(onlyForGroups = "onlyLogin")
   public void loginAsAdmin() {
     loginSteps.openLoginPage();
     loginSteps.loginAsAdmin();
   }
 
-  @BeforeMethod(onlyForGroups = "needImage")
-  public void createNewImage() {
+  @BeforeMethod(onlyForGroups = "needNewImage")
+  public void loginAndCreateNewImage() {
+    loginAsAdmin();
     imageSteps.clickAddAnImage();
 
     imageSteps.fillNecessaryImageField(ImageSteps.NecessaryImageField.URL);
@@ -30,7 +31,7 @@ public class ImageTest extends BaseTest {
   }
 
   //    we can only search image by title or tag, but it won't return items with exact same term (can, but can also with part of it)
-  @Test
+  @Test(groups = "onlyLogin")
   public void canFindImageByTitle() {
     //        Click Images
     imageSteps.clickImages();
@@ -42,7 +43,7 @@ public class ImageTest extends BaseTest {
     imageSteps.verifyIfFoundImageByTitle();
   }
 
-  @Test(groups = "cleanUp")
+  @Test(groups = { "onlyLogin", "cleanUp" })
   public void canAddImage() {
     //        Click Add an Image
     imageSteps.clickAddAnImage();
@@ -88,9 +89,6 @@ public class ImageTest extends BaseTest {
   public void canDeleteImage() {
     //        Click Images
     imageSteps.clickImages();
-
-    //       Get number of images on page
-    imageSteps.getNumberOfImagesOnPage();
 
     //        Delete last image
     imageSteps.deleteAddedImages();

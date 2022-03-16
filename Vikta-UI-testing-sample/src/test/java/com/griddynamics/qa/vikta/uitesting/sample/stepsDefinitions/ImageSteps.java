@@ -8,10 +8,8 @@ import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ImagesListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 
 public class ImageSteps extends BaseSteps {
 
@@ -75,14 +73,6 @@ public class ImageSteps extends BaseSteps {
   }
 
   @Step
-  public void scroll(){
-    WebElement lastImage = imagesListPage().getLastImageFromList();
-    Actions scroll = new Actions(getDriver());
-    scroll.moveToElement(lastImage);
-    scroll.perform();
-  }
-
-  @Step
   public void searchImageByTitle(String title) {
     imagesListPage().typeSearchTerm(title);
     clickSearchButton();
@@ -92,12 +82,12 @@ public class ImageSteps extends BaseSteps {
   public void verifyIfFoundImageByTitle() {
     assertThat(imagesListPage().getAllImagesHyperlinksList().size())
       .as("Image not found by title")
-      .isGreaterThanOrEqualTo(1);
+      .isGreaterThan(0);
   }
 
   @Step
   public void verifyLastImageUrlAndTitle(String url, String title) {
-    scroll();
+    scroll(imagesListPage().getLastImageFromList());
 
     String lastImage = imagesListPage().getLastImageFromList().getText();
 
@@ -112,14 +102,8 @@ public class ImageSteps extends BaseSteps {
 
   @Step
   public void deleteAddedImages() {
-    scroll();
+    scroll(imagesListPage().getLastImageFromList());
     imagesListPage().removeLastImage();
-  }
-
-  @Step
-  public void getNumberOfImagesOnPage() {
-    scroll();
-    imagesListPage().getAllImagesHyperlinksList();
   }
 
   @Step
@@ -131,7 +115,7 @@ public class ImageSteps extends BaseSteps {
 
   @Step
   public void clickLastImage() {
-    scroll();
+    scroll(imagesListPage().getLastImageFromList());
     List<WebElement> imagesList = imagesListPage().getAllImagesHyperlinksList();
 
     imagesList.get(imagesList.size() - 1).click();
