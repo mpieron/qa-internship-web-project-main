@@ -30,6 +30,14 @@ public class CategoryTest extends BaseTest {
     categorySteps.deleteAddedCategories();
   }
 
+  @Test(groups = "onlyLogin")
+  public void checkIfFirstTwoCategoriesHaveCorrectData(){
+//        Click Categories
+    categorySteps.clickCategories();
+
+    categorySteps.verifyIfFirstTwoCategoriesHaveCorrectTitleAndDescription();
+  }
+
 //    Searching for categories by term doesn't work for any category field
   @Test(groups = "onlyLogin")
   public void canFindCategoryByTitle() {

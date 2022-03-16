@@ -28,4 +28,9 @@ public interface TestDataAndProperties extends Config {
 
   String cardCode();
   String cardTag();
+
+  String firstCatTitle();
+  String firstCatDesc();
+  String secondCatTitle();
+  String secondCatDesc();
 }

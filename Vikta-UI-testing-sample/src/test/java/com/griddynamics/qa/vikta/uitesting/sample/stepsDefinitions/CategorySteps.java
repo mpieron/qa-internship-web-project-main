@@ -6,6 +6,7 @@ import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.*;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -114,6 +115,25 @@ public class CategorySteps extends BaseSteps {
     assertThat(categoryListPage().messageDeleteIsDisplayed())
       .as("Deletion message should be displayed")
       .isTrue();
+  }
+
+  @Step
+  public void verifyIfFirstTwoCategoriesHaveCorrectTitleAndDescription() {
+    assertThat(categoryListPage().getFirstCategoryFromList().getText())
+            .as("First category has wrong title.")
+            .contains(getData().firstCatTitle());
+
+    assertThat(categoryListPage().getFirstCategoryFromList().getText())
+            .as("First category has wrong description.")
+            .contains(getData().firstCatDesc());
+
+    assertThat(categoryListPage().getSecondCategoryFromList().getText())
+            .as("Second category has wrong title.")
+            .contains(getData().secondCatTitle());
+
+    assertThat(categoryListPage().getSecondCategoryFromList().getText())
+            .as("Second category has wrong description.")
+            .contains(getData().secondCatDesc());
   }
 
   CategoriesListPage categoryListPage() {
