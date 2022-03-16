@@ -83,7 +83,11 @@ public class Utilities {
     return faker.numerify("2022-10-10");
   }
 
-  public static String generateURL(){ return faker.bothify("https://?????/????.jpg");}
+  public static String generateURL() {
+    return faker.bothify("https://?????/????.jpg");
+  }
 
-  public static String generateTitle(){ return faker.book().title();}
+  public static String generateTitle() {
+    return faker.book().title();
+  }
 }

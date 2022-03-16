@@ -3,7 +3,6 @@ package com.griddynamics.qa.vikta.uitesting.sample.pageObjects;
 import java.util.ArrayList;
 import java.util.List;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 public class AddressEditAddPage extends EditAddPage{

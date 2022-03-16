@@ -14,6 +14,9 @@ public abstract class ResourceListPage {
   @FindBy(id = "btnSearch")
   protected WebElement btnSearch;
 
+  @FindBy(id = "tMessage")
+  protected WebElement tMessage;
+
   protected final String firstFromList = "> tbody > tr:first-child";
 
   protected final String secondFromList = "> tbody > tr:nth-child(2)";
@@ -24,12 +27,16 @@ public abstract class ResourceListPage {
     return String.format("> tbody > tr > td:nth-child(%d) > a", numberOfColumn);
   }
 
-  public void typeSearchTerm(String term){
+  public void typeSearchTerm(String term) {
     tbTerm.clear();
     tbTerm.sendKeys(term);
   }
 
-  public void clickSearchButton(){
+  public boolean messageDeleteIsDisplayed() {
+    return tMessage.isDisplayed();
+  }
+
+  public void clickSearchButton() {
     btnSearch.click();
   }
 }
