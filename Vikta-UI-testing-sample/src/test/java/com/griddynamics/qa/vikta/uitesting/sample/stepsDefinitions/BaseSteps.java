@@ -7,8 +7,9 @@ import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataAndProperties;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.BasePage;
 import io.qameta.allure.Step;
 import java.util.Objects;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -48,6 +49,13 @@ abstract class BaseSteps {
 
   <P> P getPage(Class<P> pageClass) {
     return PageFactory.initElements(getDriver(), pageClass);
+  }
+
+  @Step
+  public void scroll(WebElement targetElement) {
+    Actions scroll = new Actions(getDriver());
+    scroll.moveToElement(targetElement);
+    scroll.perform();
   }
 
   @Step
