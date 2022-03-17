@@ -119,20 +119,23 @@ public class CategorySteps extends BaseSteps {
 
   @Step
   public void verifyIfFirstTwoCategoriesHaveCorrectTitleAndDescription() {
-    assertThat(categoryListPage().getFirstCategoryFromList().getText())
-            .as("First category has wrong title.")
+    String firstCategory = categoryListPage().getFirstCategoryFromList().getText();
+    String secondCategory = categoryListPage().getSecondCategoryFromList().getText();
+
+    assertThat(firstCategory)
+            .as("First category \"%s\" should has title %s.")
             .contains(getData().firstCatTitle());
 
-    assertThat(categoryListPage().getFirstCategoryFromList().getText())
-            .as("First category has wrong description.")
+    assertThat(firstCategory)
+            .as("First category \"%s\" should has description %s.")
             .contains(getData().firstCatDesc());
 
-    assertThat(categoryListPage().getSecondCategoryFromList().getText())
-            .as("Second category has wrong title.")
+    assertThat(secondCategory)
+            .as("Second category \"%s\" should has title %s.")
             .contains(getData().secondCatTitle());
 
-    assertThat(categoryListPage().getSecondCategoryFromList().getText())
-            .as("Second category has wrong description.")
+    assertThat(secondCategory)
+            .as("Second category \"%s\" should has description %s.")
             .contains(getData().secondCatDesc());
   }
 

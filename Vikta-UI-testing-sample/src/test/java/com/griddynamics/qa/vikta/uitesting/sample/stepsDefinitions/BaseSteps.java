@@ -52,9 +52,9 @@ abstract class BaseSteps {
   }
 
   @Step
-  public void scroll(WebElement lastImage) {
+  public void scroll(WebElement targetElement) {
     Actions scroll = new Actions(getDriver());
-    scroll.moveToElement(lastImage);
+    scroll.moveToElement(targetElement);
     scroll.perform();
   }
 
