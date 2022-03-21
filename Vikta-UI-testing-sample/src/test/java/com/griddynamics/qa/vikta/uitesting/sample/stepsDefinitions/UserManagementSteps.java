@@ -112,7 +112,7 @@ public class UserManagementSteps extends BaseSteps {
   @Step
   public void verifyIfFoundUserByLoginName() {
     assertThat(usersListPage().getAllUsersHyperlinksList().size())
-      .as("User not found by login name")
+      .as("User should be found by login name")
       .isGreaterThan(0);
   }
 
@@ -122,7 +122,7 @@ public class UserManagementSteps extends BaseSteps {
     String lastUser = usersListPage().getLastUserFromList().getText();
 
     assertThat(lastUser)
-      .as("User \"%s\" has wrong data, should contains %s", lastUser, userData)
+      .as("User \"%s\" has wrong data, should contain %s", lastUser, userData)
       .contains(userData);
   }
 
@@ -139,11 +139,11 @@ public class UserManagementSteps extends BaseSteps {
     String admin = usersListPage().getUser_admin().getText();
 
     assertThat(firstUser)
-      .as("First user \"%s\" should has data: %s.", firstUser, getUserData())
+      .as("First user \"%s\" should have data: %s.", firstUser, getUserData())
       .contains(getUserData());
 
     assertThat(admin)
-      .as("Second user \"%s\" should has data: %s.", admin, getAdminData())
+      .as("Second user \"%s\" should have data: %s.", admin, getAdminData())
       .contains(getAdminData());
   }
 
