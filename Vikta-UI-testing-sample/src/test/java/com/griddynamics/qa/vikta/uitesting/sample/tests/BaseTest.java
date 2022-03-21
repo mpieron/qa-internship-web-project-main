@@ -25,6 +25,7 @@ public class BaseTest {
   CardSteps cardSteps;
   ImageSteps imageSteps;
   CategorySteps categorySteps;
+  UserManagementSteps userManagementSteps;
 
   BaseTest() {
     driverManager = new DriverManager(DataProvider.get());
@@ -41,6 +42,7 @@ public class BaseTest {
     cardSteps = new CardSteps(driverManager.get());
     imageSteps = new ImageSteps(driverManager.get());
     categorySteps = new CategorySteps(driverManager.get());
+    userManagementSteps = new UserManagementSteps(driverManager.get());
   }
 
   @AfterMethod

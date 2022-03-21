@@ -20,9 +20,17 @@ public interface TestDataAndProperties extends Config {
 
   String adminName();
   String adminPassword();
+  String adminMail();
+  String adminSurname();
+  String adminFirstName();
+  String adminMiddleName();
 
   String userName();
   String userPassword();
+  String userMail();
+  String userSurname();
+  String userFirstName();
+  String userMiddleName();
 
   String nickname();
 
