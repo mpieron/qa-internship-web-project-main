@@ -15,6 +15,12 @@ public abstract class EditAddPage {
     @FindAll({ @FindBy(id = "btnDelete"), @FindBy(id = "btnReset") })
     private WebElement btnDeleteOrReset;
 
+    @FindBy(css = ".content > div > form > h2")
+    private WebElement actionHeader;
+
+    @FindBy(id = "divErrorsAndMessages")
+    protected WebElement divErrorsAndMessages;
+
     public void clickSaveButton(){
         btnSave.click();
     }
@@ -30,5 +36,13 @@ public abstract class EditAddPage {
     public void typeIn(WebElement targetElement, String value) {
         targetElement.clear();
         targetElement.sendKeys(value);
+    }
+
+    public String getActionHeader() {
+        return actionHeader.getText();
+    }
+
+    public boolean tableWithErrorsIsDisplayed() {
+        return divErrorsAndMessages.isDisplayed();
     }
 }
