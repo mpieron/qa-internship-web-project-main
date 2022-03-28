@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+
 /**
  * "Parent" Page Object for almost all of the rest of the pages (except Login).
  *
@@ -33,6 +35,15 @@ public class BasePage {
 
   @FindBy(id = "aEditProfile")
   private WebElement aEditProfile;
+
+  @FindBy(id = "aToCartTop")
+  private WebElement aToCartTop;
+
+  @FindBy(className = "navbar")
+  private List<WebElement> rightNavbar;
+
+  @FindBy(id = "spCartTopMsg")
+  private WebElement spCartTopMsg;
 
   @FindBy(id = "sploggedInName")
   private WebElement sploggedInName;
@@ -85,5 +96,18 @@ public class BasePage {
 
   public void clickLogoutFooterBottom() {
     aLogoutBottom.click();
+  }
+
+  public void goToShoppingCart(){ aToCartTop.click();}
+
+  public boolean shoppingCartIconIsDisplayed(){
+    return rightNavbar.size() == 2; }
+
+  public String getNumberOfItemsInShoppingCart(){
+    return spCartTopMsg.getText();
+  }
+
+  public WebElement getShoppingCart(){
+    return aToCartTop;
   }
 }

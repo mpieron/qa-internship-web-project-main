@@ -26,6 +26,7 @@ public class BaseTest {
   ImageSteps imageSteps;
   CategorySteps categorySteps;
   UserManagementSteps userManagementSteps;
+  ShoppingCartSteps shoppingCartSteps;
 
   BaseTest() {
     driverManager = new DriverManager(DataProvider.get());
@@ -43,6 +44,7 @@ public class BaseTest {
     imageSteps = new ImageSteps(driverManager.get());
     categorySteps = new CategorySteps(driverManager.get());
     userManagementSteps = new UserManagementSteps(driverManager.get());
+    shoppingCartSteps = new ShoppingCartSteps(driverManager.get());
   }
 
   @AfterMethod
