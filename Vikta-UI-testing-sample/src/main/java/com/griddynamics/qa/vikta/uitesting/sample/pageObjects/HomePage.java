@@ -140,4 +140,8 @@ public class HomePage extends BasePage {
   public void clickResetBottom() {
     btnResetSearchCriteria.click();
   }
+
+  public void  clickFirstImageDetailsButton(){
+    productsList.findElement(By.cssSelector(":first-child > nav > a")).click();
+  }
 }
