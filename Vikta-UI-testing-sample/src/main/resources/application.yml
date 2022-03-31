@@ -34,4 +34,4 @@ setup:
   baseUrl: http://localhost:5054
 
   loginPageUrl: http://localhost:5054/login
-  registrationPageUrl: ${baseHost}:${basePort}/registration
+  registrationPageUrl: http://localhost:5054/registration
