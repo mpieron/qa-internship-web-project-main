@@ -1,5 +1,7 @@
 package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ShoppingCartPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ImageDetailsPage;
@@ -11,11 +13,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ShoppingCartSteps extends BaseSteps {
 
-    public ShoppingCartSteps(WebDriver driver) {
-        super(driver);
-    }
+  public ShoppingCartSteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
+    super(properties, testData, driver);
+  }
 
-    @Step
+  @Step
     public void addFirstImageToShoppingCart(){
         homePage().clickFirstImageDetailsButton();
         imageDetailsPage().clickAddToCart();

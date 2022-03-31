@@ -2,6 +2,8 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.LoginPage;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
@@ -12,13 +14,16 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  */
 public class LoginSteps extends BaseSteps {
 
-  public LoginSteps(WebDriver driver) {
-    super(driver);
+  public LoginSteps(
+      TestSetupConfiguration properties,
+      TestDataConfiguration testData,
+      WebDriver driver) {
+    super(properties, testData, driver);
   }
 
   @Step
   public void openLoginPage() {
-    getDriver().get(properties.getLoginPageUrl());
+    driver.get(properties.getLoginPageUrl());
   }
 
   @Step

@@ -21,14 +21,16 @@ import org.springframework.stereotype.Component;
  * Manages WebDriver instantiation etc.
  */
 @Slf4j
-@RequiredArgsConstructor
 @Component
 public final class DriverManager {
 
   private static final int THOUSAND = 1000;
-  @Autowired
   private final TestSetupConfiguration properties;
-  private ThreadLocal<WebDriver> threadWebDriver = new ThreadLocal<>();
+  private final ThreadLocal<WebDriver> threadWebDriver = new ThreadLocal<>();
+
+  public DriverManager(TestSetupConfiguration properties){
+    this.properties=properties;
+  }
 
   enum WebDriverType {
     FIREFOX,
@@ -55,7 +57,6 @@ public final class DriverManager {
     //driver.manage().window().maximize();
 
     Configuration.browser = driverType.name().toLowerCase();
-    Configuration.startMaximized = true;
     Configuration.timeout = properties.getWaitTimeout() * THOUSAND;
     Configuration.pageLoadTimeout = properties.getPageLoadTimeout() * THOUSAND;
 

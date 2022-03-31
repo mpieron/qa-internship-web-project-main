@@ -31,7 +31,7 @@ setup:
 
   baseHost: http://localhost
   basePort: 5054
-  baseUrl: ${baseHost}:${basePort}
+  baseUrl: http://localhost:5054
 
-  loginPageUrl: ${baseHost}:${basePort}/login
+  loginPageUrl: http://localhost:5054/login
   registrationPageUrl: ${baseHost}:${basePort}/registration

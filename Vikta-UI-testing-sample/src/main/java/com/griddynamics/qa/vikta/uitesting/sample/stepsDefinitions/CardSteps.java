@@ -2,6 +2,8 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CardEditAddPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CardsListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
@@ -14,8 +16,8 @@ import org.openqa.selenium.WebElement;
 
 public class CardSteps extends BaseSteps {
 
-  public CardSteps(WebDriver driver) {
-    super(driver);
+  public CardSteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
+    super(properties, testData, driver);
   }
 
   private enum CardField {

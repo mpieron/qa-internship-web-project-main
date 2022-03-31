@@ -2,6 +2,8 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AddressEditAddPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AddressesListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
@@ -14,8 +16,9 @@ import org.openqa.selenium.WebElement;
 
 public class AddressSteps extends BaseSteps {
 
-  public AddressSteps(WebDriver driver) {
-    super(driver);
+
+  public AddressSteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
+    super(properties, testData, driver);
   }
 
   private enum AddressField {
