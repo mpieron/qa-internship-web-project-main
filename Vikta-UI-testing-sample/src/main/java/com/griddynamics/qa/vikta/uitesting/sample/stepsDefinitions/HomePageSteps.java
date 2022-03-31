@@ -31,7 +31,7 @@ public class HomePageSteps extends BaseSteps {
 
   @Step
   public void openHomePage() {
-    getDriver().get(getData().baseUrl());
+    getDriver().get(properties.getBaseUrl());
   }
 
   @Step

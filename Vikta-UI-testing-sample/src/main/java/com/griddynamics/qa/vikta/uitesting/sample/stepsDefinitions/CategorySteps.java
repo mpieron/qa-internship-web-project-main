@@ -124,19 +124,19 @@ public class CategorySteps extends BaseSteps {
 
     assertThat(firstCategory)
             .as("First category \"%s\" should has title %s.")
-            .contains(getData().firstCatTitle());
+            .contains(testData.getFirstCatTitle());
 
     assertThat(firstCategory)
             .as("First category \"%s\" should has description %s.")
-            .contains(getData().firstCatDesc());
+            .contains(testData.getFirstCatDesc());
 
     assertThat(secondCategory)
             .as("Second category \"%s\" should has title %s.")
-            .contains(getData().secondCatTitle());
+            .contains(testData.getSecondCatTitle());
 
     assertThat(secondCategory)
             .as("Second category \"%s\" should has description %s.")
-            .contains(getData().secondCatDesc());
+            .contains(testData.getSecondCatDesc());
   }
 
   CategoriesListPage categoryListPage() {

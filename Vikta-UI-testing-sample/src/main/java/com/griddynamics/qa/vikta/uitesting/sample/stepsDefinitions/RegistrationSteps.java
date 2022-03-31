@@ -34,7 +34,7 @@ public class RegistrationSteps extends BaseSteps {
 
   @Step
   public void openRegistrationPage() {
-    getDriver().get(getData().registrationPageUrl());
+    getDriver().get(properties.getRegistrationPageUrl());
   }
 
   @Step
@@ -81,7 +81,7 @@ public class RegistrationSteps extends BaseSteps {
 
   @Step
   public String typeExistingUserNameInto() {
-    String loginName = getData().userName();
+    String loginName = testData.getUserName();
     page().typeInLoginname(loginName);
     return loginName;
   }
@@ -89,7 +89,7 @@ public class RegistrationSteps extends BaseSteps {
   @Step
   public void verifyCurrentPageIsRegistration() {
     assertCurrentPageUrl(
-      getData().registrationPageUrl(),
+      properties.getRegistrationPageUrl(),
       "Registration page was expected to be the current one."
     );
   }

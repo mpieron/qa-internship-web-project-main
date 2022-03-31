@@ -114,7 +114,7 @@ public class CardSteps extends BaseSteps {
   public void verifyFirstCardFieldsAreCorrect() {
     assertThat(cardsListPage().getFirstCardFromList().getText())
       .as("Default card field is not correct.")
-      .contains(getData().cardCode(), getData().cardTag());
+      .contains(testData.getCardCode(), testData.getCardTag());
   }
 
   @Step

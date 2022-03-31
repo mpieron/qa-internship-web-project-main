@@ -194,22 +194,22 @@ public class UserManagementSteps extends BaseSteps {
 
   private String getUserData() {
     StringJoiner userData = new StringJoiner(" ");
-    userData.add(getData().userName());
-    userData.add(getData().userMail());
-    userData.add(getData().userSurname());
-    userData.add(getData().userFirstName());
-    userData.add(getData().userMiddleName());
+    userData.add(testData.getUserName());
+    userData.add(testData.getUserMail());
+    userData.add(testData.getUserSurname());
+    userData.add(testData.getUserFirstName());
+    userData.add(testData.getUserMiddleName());
 
     return userData.toString();
   }
 
   private String getAdminData() {
     StringJoiner adminData = new StringJoiner(" ");
-    adminData.add(getData().adminName());
-    adminData.add(getData().adminMail());
-    adminData.add(getData().adminSurname());
-    adminData.add(getData().adminFirstName());
-    adminData.add(getData().adminMiddleName());
+    adminData.add(testData.getAdminName());
+    adminData.add(testData.getAdminMail());
+    adminData.add(testData.getAdminSurname());
+    adminData.add(testData.getAdminFirstName());
+    adminData.add(testData.getAdminMiddleName());
 
     return adminData.toString();
   }

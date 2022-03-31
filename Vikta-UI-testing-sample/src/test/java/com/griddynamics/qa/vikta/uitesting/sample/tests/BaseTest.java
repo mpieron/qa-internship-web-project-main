@@ -1,21 +1,25 @@
 package com.griddynamics.qa.vikta.uitesting.sample.tests;
 
 import com.griddynamics.qa.vikta.uitesting.sample.auxiliary.DriverManager;
-import com.griddynamics.qa.vikta.uitesting.sample.config.DataProvider;
 import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.*;
 import io.qameta.allure.Allure;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 
-public class BaseTest {
+@SpringBootTest
+public class BaseTest extends AbstractTestNGSpringContextTests {
 
-  // TODO: Think about some IoC/DI here.
+  @Autowired
   private DriverManager driverManager;
 
   LoginSteps loginSteps;
@@ -28,9 +32,9 @@ public class BaseTest {
   UserManagementSteps userManagementSteps;
   ShoppingCartSteps shoppingCartSteps;
 
-  BaseTest() {
-    driverManager = new DriverManager(DataProvider.get());
-  }
+//  BaseTest() {
+//    driverManager = new DriverManager(DataProvider.get());
+//  }
 
   @BeforeClass
   void setupClass() {

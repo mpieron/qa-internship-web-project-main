@@ -97,7 +97,7 @@ public class AddressSteps extends BaseSteps {
   public void verifyFirstAddressNicknameIsCorrect() {
     assertThat(addressesListPage().getFirstAddressFromList().getText())
       .as("Default address nickname is not correct.")
-      .contains(getData().nickname());
+      .contains(testData.getNickname());
   }
 
   @Step

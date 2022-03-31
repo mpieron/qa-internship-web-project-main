@@ -1,0 +1,37 @@
+test-data:
+  adminName: admin
+  adminPassword: 123qweadmin
+  adminMail: A@d.mi
+  adminSurname: Skuratov
+  adminFirstName: Admin
+  adminMiddleName: Maljutovi4
+
+  userName: qq
+  userPassword: 123
+  userMail: Dv@rn.ik
+  userSurname: Ik
+  userFirstName: D
+  userMiddleName: Vorn
+
+  nickname: To4ka
+
+  cardCode: 321
+  cardTag: Pod Del Ka
+
+  firstCatTitle: Empty
+  firstCatDesc: There is no fish here.
+  secondCatTitle: Full
+  secondCatDesc: All the fishes are here.
+
+setup:
+  browser: chrome
+  pageLoadTimeout: 12
+
+  waitTimeout: 11
+
+  baseHost: http://localhost
+  basePort: 5054
+  baseUrl: ${baseHost}:${basePort}
+
+  loginPageUrl: ${baseHost}:${basePort}/login
+  registrationPageUrl: ${baseHost}:${basePort}/registration

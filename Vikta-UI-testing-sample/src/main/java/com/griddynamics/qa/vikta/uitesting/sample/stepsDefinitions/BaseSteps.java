@@ -2,8 +2,8 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.griddynamics.qa.vikta.uitesting.sample.config.DataProvider;
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataAndProperties;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.BasePage;
 import io.qameta.allure.Step;
 import java.util.Objects;
@@ -13,14 +13,23 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Base class to contain common auxiliary methods for step definitions.
  */
+@Component
 abstract class BaseSteps {
 
   private WebDriver driver;
   private WebDriverWait wait;
+
+  @Autowired
+  protected TestSetupConfiguration properties;
+
+  @Autowired
+  protected TestDataConfiguration testData;
 
   public enum UserType {
     USER,
@@ -37,15 +46,15 @@ abstract class BaseSteps {
 
   WebDriverWait getWait() {
     if (Objects.isNull(this.wait)) {
-      this.wait = new WebDriverWait(getDriver(), getData().waitTimeout());
+      this.wait = new WebDriverWait(getDriver(), properties.getWaitTimeout());
     }
 
     return wait;
   }
-
-  TestDataAndProperties getData() {
-    return DataProvider.get();
-  }
+//
+//  TestDataAndProperties getData() {
+//    return DataProvider.get();
+//  }
 
   <P> P getPage(Class<P> pageClass) {
     return PageFactory.initElements(getDriver(), pageClass);
@@ -63,7 +72,7 @@ abstract class BaseSteps {
     BasePage currentPage = getPage(BasePage.class);
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getLoggedInName()));
 
-    assertCurrentPageUrl(getData().baseUrl(), "Home page was expected to be the current one.");
+    assertCurrentPageUrl(properties.getBaseUrl(), "Home page was expected to be the current one.");
 
     assertThat(currentPage.getCurrentUserName())
       .as("Unexpected current user's name displayed. Expected: %s", username)

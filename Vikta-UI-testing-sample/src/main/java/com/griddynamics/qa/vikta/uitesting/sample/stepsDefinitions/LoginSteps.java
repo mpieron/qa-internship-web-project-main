@@ -18,7 +18,7 @@ public class LoginSteps extends BaseSteps {
 
   @Step
   public void openLoginPage() {
-    getDriver().get(getData().loginPageUrl());
+    getDriver().get(properties.getLoginPageUrl());
   }
 
   @Step
@@ -28,12 +28,12 @@ public class LoginSteps extends BaseSteps {
 
   @Step
   public void loginAsRegularUser() {
-    page().login(getData().userName(), getData().userPassword());
+    page().login(testData.getUserName(), testData.getUserPassword());
   }
 
   @Step
   public void loginAsAdmin() {
-    page().login(getData().adminName(), getData().adminPassword());
+    page().login(testData.getAdminName(), testData.getAdminPassword());
   }
 
   @Step
@@ -43,12 +43,12 @@ public class LoginSteps extends BaseSteps {
 
   @Step
   public void verifyCurrentPageIsHomePageForTheRegularUser() {
-    verifyCurrentPageIsHomePageForTheUser(getData().userName(), UserType.USER);
+    verifyCurrentPageIsHomePageForTheUser(testData.getUserName(), UserType.USER);
   }
 
   @Step
   public void verifyCurrentPageIsHomePageForTheAdmin() {
-    verifyCurrentPageIsHomePageForTheUser(getData().adminName(), UserType.ADMIN);
+    verifyCurrentPageIsHomePageForTheUser(testData.getAdminName(), UserType.ADMIN);
   }
 
   @Step

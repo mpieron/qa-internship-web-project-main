@@ -2,8 +2,9 @@ package com.griddynamics.qa.vikta.uitesting.sample.auxiliary;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataAndProperties;
 import java.util.Objects;
+
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -13,16 +14,20 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.CapabilityType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Manages WebDriver instantiation etc.
  */
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public final class DriverManager {
 
   private static final int THOUSAND = 1000;
-  private final TestDataAndProperties properties;
+  @Autowired
+  private final TestSetupConfiguration properties;
   private ThreadLocal<WebDriver> threadWebDriver = new ThreadLocal<>();
 
   enum WebDriverType {
@@ -51,8 +56,8 @@ public final class DriverManager {
 
     Configuration.browser = driverType.name().toLowerCase();
     Configuration.startMaximized = true;
-    Configuration.timeout = properties.waitTimeout() * THOUSAND;
-    Configuration.pageLoadTimeout = properties.pageLoadTimeout() * THOUSAND;
+    Configuration.timeout = properties.getWaitTimeout() * THOUSAND;
+    Configuration.pageLoadTimeout = properties.getPageLoadTimeout() * THOUSAND;
 
     WebDriverRunner.setWebDriver(driver);
     threadWebDriver.set(driver);
@@ -80,7 +85,7 @@ public final class DriverManager {
    * @return web driver type specified by the properties.
    */
   private WebDriverType getDriverType() {
-    val driver = properties.browser();
+    val driver = properties.getBrowser();
     return Objects.isNull(driver)
       ? WebDriverType.CHROME
       : WebDriverType.valueOf(driver.toUpperCase());
