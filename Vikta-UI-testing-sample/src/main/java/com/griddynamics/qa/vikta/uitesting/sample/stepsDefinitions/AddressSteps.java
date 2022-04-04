@@ -16,11 +16,6 @@ import org.openqa.selenium.WebElement;
 
 public class AddressSteps extends BaseSteps {
 
-
-  public AddressSteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
-    super(properties, testData, driver);
-  }
-
   private enum AddressField {
     STREET,
     ADDITIONAL_STREET_INFO,

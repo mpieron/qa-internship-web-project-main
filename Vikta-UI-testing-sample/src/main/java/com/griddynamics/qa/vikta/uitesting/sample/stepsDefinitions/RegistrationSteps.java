@@ -2,12 +2,9 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.RegistrationPage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
@@ -16,24 +13,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 public class RegistrationSteps extends BaseSteps {
 
   private static String SUCCESSFUL_REGISTRATION_MESSAGE_PREFIX =
-    "User has been registered successfully: ";
+      "User has been registered successfully: ";
 
   private static String FAILED_REGISTRATION_MESSAGE_PREFIX =
-    "There is already a user registered with the loginname provided";
-
-
-  public RegistrationSteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
-    super(properties, testData, driver);
-  }
-
-  public enum FieldName {
-    LOGINNAME,
-    SURNAME,
-    FIRSTNAME,
-    PATRONIM,
-    PASSWORD,
-    EMAIL,
-  }
+      "There is already a user registered with the loginname provided";
 
   @Step
   public void openRegistrationPage() {
@@ -70,7 +53,7 @@ public class RegistrationSteps extends BaseSteps {
         break;
       default:
         throw new IllegalArgumentException(
-          "Unsupported Registration page field name: " + fieldName
+            "Unsupported Registration page field name: " + fieldName
         );
     }
 
@@ -92,8 +75,8 @@ public class RegistrationSteps extends BaseSteps {
   @Step
   public void verifyCurrentPageIsRegistration() {
     assertCurrentPageUrl(
-      properties.getRegistrationPageUrl(),
-      "Registration page was expected to be the current one."
+        properties.getRegistrationPageUrl(),
+        "Registration page was expected to be the current one."
     );
   }
 
@@ -102,28 +85,37 @@ public class RegistrationSteps extends BaseSteps {
     getWait().until(ExpectedConditions.visibilityOf(page().getMessageWebElement()));
     // Have a look at https://assertj.github.io/doc/
     assertThat(page().getMessageText().trim())
-      .as("Successful registration message was nor shown or had unexpected content.")
-      .startsWith(SUCCESSFUL_REGISTRATION_MESSAGE_PREFIX);
+        .as("Successful registration message was nor shown or had unexpected content.")
+        .startsWith(SUCCESSFUL_REGISTRATION_MESSAGE_PREFIX);
   }
 
   @Step
   public void verifyFailedRegistrationMessageIsDisplayed() {
     getWait()
-      .until(ExpectedConditions.visibilityOf(page().getFailedRegistrationMessageWebElement()));
+        .until(ExpectedConditions.visibilityOf(page().getFailedRegistrationMessageWebElement()));
     assertThat(page().getRegisteredUserExistMessageText().trim())
-      .as("Failed registration message was nor shown or had unexpected content.")
-      .startsWith(FAILED_REGISTRATION_MESSAGE_PREFIX);
+        .as("Failed registration message was nor shown or had unexpected content.")
+        .startsWith(FAILED_REGISTRATION_MESSAGE_PREFIX);
   }
 
   @Step
   public void verifySuccessfulRegistrationMessageContainsNewUsername(String loginnameUsed) {
     // Have a look at https://assertj.github.io/doc/
     assertThat(page().getMessageText().trim())
-      .as("Successful registration message was expected to contain the new username used.")
-      .contains(loginnameUsed);
+        .as("Successful registration message was expected to contain the new username used.")
+        .contains(loginnameUsed);
   }
 
   private RegistrationPage page() {
     return getPage(RegistrationPage.class);
+  }
+
+  public enum FieldName {
+    LOGINNAME,
+    SURNAME,
+    FIRSTNAME,
+    PATRONIM,
+    PASSWORD,
+    EMAIL,
   }
 }

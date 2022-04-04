@@ -16,10 +16,6 @@ import org.openqa.selenium.WebElement;
 
 public class CardSteps extends BaseSteps {
 
-  public CardSteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
-    super(properties, testData, driver);
-  }
-
   private enum CardField {
     CARD_NUMBER,
     CARD_CODE,

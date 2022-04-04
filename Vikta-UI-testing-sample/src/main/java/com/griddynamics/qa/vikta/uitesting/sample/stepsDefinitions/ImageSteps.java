@@ -2,27 +2,15 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AdminBasePage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ImageEditAddPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ImagesListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class ImageSteps extends BaseSteps {
-
-  public ImageSteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
-    super(properties, testData, driver);
-  }
-
-  public enum NecessaryImageField {
-    URL,
-    TITLE,
-  }
 
   @Step
   public String fillNecessaryImageField(NecessaryImageField imageField) {
@@ -38,7 +26,7 @@ public class ImageSteps extends BaseSteps {
         break;
       default:
         throw new IllegalArgumentException(
-          "Unsupported Address Add/Edit page field name: " + imageField
+            "Unsupported Address Add/Edit page field name: " + imageField
         );
     }
     return valueToReturn;
@@ -83,8 +71,8 @@ public class ImageSteps extends BaseSteps {
   @Step
   public void verifyIfFoundImageByTitle() {
     assertThat(imagesListPage().getAllImagesHyperlinksList().size())
-      .as("Image not found by title")
-      .isGreaterThan(0);
+        .as("Image not found by title")
+        .isGreaterThan(0);
   }
 
   @Step
@@ -94,12 +82,12 @@ public class ImageSteps extends BaseSteps {
     String lastImage = imagesListPage().getLastImageFromList().getText();
 
     assertThat(lastImage)
-      .as("Image \"%s\" has wrong url, should contains url %s", lastImage, url)
-      .contains(url);
+        .as("Image \"%s\" has wrong url, should contains url %s", lastImage, url)
+        .contains(url);
 
     assertThat(lastImage)
-      .as("Image \"%s\" has wrong title, should contains %s", lastImage, title)
-      .contains(title);
+        .as("Image \"%s\" has wrong title, should contains %s", lastImage, title)
+        .contains(title);
   }
 
   @Step
@@ -111,8 +99,8 @@ public class ImageSteps extends BaseSteps {
   @Step
   public void verifyIfImageWasDeleted() {
     assertThat(imagesListPage().messageDeleteIsDisplayed())
-      .as("Deletion message should be displayed")
-      .isTrue();
+        .as("Deletion message should be displayed")
+        .isTrue();
   }
 
   @Step
@@ -133,5 +121,10 @@ public class ImageSteps extends BaseSteps {
 
   AdminBasePage adminBasePage() {
     return getPage(AdminBasePage.class);
+  }
+
+  public enum NecessaryImageField {
+    URL,
+    TITLE,
   }
 }

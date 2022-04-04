@@ -1,8 +1,5 @@
 package com.griddynamics.qa.vikta.uitesting.sample.tests;
 
-import com.griddynamics.qa.vikta.uitesting.sample.auxiliary.DriverManager;
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.AddressSteps;
 import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.CardSteps;
 import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.CategorySteps;
@@ -13,7 +10,6 @@ import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.RegistrationS
 import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.ShoppingCartSteps;
 import com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions.UserManagementSteps;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,55 +17,48 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BaseTestConfiguration {
 
-  @Autowired
-  private final DriverManager driverManager;
-
-  private final TestSetupConfiguration properties;
-
-  private final TestDataConfiguration testData;
-
   @Bean
-  public LoginSteps loginSteps(){
-    return new LoginSteps(properties, testData, driverManager.get());
+  public LoginSteps loginSteps() {
+    return new LoginSteps();
   }
 
   @Bean
-  public RegistrationSteps registrationSteps(){
-    return new RegistrationSteps(properties, testData, driverManager.get());
+  public RegistrationSteps registrationSteps() {
+    return new RegistrationSteps();
   }
 
   @Bean
-  public HomePageSteps homePageSteps(){
-    return new HomePageSteps(properties, testData, driverManager.get());
+  public HomePageSteps homePageSteps() {
+    return new HomePageSteps();
   }
 
   @Bean
-  public AddressSteps addressSteps(){
-    return new AddressSteps(properties, testData, driverManager.get());
+  public AddressSteps addressSteps() {
+    return new AddressSteps();
   }
 
   @Bean
-  public CardSteps cardSteps(){
-    return new CardSteps(properties, testData, driverManager.get());
+  public CardSteps cardSteps() {
+    return new CardSteps();
   }
 
   @Bean
-  public ImageSteps imageSteps(){
-    return new ImageSteps(properties, testData, driverManager.get());
+  public ImageSteps imageSteps() {
+    return new ImageSteps();
   }
 
   @Bean
-  public CategorySteps categorySteps(){
-    return new CategorySteps(properties, testData, driverManager.get());
+  public CategorySteps categorySteps() {
+    return new CategorySteps();
   }
 
   @Bean
-  public UserManagementSteps userManagementSteps(){
-    return new UserManagementSteps(properties, testData, driverManager.get());
+  public UserManagementSteps userManagementSteps() {
+    return new UserManagementSteps();
   }
 
   @Bean
-  public ShoppingCartSteps shoppingCartSteps(){
-    return new ShoppingCartSteps(properties, testData, driverManager.get());
+  public ShoppingCartSteps shoppingCartSteps() {
+    return new ShoppingCartSteps();
   }
 }

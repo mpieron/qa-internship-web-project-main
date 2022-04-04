@@ -21,13 +21,14 @@ import org.springframework.stereotype.Component;
  * Base class to contain common auxiliary methods for step definitions.
  */
 @Component
-@RequiredArgsConstructor
 public abstract class BaseSteps {
 
-  protected final TestSetupConfiguration properties;
-  protected final TestDataConfiguration testData;
   @Autowired
-  protected final WebDriver driver;
+  protected TestSetupConfiguration properties;
+  @Autowired
+  protected TestDataConfiguration testData;
+  @Autowired
+  protected WebDriver driver;
   private WebDriverWait wait;
 
   WebDriverWait getWait() {

@@ -2,30 +2,16 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
-import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.*;
+import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AdminBasePage;
+import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.UserEditAddPage;
+import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.UsersListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
 import java.util.StringJoiner;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class UserManagementSteps extends BaseSteps {
-
-  public UserManagementSteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
-    super(properties, testData, driver);
-  }
-
-  public enum UserField {
-    LOGIN_NAME,
-    PASSWORD,
-    EMAIL,
-    SURNAME,
-    FIRST_NAME,
-    MIDDLE_NAME,
-  }
 
   @Step
   public String fillUserField(UserManagementSteps.UserField userField) {
@@ -56,7 +42,8 @@ public class UserManagementSteps extends BaseSteps {
         userEditAddPage().typeMiddleName(valueToReturn);
         break;
       default:
-        throw new IllegalArgumentException("Unsupported Address Add/Edit page field name: " + userField);
+        throw new IllegalArgumentException(
+            "Unsupported Address Add/Edit page field name: " + userField);
     }
     return valueToReturn;
   }
@@ -114,8 +101,8 @@ public class UserManagementSteps extends BaseSteps {
   @Step
   public void verifyIfFoundUserByLoginName() {
     assertThat(usersListPage().getAllUsersHyperlinksList().size())
-      .as("User should be found by login name")
-      .isGreaterThan(0);
+        .as("User should be found by login name")
+        .isGreaterThan(0);
   }
 
   @Step
@@ -124,15 +111,15 @@ public class UserManagementSteps extends BaseSteps {
     String lastUser = usersListPage().getLastUserFromList().getText();
 
     assertThat(lastUser)
-      .as("User \"%s\" has wrong data, should contain %s", lastUser, userData)
-      .contains(userData);
+        .as("User \"%s\" has wrong data, should contain %s", lastUser, userData)
+        .contains(userData);
   }
 
   @Step
   public void verifyIfUserWasDeleted() {
     assertThat(usersListPage().messageDeleteIsDisplayed())
-      .as("Deletion message should be displayed")
-      .isTrue();
+        .as("Deletion message should be displayed")
+        .isTrue();
   }
 
   @Step
@@ -141,12 +128,12 @@ public class UserManagementSteps extends BaseSteps {
     String admin = usersListPage().getUser_admin().getText();
 
     assertThat(firstUser)
-      .as("First user \"%s\" should have data: %s.", firstUser, getUserData())
-      .contains(getUserData());
+        .as("First user \"%s\" should have data: %s.", firstUser, getUserData())
+        .contains(getUserData());
 
     assertThat(admin)
-      .as("Second user \"%s\" should have data: %s.", admin, getAdminData())
-      .contains(getAdminData());
+        .as("Second user \"%s\" should have data: %s.", admin, getAdminData())
+        .contains(getAdminData());
   }
 
   @Step
@@ -166,16 +153,18 @@ public class UserManagementSteps extends BaseSteps {
   public void verifyIfCanNotCreateUserWithoutLoginName() {
     String correctAction = "Create a user";
     assertThat(userEditAddPage().getActionHeader())
-      .as("Action should be \" %s \", but was \" %s \"", correctAction, userEditAddPage().getActionHeader())
-      .isEqualTo(correctAction);
+        .as("Action should be \" %s \", but was \" %s \"", correctAction,
+            userEditAddPage().getActionHeader())
+        .isEqualTo(correctAction);
   }
 
   @Step
   public void verifyIfCanNotCreateUserWithoutPassword() {
     String correctAction = "Create a user";
     assertThat(userEditAddPage().getActionHeader())
-      .as("Action should be \" %s \", but was \" %s \"", correctAction, userEditAddPage().getActionHeader())
-      .isEqualTo(correctAction);
+        .as("Action should be \" %s \", but was \" %s \"", correctAction,
+            userEditAddPage().getActionHeader())
+        .isEqualTo(correctAction);
 
     assertThat(userEditAddPage().avatarIsDisplayed()).as("Avatar should be displayed").isTrue();
 
@@ -184,14 +173,14 @@ public class UserManagementSteps extends BaseSteps {
     String displayed = userEditAddPage().getNoPasswordDisplayedCommunicat();
 
     assertThat(userEditAddPage().getNoPasswordDisplayedCommunicat())
-      .as("Message about no password should contains %s and %s, but contains %s",
-              onePart, secondPart, displayed)
-      .contains(onePart)
-      .contains(secondPart);
+        .as("Message about no password should contains %s and %s, but contains %s",
+            onePart, secondPart, displayed)
+        .contains(onePart)
+        .contains(secondPart);
 
     assertThat(userEditAddPage().tableWithErrorsIsDisplayed())
-      .as("Table with errors should be displayed")
-      .isTrue();
+        .as("Table with errors should be displayed")
+        .isTrue();
   }
 
   private String getUserData() {
@@ -226,5 +215,14 @@ public class UserManagementSteps extends BaseSteps {
 
   AdminBasePage adminBasePage() {
     return getPage(AdminBasePage.class);
+  }
+
+  public enum UserField {
+    LOGIN_NAME,
+    PASSWORD,
+    EMAIL,
+    SURNAME,
+    FIRST_NAME,
+    MIDDLE_NAME,
   }
 }

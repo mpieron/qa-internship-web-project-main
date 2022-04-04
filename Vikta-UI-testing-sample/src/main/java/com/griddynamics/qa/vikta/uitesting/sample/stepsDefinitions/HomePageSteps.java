@@ -2,14 +2,11 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
 import java.util.Random;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +18,6 @@ public class HomePageSteps extends BaseSteps {
 
   @Autowired
   private HomePage homePage;
-
-  public HomePageSteps(TestSetupConfiguration properties, TestDataConfiguration testData,
-      WebDriver driver) {
-    super(properties, testData, driver);
-  }
-
-  public enum FieldName {
-    TITLE,
-    TAG,
-    RATINGFROM,
-    RATINGTO,
-    PRICEFROM,
-    PRICETO,
-  }
 
   @Step
   public void openHomePage() {
@@ -84,8 +67,8 @@ public class HomePageSteps extends BaseSteps {
     assertThat(homePage.getImagesTitlesFromCurrentPage().size()).isGreaterThan(0);
 
     assertThat(homePage.getImagesTitlesFromCurrentPage())
-      .as("Found image item that doesn't contain searched title")
-      .allSatisfy(image -> assertThat(image.getText()).contains(title));
+        .as("Found image item that doesn't contain searched title")
+        .allSatisfy(image -> assertThat(image.getText()).contains(title));
   }
 
   @Step
@@ -102,12 +85,12 @@ public class HomePageSteps extends BaseSteps {
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagePricesFromCurrentPage())
-      .as("Found image item that's price is lower that search")
-      .allSatisfy(
-        imagePrice ->
-          assertThat(Double.parseDouble(imagePrice))
-            .isGreaterThanOrEqualTo(Double.parseDouble(price))
-      );
+        .as("Found image item that's price is lower that search")
+        .allSatisfy(
+            imagePrice ->
+                assertThat(Double.parseDouble(imagePrice))
+                    .isGreaterThanOrEqualTo(Double.parseDouble(price))
+        );
   }
 
   @Step
@@ -116,11 +99,12 @@ public class HomePageSteps extends BaseSteps {
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagePricesFromCurrentPage())
-      .as("Found image item that's price is greater that search")
-      .allSatisfy(
-        imagePrice ->
-          assertThat(Double.parseDouble(imagePrice)).isLessThanOrEqualTo(Double.parseDouble(price))
-      );
+        .as("Found image item that's price is greater that search")
+        .allSatisfy(
+            imagePrice ->
+                assertThat(Double.parseDouble(imagePrice)).isLessThanOrEqualTo(
+                    Double.parseDouble(price))
+        );
   }
 
   @Step
@@ -129,8 +113,8 @@ public class HomePageSteps extends BaseSteps {
     getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
 
     assertThat(currentPage.getSelectedCategoryTitle().getText())
-      .as("Wrong category found")
-      .contains(categoryName);
+        .as("Wrong category found")
+        .contains(categoryName);
   }
 
   @Step
@@ -141,5 +125,14 @@ public class HomePageSteps extends BaseSteps {
   @Step
   public void clickSearchBottom() {
     homePage.clickSearchBottom();
+  }
+
+  public enum FieldName {
+    TITLE,
+    TAG,
+    RATINGFROM,
+    RATINGTO,
+    PRICEFROM,
+    PRICETO,
   }
 }

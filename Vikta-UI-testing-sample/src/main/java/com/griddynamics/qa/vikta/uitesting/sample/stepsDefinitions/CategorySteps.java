@@ -2,26 +2,15 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
-import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.*;
+import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AdminBasePage;
+import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CategoriesListPage;
+import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CategoryEditAddPage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
-
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class CategorySteps extends BaseSteps {
-
-  public CategorySteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
-    super(properties, testData, driver);
-  }
-
-  public enum NecessaryCategoryField {
-    TITLE,
-    PATH_TO_CATEGORY_IMAGE,
-  }
 
   @Step
   public String fillNecessaryCategoryField(CategorySteps.NecessaryCategoryField categoryField) {
@@ -36,7 +25,8 @@ public class CategorySteps extends BaseSteps {
         categoryEditAddPage().typePathToCatImage(valueToReturn);
         break;
       default:
-        throw new IllegalArgumentException("Unsupported Address Add/Edit page field name: " + categoryField);
+        throw new IllegalArgumentException(
+            "Unsupported Address Add/Edit page field name: " + categoryField);
     }
     return valueToReturn;
   }
@@ -94,8 +84,8 @@ public class CategorySteps extends BaseSteps {
   @Step
   public void verifyIfFoundCategoryByTitle() {
     assertThat(categoryListPage().getAllCategoriesHyperlinksList().size())
-      .as("Category not found by title")
-      .isGreaterThan(0);
+        .as("Category not found by title")
+        .isGreaterThan(0);
   }
 
   @Step
@@ -104,19 +94,19 @@ public class CategorySteps extends BaseSteps {
     String lastCategory = categoryListPage().getLastCategoryFromList().getText();
 
     assertThat(lastCategory)
-      .as("Category \"%s\" has wrong title, should contains %s", lastCategory, title)
-      .contains(title);
+        .as("Category \"%s\" has wrong title, should contains %s", lastCategory, title)
+        .contains(title);
 
     assertThat(lastCategory)
-      .as("Category \"%s\" has wrong path should contains %s", lastCategory, path)
-      .contains(path);
+        .as("Category \"%s\" has wrong path should contains %s", lastCategory, path)
+        .contains(path);
   }
 
   @Step
   public void verifyIfCategoryWasDeleted() {
     assertThat(categoryListPage().messageDeleteIsDisplayed())
-      .as("Deletion message should be displayed")
-      .isTrue();
+        .as("Deletion message should be displayed")
+        .isTrue();
   }
 
   @Step
@@ -125,20 +115,20 @@ public class CategorySteps extends BaseSteps {
     String secondCategory = categoryListPage().getSecondCategoryFromList().getText();
 
     assertThat(firstCategory)
-            .as("First category \"%s\" should has title %s.")
-            .contains(testData.getFirstCatTitle());
+        .as("First category \"%s\" should has title %s.")
+        .contains(testData.getFirstCatTitle());
 
     assertThat(firstCategory)
-            .as("First category \"%s\" should has description %s.")
-            .contains(testData.getFirstCatDesc());
+        .as("First category \"%s\" should has description %s.")
+        .contains(testData.getFirstCatDesc());
 
     assertThat(secondCategory)
-            .as("Second category \"%s\" should has title %s.")
-            .contains(testData.getSecondCatTitle());
+        .as("Second category \"%s\" should has title %s.")
+        .contains(testData.getSecondCatTitle());
 
     assertThat(secondCategory)
-            .as("Second category \"%s\" should has description %s.")
-            .contains(testData.getSecondCatDesc());
+        .as("Second category \"%s\" should has description %s.")
+        .contains(testData.getSecondCatDesc());
   }
 
   CategoriesListPage categoryListPage() {
@@ -151,5 +141,10 @@ public class CategorySteps extends BaseSteps {
 
   AdminBasePage adminBasePage() {
     return getPage(AdminBasePage.class);
+  }
+
+  public enum NecessaryCategoryField {
+    TITLE,
+    PATH_TO_CATEGORY_IMAGE,
   }
 }
