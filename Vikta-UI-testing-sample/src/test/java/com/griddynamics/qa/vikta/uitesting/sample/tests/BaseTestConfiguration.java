@@ -23,9 +23,9 @@ public class BaseTestConfiguration {
 
   @Autowired
   private final DriverManager driverManager;
-  @Autowired
+
   private final TestSetupConfiguration properties;
-  @Autowired
+
   private final TestDataConfiguration testData;
 
   @Bean

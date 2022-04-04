@@ -24,9 +24,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public abstract class BaseSteps {
 
-  @Autowired
   protected final TestSetupConfiguration properties;
-  @Autowired
+
   protected final TestDataConfiguration testData;
   @Autowired
   protected final WebDriver driver;

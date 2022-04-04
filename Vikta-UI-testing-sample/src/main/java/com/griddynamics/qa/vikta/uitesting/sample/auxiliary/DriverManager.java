@@ -21,48 +21,17 @@ import org.springframework.stereotype.Component;
  * Manages WebDriver instantiation etc.
  */
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public final class DriverManager {
 
-  private static final int THOUSAND = 1000;
-  private final TestSetupConfiguration properties;
-  private final ThreadLocal<WebDriver> threadWebDriver = new ThreadLocal<>();
-
-  public DriverManager(TestSetupConfiguration properties){
-    this.properties=properties;
-  }
-
-  enum WebDriverType {
-    FIREFOX,
-    CHROME,
-  }
-
-  public void instantiateDriver() {
-    log.info("About to init new web driver instance.");
-    final WebDriver driver;
-    val driverType = getDriverType();
-
-    switch (driverType) {
-      case FIREFOX:
-        driver = createFirefoxDriver();
-        break;
-      case CHROME:
-        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver\\chromedriver.exe");
-        driver = createChromeDriver();
-        break;
-      default:
-        throw new UnsupportedOperationException("Unsupported WebDriver type: " + driverType);
-    }
-
-    //driver.manage().window().maximize();
-
-    Configuration.browser = driverType.name().toLowerCase();
-    Configuration.timeout = properties.getWaitTimeout() * THOUSAND;
-    Configuration.pageLoadTimeout = properties.getPageLoadTimeout() * THOUSAND;
-
-    WebDriverRunner.setWebDriver(driver);
-    threadWebDriver.set(driver);
-  }
+  @Autowired
+  private final ThreadLocal<WebDriver> threadWebDriver;
+//  private final TestSetupConfiguration properties;
+//
+//  public DriverManager(TestSetupConfiguration properties){
+//    this.properties = properties;
+//  }
 
   public void quite() {
     if (Objects.nonNull(threadWebDriver.get())) {
@@ -77,41 +46,5 @@ public final class DriverManager {
 
   public byte[] takeScreenshot() {
     return ((TakesScreenshot) get()).getScreenshotAs(OutputType.BYTES);
-  }
-
-  /**
-   * Driver type to use is defined by corresponding property value.
-   * Defaults to Chrome if property is not set
-   *
-   * @return web driver type specified by the properties.
-   */
-  private WebDriverType getDriverType() {
-    val driver = properties.getBrowser();
-    return Objects.isNull(driver)
-      ? WebDriverType.CHROME
-      : WebDriverType.valueOf(driver.toUpperCase());
-  }
-
-  private FirefoxDriver createFirefoxDriver() {
-    // https://github.com/bonigarcia/webdrivermanager/
-    final FirefoxOptions ops = new FirefoxOptions();
-    //TODO: Configure as needed.
-    ops.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.DISMISS);
-    io.github.bonigarcia.wdm.WebDriverManager.getInstance(WebDriverType.FIREFOX.name()).setup();
-
-    return new FirefoxDriver(ops);
-  }
-
-  private ChromeDriver createChromeDriver() {
-    final ChromeOptions ops = new ChromeOptions();
-    ops.addArguments("--start-maximized");
-    ops.addArguments("--dns-prefetch-disable");
-    ops.addArguments("test-type");
-    ops.addArguments("--headless");
-    ops.setPageLoadStrategy(PageLoadStrategy.EAGER);
-    ops.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
-    io.github.bonigarcia.wdm.WebDriverManager.getInstance(WebDriverType.CHROME.name()).setup();
-
-    return new ChromeDriver(ops);
   }
 }
