@@ -18,5 +18,4 @@ public class BaseStepsConfiguration {
   public WebDriver driver() {
     return driverManager.get();
   }
-
 }
