@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 public abstract class BaseSteps {
 
   protected final TestSetupConfiguration properties;
-
   protected final TestDataConfiguration testData;
   @Autowired
   protected final WebDriver driver;
@@ -35,7 +34,6 @@ public abstract class BaseSteps {
     if (Objects.isNull(this.wait)) {
       this.wait = new WebDriverWait(driver, properties.getWaitTimeout());
     }
-
     return wait;
   }
 

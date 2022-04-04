@@ -1,6 +1,5 @@
 package com.griddynamics.qa.vikta.uitesting.sample.auxiliary;
 
-
 import com.codeborne.selenide.WebDriverRunner;
 import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import lombok.RequiredArgsConstructor;
@@ -94,5 +93,4 @@ public class DriverManagerConfiguration {
 
         return new ChromeDriver(ops);
     }
-
 }
