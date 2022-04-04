@@ -2,6 +2,8 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AdminBasePage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ImageEditAddPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ImagesListPage;
@@ -13,8 +15,8 @@ import org.openqa.selenium.WebElement;
 
 public class ImageSteps extends BaseSteps {
 
-  public ImageSteps(WebDriver driver) {
-    super(driver);
+  public ImageSteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
+    super(properties, testData, driver);
   }
 
   public enum NecessaryImageField {

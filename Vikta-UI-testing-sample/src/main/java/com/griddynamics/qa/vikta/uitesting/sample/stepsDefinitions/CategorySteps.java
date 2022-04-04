@@ -2,6 +2,8 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.*;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
@@ -12,8 +14,8 @@ import org.openqa.selenium.WebElement;
 
 public class CategorySteps extends BaseSteps {
 
-  public CategorySteps(WebDriver driver) {
-    super(driver);
+  public CategorySteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
+    super(properties, testData, driver);
   }
 
   public enum NecessaryCategoryField {
@@ -124,19 +126,19 @@ public class CategorySteps extends BaseSteps {
 
     assertThat(firstCategory)
             .as("First category \"%s\" should has title %s.")
-            .contains(getData().firstCatTitle());
+            .contains(testData.getFirstCatTitle());
 
     assertThat(firstCategory)
             .as("First category \"%s\" should has description %s.")
-            .contains(getData().firstCatDesc());
+            .contains(testData.getFirstCatDesc());
 
     assertThat(secondCategory)
             .as("Second category \"%s\" should has title %s.")
-            .contains(getData().secondCatTitle());
+            .contains(testData.getSecondCatTitle());
 
     assertThat(secondCategory)
             .as("Second category \"%s\" should has description %s.")
-            .contains(getData().secondCatDesc());
+            .contains(testData.getSecondCatDesc());
   }
 
   CategoriesListPage categoryListPage() {

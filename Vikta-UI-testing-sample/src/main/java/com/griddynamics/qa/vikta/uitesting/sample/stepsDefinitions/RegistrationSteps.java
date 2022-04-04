@@ -2,6 +2,8 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.RegistrationPage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
@@ -19,8 +21,9 @@ public class RegistrationSteps extends BaseSteps {
   private static String FAILED_REGISTRATION_MESSAGE_PREFIX =
     "There is already a user registered with the loginname provided";
 
-  public RegistrationSteps(WebDriver driver) {
-    super(driver);
+
+  public RegistrationSteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
+    super(properties, testData, driver);
   }
 
   public enum FieldName {
@@ -34,7 +37,7 @@ public class RegistrationSteps extends BaseSteps {
 
   @Step
   public void openRegistrationPage() {
-    getDriver().get(getData().registrationPageUrl());
+    driver.get(properties.getRegistrationPageUrl());
   }
 
   @Step
@@ -81,7 +84,7 @@ public class RegistrationSteps extends BaseSteps {
 
   @Step
   public String typeExistingUserNameInto() {
-    String loginName = getData().userName();
+    String loginName = testData.getUserName();
     page().typeInLoginname(loginName);
     return loginName;
   }
@@ -89,7 +92,7 @@ public class RegistrationSteps extends BaseSteps {
   @Step
   public void verifyCurrentPageIsRegistration() {
     assertCurrentPageUrl(
-      getData().registrationPageUrl(),
+      properties.getRegistrationPageUrl(),
       "Registration page was expected to be the current one."
     );
   }

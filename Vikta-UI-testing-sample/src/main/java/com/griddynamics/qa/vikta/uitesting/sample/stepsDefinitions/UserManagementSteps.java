@@ -2,6 +2,8 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.*;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
@@ -12,8 +14,8 @@ import org.openqa.selenium.WebElement;
 
 public class UserManagementSteps extends BaseSteps {
 
-  public UserManagementSteps(WebDriver driver) {
-    super(driver);
+  public UserManagementSteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
+    super(properties, testData, driver);
   }
 
   public enum UserField {
@@ -194,22 +196,22 @@ public class UserManagementSteps extends BaseSteps {
 
   private String getUserData() {
     StringJoiner userData = new StringJoiner(" ");
-    userData.add(getData().userName());
-    userData.add(getData().userMail());
-    userData.add(getData().userSurname());
-    userData.add(getData().userFirstName());
-    userData.add(getData().userMiddleName());
+    userData.add(testData.getUserName());
+    userData.add(testData.getUserMail());
+    userData.add(testData.getUserSurname());
+    userData.add(testData.getUserFirstName());
+    userData.add(testData.getUserMiddleName());
 
     return userData.toString();
   }
 
   private String getAdminData() {
     StringJoiner adminData = new StringJoiner(" ");
-    adminData.add(getData().adminName());
-    adminData.add(getData().adminMail());
-    adminData.add(getData().adminSurname());
-    adminData.add(getData().adminFirstName());
-    adminData.add(getData().adminMiddleName());
+    adminData.add(testData.getAdminName());
+    adminData.add(testData.getAdminMail());
+    adminData.add(testData.getAdminSurname());
+    adminData.add(testData.getAdminFirstName());
+    adminData.add(testData.getAdminMiddleName());
 
     return adminData.toString();
   }

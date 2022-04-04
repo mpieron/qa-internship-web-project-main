@@ -2,6 +2,8 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.LoginPage;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
@@ -12,13 +14,16 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  */
 public class LoginSteps extends BaseSteps {
 
-  public LoginSteps(WebDriver driver) {
-    super(driver);
+  public LoginSteps(
+      TestSetupConfiguration properties,
+      TestDataConfiguration testData,
+      WebDriver driver) {
+    super(properties, testData, driver);
   }
 
   @Step
   public void openLoginPage() {
-    getDriver().get(getData().loginPageUrl());
+    driver.get(properties.getLoginPageUrl());
   }
 
   @Step
@@ -28,12 +33,12 @@ public class LoginSteps extends BaseSteps {
 
   @Step
   public void loginAsRegularUser() {
-    page().login(getData().userName(), getData().userPassword());
+    page().login(testData.getUserName(), testData.getUserPassword());
   }
 
   @Step
   public void loginAsAdmin() {
-    page().login(getData().adminName(), getData().adminPassword());
+    page().login(testData.getAdminName(), testData.getAdminPassword());
   }
 
   @Step
@@ -43,12 +48,12 @@ public class LoginSteps extends BaseSteps {
 
   @Step
   public void verifyCurrentPageIsHomePageForTheRegularUser() {
-    verifyCurrentPageIsHomePageForTheUser(getData().userName(), UserType.USER);
+    verifyCurrentPageIsHomePageForTheUser(testData.getUserName(), UserType.USER);
   }
 
   @Step
   public void verifyCurrentPageIsHomePageForTheAdmin() {
-    verifyCurrentPageIsHomePageForTheUser(getData().adminName(), UserType.ADMIN);
+    verifyCurrentPageIsHomePageForTheUser(testData.getAdminName(), UserType.ADMIN);
   }
 
   @Step

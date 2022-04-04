@@ -2,6 +2,8 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
@@ -16,8 +18,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  */
 public class HomePageSteps extends BaseSteps {
 
-  public HomePageSteps(WebDriver driver) {
-    super(driver);
+  public HomePageSteps(TestSetupConfiguration properties, TestDataConfiguration testData, WebDriver driver) {
+    super(properties, testData, driver);
   }
 
   public enum FieldName {
@@ -31,7 +33,7 @@ public class HomePageSteps extends BaseSteps {
 
   @Step
   public void openHomePage() {
-    getDriver().get(getData().baseUrl());
+    driver.get(properties.getBaseUrl());
   }
 
   @Step
