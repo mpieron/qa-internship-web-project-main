@@ -27,7 +27,7 @@ public abstract class BaseSteps {
   @Autowired
   protected TestDataConfiguration testData;
   @Autowired
-  protected DriverManager driverManager;
+  private DriverManager driverManager;
   private WebDriverWait wait;
   @Autowired
   private BasePage basePage;
