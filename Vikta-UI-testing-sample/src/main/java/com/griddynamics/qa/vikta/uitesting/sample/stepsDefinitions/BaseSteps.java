@@ -2,6 +2,7 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.auxiliary.DriverManager;
 import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.BasePage;
@@ -10,7 +11,6 @@ import java.util.Objects;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,44 +27,45 @@ public abstract class BaseSteps {
   @Autowired
   protected TestDataConfiguration testData;
   @Autowired
-  protected WebDriver driver;
+  protected DriverManager driverManager;
   private WebDriverWait wait;
+  @Autowired
+  private BasePage basePage;
+
+  protected WebDriver getDriver(){
+    return driverManager.get();
+  }
 
   WebDriverWait getWait() {
     if (Objects.isNull(this.wait)) {
-      this.wait = new WebDriverWait(driver, properties.getWaitTimeout());
+      this.wait = new WebDriverWait(getDriver(), properties.getWaitTimeout());
     }
     return wait;
   }
 
-  <P> P getPage(Class<P> pageClass) {
-    return PageFactory.initElements(driver, pageClass);
-  }
-
   @Step
   public void scroll(WebElement targetElement) {
-    Actions scroll = new Actions(driver);
+    Actions scroll = new Actions(getDriver());
     scroll.moveToElement(targetElement);
     scroll.perform();
   }
 
   @Step
   void verifyCurrentPageIsHomePageForTheUser(String username, UserType userType) {
-    BasePage currentPage = getPage(BasePage.class);
-    getWait().until(ExpectedConditions.visibilityOf(currentPage.getLoggedInName()));
+    getWait().until(ExpectedConditions.visibilityOf(basePage.getLoggedInName()));
 
     assertCurrentPageUrl(properties.getBaseUrl(), "Home page was expected to be the current one.");
 
-    assertThat(currentPage.getCurrentUserName())
+    assertThat(basePage.getCurrentUserName())
         .as("Unexpected current user's name displayed. Expected: %s", username)
         .contains(username);
 
-    assertThat(currentPage.getLoggedRole()).as("Assigned wrong role").contains(userType.toString());
+    assertThat(basePage.getLoggedRole()).as("Assigned wrong role").contains(userType.toString());
   }
 
   @Step
   void assertCurrentPageUrl(String expectedUrl, String messageOnFail) {
-    assertThat(driver.getCurrentUrl()).as(messageOnFail).contains(expectedUrl);
+    assertThat(getDriver().getCurrentUrl()).as(messageOnFail).contains(expectedUrl);
   }
 
   public enum UserType {

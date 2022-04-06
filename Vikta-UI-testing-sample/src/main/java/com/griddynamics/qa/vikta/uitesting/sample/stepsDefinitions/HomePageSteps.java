@@ -21,7 +21,7 @@ public class HomePageSteps extends BaseSteps {
 
   @Step
   public void openHomePage() {
-    driver.get(properties.getBaseUrl());
+    getDriver().get(properties.getBaseUrl());
   }
 
   @Step
@@ -61,8 +61,7 @@ public class HomePageSteps extends BaseSteps {
 
   @Step
   public void verifyImagesFoundByTitle(String title) {
-    HomePage currentPage = getPage(HomePage.class);
-    getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
+    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagesTitlesFromCurrentPage().size()).isGreaterThan(0);
 
@@ -73,16 +72,14 @@ public class HomePageSteps extends BaseSteps {
 
   @Step
   public void verifyImagesFoundByTags() {
-    HomePage currentPage = getPage(HomePage.class);
-    getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
+    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagesTitlesFromCurrentPage().size()).isGreaterThan(0);
   }
 
   @Step
   public void verifyImagesFoundByPriceFrom(String price) {
-    HomePage currentPage = getPage(HomePage.class);
-    getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
+    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagePricesFromCurrentPage())
         .as("Found image item that's price is lower that search")
@@ -95,8 +92,7 @@ public class HomePageSteps extends BaseSteps {
 
   @Step
   public void verifyImagesFoundByPriceTo(String price) {
-    HomePage currentPage = getPage(HomePage.class);
-    getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
+    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagePricesFromCurrentPage())
         .as("Found image item that's price is greater that search")
@@ -109,10 +105,9 @@ public class HomePageSteps extends BaseSteps {
 
   @Step
   public void verifySearchedCategory(String categoryName) {
-    HomePage currentPage = getPage(HomePage.class);
-    getWait().until(ExpectedConditions.visibilityOf(currentPage.getSelectedCategoryTitle()));
+    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
-    assertThat(currentPage.getSelectedCategoryTitle().getText())
+    assertThat(homePage.getSelectedCategoryTitle().getText())
         .as("Wrong category found")
         .contains(categoryName);
   }

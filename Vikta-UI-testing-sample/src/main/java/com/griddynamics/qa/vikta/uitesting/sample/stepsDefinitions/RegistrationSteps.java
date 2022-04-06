@@ -24,7 +24,7 @@ public class RegistrationSteps extends BaseSteps {
 
   @Step
   public void openRegistrationPage() {
-    driver.get(properties.getRegistrationPageUrl());
+    getDriver().get(properties.getRegistrationPageUrl());
   }
 
   @Step

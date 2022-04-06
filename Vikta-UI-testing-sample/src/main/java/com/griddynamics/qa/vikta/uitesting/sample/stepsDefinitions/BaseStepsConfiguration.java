@@ -15,42 +15,42 @@ public class BaseStepsConfiguration {
   private final DriverManager driverManager;
 
   @Bean
-  public WebDriver driver() {
-    return driverManager.get();
+  BasePage basePage() {
+    return getPage(BasePage.class);
   }
 
   @Bean
-  public HomePage homePage() {
+  HomePage homePage() {
     return getPage(HomePage.class);
   }
 
   @Bean
-  private LoginPage loginPage() {
+  LoginPage loginPage() {
     return getPage(LoginPage.class);
   }
 
   @Bean
-  private RegistrationPage registrationPage() {
+  RegistrationPage registrationPage() {
     return getPage(RegistrationPage.class);
   }
 
   @Bean
-  public AddressEditAddPage addressEditAddPage() {
+  AddressEditAddPage addressEditAddPage() {
     return getPage(AddressEditAddPage.class);
   }
 
   @Bean
-  public AddressesListPage addressesListPage() {
+  AddressesListPage addressesListPage() {
     return getPage(AddressesListPage.class);
   }
 
   @Bean
-  private CardEditAddPage cardEditAddPage() {
+  CardEditAddPage cardEditAddPage() {
     return getPage(CardEditAddPage.class);
   }
 
   @Bean
-  private CardsListPage cardsListPage() {
+  CardsListPage cardsListPage() {
     return getPage(CardsListPage.class);
   }
 
@@ -60,12 +60,12 @@ public class BaseStepsConfiguration {
   }
 
   @Bean
-  CategoryEditAddPage categoryEditAddPage() {
+   CategoryEditAddPage categoryEditAddPage() {
     return getPage(CategoryEditAddPage.class);
   }
 
   @Bean
-  AdminBasePage adminBasePage() {
+   AdminBasePage adminBasePage() {
     return getPage(AdminBasePage.class);
   }
 

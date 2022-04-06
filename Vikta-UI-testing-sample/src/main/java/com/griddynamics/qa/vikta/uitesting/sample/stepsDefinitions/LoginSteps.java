@@ -17,7 +17,7 @@ public class LoginSteps extends BaseSteps {
 
   @Step
   public void openLoginPage() {
-    driver.get(properties.getLoginPageUrl());
+    getDriver().get(properties.getLoginPageUrl());
   }
 
   @Step
