@@ -9,8 +9,17 @@ import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ImageSteps extends BaseSteps {
+
+  @Autowired
+  AdminBasePage adminBasePage;
+  @Autowired
+  ImagesListPage imagesListPage;
+  @Autowired
+  ImageEditAddPage imageEditAddPage;
+
 
   @Step
   public String fillNecessaryImageField(NecessaryImageField imageField) {
@@ -18,11 +27,11 @@ public class ImageSteps extends BaseSteps {
     switch (imageField) {
       case URL:
         valueToReturn = Utilities.generateURL();
-        imageEditAddPage().typeURL(valueToReturn);
+        imageEditAddPage.typeURL(valueToReturn);
         break;
       case TITLE:
         valueToReturn = Utilities.generateTitle();
-        imageEditAddPage().typeTitle(valueToReturn);
+        imageEditAddPage.typeTitle(valueToReturn);
         break;
       default:
         throw new IllegalArgumentException(
@@ -34,52 +43,52 @@ public class ImageSteps extends BaseSteps {
 
   @Step
   public void clickImages() {
-    adminBasePage().clickImages();
+    adminBasePage.clickImages();
   }
 
   @Step
   public void clickAddAnImage() {
-    adminBasePage().clickAddImage();
+    adminBasePage.clickAddImage();
   }
 
   @Step
   public String getFirstImageTitle() {
-    return imagesListPage().getAllImagesHyperlinksList().get(0).getText();
+    return imagesListPage.getAllImagesHyperlinksList().get(0).getText();
   }
 
   @Step
   public void clickSearchButton() {
-    imagesListPage().clickSearchButton();
+    imagesListPage.clickSearchButton();
   }
 
   @Step
   public void clickSaveButton() {
-    imageEditAddPage().clickSaveButton();
+    imageEditAddPage.clickSaveButton();
   }
 
   @Step
   public void clickToTheListOfImageItems() {
-    adminBasePage().clickImages();
+    adminBasePage.clickImages();
   }
 
   @Step
   public void searchImageByTitle(String title) {
-    imagesListPage().typeSearchTerm(title);
+    imagesListPage.typeSearchTerm(title);
     clickSearchButton();
   }
 
   @Step
   public void verifyIfFoundImageByTitle() {
-    assertThat(imagesListPage().getAllImagesHyperlinksList().size())
+    assertThat(imagesListPage.getAllImagesHyperlinksList().size())
         .as("Image not found by title")
         .isGreaterThan(0);
   }
 
   @Step
   public void verifyLastImageUrlAndTitle(String url, String title) {
-    scroll(imagesListPage().getLastImageFromList());
+    scroll(imagesListPage.getLastImageFromList());
 
-    String lastImage = imagesListPage().getLastImageFromList().getText();
+    String lastImage = imagesListPage.getLastImageFromList().getText();
 
     assertThat(lastImage)
         .as("Image \"%s\" has wrong url, should contains url %s", lastImage, url)
@@ -92,35 +101,23 @@ public class ImageSteps extends BaseSteps {
 
   @Step
   public void deleteAddedImages() {
-    scroll(imagesListPage().getLastImageFromList());
-    imagesListPage().removeLastImage();
+    scroll(imagesListPage.getLastImageFromList());
+    imagesListPage.removeLastImage();
   }
 
   @Step
   public void verifyIfImageWasDeleted() {
-    assertThat(imagesListPage().messageDeleteIsDisplayed())
+    assertThat(imagesListPage.messageDeleteIsDisplayed())
         .as("Deletion message should be displayed")
         .isTrue();
   }
 
   @Step
   public void clickLastImage() {
-    scroll(imagesListPage().getLastImageFromList());
-    List<WebElement> imagesList = imagesListPage().getAllImagesHyperlinksList();
+    scroll(imagesListPage.getLastImageFromList());
+    List<WebElement> imagesList = imagesListPage.getAllImagesHyperlinksList();
 
     imagesList.get(imagesList.size() - 1).click();
-  }
-
-  ImagesListPage imagesListPage() {
-    return getPage(ImagesListPage.class);
-  }
-
-  ImageEditAddPage imageEditAddPage() {
-    return getPage(ImageEditAddPage.class);
-  }
-
-  AdminBasePage adminBasePage() {
-    return getPage(AdminBasePage.class);
   }
 
   public enum NecessaryImageField {

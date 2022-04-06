@@ -2,8 +2,6 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CardEditAddPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CardsListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
@@ -11,10 +9,18 @@ import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
 import java.util.StringJoiner;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 public class CardSteps extends BaseSteps {
+
+  @Autowired
+  private HomePage homePage;
+  @Autowired
+  private CardEditAddPage cardEditAddPage;
+  @Autowired
+  private CardsListPage cardsListPage;
 
   private enum CardField {
     CARD_NUMBER,
@@ -30,23 +36,23 @@ public class CardSteps extends BaseSteps {
     switch (cardField) {
       case CARD_NUMBER:
         valueToReturn = Utilities.generateCardNumber();
-        cardEditAddPage().typeInCardNumber(valueToReturn);
+        cardEditAddPage.typeInCardNumber(valueToReturn);
         break;
       case CARD_CODE:
         valueToReturn = Utilities.generateCardCode();
-        cardEditAddPage().typeInCardCode(valueToReturn);
+        cardEditAddPage.typeInCardCode(valueToReturn);
         break;
       case OWNER:
         valueToReturn = Utilities.generateCardOwner();
-        cardEditAddPage().typeInOwner(valueToReturn);
+        cardEditAddPage.typeInOwner(valueToReturn);
         break;
       case EXPIRATION_DATE:
         valueToReturn = Utilities.generateExpirationDate();
-        cardEditAddPage().typeInExpirationDate(valueToReturn);
+        cardEditAddPage.typeInExpirationDate(valueToReturn);
         break;
       case NICKNAME:
         valueToReturn = Utilities.generateNickname();
-        cardEditAddPage().typeInNickname(valueToReturn);
+        cardEditAddPage.typeInNickname(valueToReturn);
         break;
       default:
         throw new IllegalArgumentException(
@@ -58,32 +64,32 @@ public class CardSteps extends BaseSteps {
 
   @Step
   public void clickAtCardTab() {
-    homePage().clickCardsBottom();
+    homePage.clickCardsBottom();
   }
 
   @Step
   public void clickAddCardTab() {
-    homePage().clickAddCardBottom();
+    homePage.clickAddCardBottom();
   }
 
   @Step
   public void clickAtSecondCardHyperlink() {
-    cardsListPage().clickAtSecondCardHyperlink();
+    cardsListPage.clickAtSecondCardHyperlink();
   }
 
   @Step
   public void clickSaveButton() {
-    cardEditAddPage().clickSaveButton();
+    cardEditAddPage.clickSaveButton();
   }
 
   @Step
   public void clickDeleteOrResetButton() {
-    cardEditAddPage().clickDeleteOrResetButton();
+    cardEditAddPage.clickDeleteOrResetButton();
   }
 
   @Step
   public void clickToTheListOfCards() {
-    cardEditAddPage().clickToTheListOfItems();
+    cardEditAddPage.clickToTheListOfItems();
   }
 
   @Step
@@ -99,25 +105,25 @@ public class CardSteps extends BaseSteps {
 
   @Step
   public void deleteAddedCards() {
-    List<WebElement> allCardsHyperlinksList = cardsListPage().getAllCardsHyperlinksList();
+    List<WebElement> allCardsHyperlinksList = cardsListPage.getAllCardsHyperlinksList();
 
     for (int i = 1; i < allCardsHyperlinksList.size(); i++) {
       allCardsHyperlinksList.get(i).click();
-      cardEditAddPage().clickDeleteOrResetButton();
-      cardEditAddPage().clickToTheListOfItems();
+      cardEditAddPage.clickDeleteOrResetButton();
+      cardEditAddPage.clickToTheListOfItems();
     }
   }
 
   @Step
   public void verifyFirstCardFieldsAreCorrect() {
-    assertThat(cardsListPage().getFirstCardFromList().getText())
+    assertThat(cardsListPage.getFirstCardFromList().getText())
       .as("Default card field is not correct.")
       .contains(testData.getCardCode(), testData.getCardTag());
   }
 
   @Step
   public void verifyIfChangedAllFieldsCorrectly(String cardInfo) {
-    String cardOnPage = cardsListPage().getSecondACardFromList().getText().substring(2);
+    String cardOnPage = cardsListPage.getSecondACardFromList().getText().substring(2);
     assertThat(cardOnPage)
       .as("Card wasn't changed correctly. Should be %s, but was %s", cardInfo, cardOnPage)
       .isEqualTo(cardInfo);
@@ -125,7 +131,7 @@ public class CardSteps extends BaseSteps {
 
   @Step
   public void verifyIfAddedCardCorrectly(String cardInfo) {
-    String cardAddress = cardsListPage().getLastCardFromList().getText().substring(2);
+    String cardAddress = cardsListPage.getLastCardFromList().getText().substring(2);
     assertThat(cardAddress)
       .as("Card wasn't added correctly. Should be %s, was %s", cardAddress, cardInfo)
       .isEqualTo(cardInfo);
@@ -133,27 +139,15 @@ public class CardSteps extends BaseSteps {
 
   @Step
   public void verifyIfCardWasDeleted() {
-    List<WebElement> allCardsHyperlinksList = cardsListPage().getAllCardsHyperlinksList();
+    List<WebElement> allCardsHyperlinksList = cardsListPage.getAllCardsHyperlinksList();
 
     assertThat(allCardsHyperlinksList.size()).as("Card wasn't deleted").isEqualTo(1);
   }
 
   @Step
   public void verifyIfAllFieldsOnAddPageAreEmpty() {
-    assertThat(cardEditAddPage().getAllFields())
+    assertThat(cardEditAddPage.getAllFields())
       .as("There is not empty field!")
       .allSatisfy(contents -> assertThat(contents.getText()).isEmpty());
-  }
-
-  private HomePage homePage() {
-    return getPage(HomePage.class);
-  }
-
-  private CardEditAddPage cardEditAddPage() {
-    return getPage(CardEditAddPage.class);
-  }
-
-  private CardsListPage cardsListPage() {
-    return getPage(CardsListPage.class);
   }
 }

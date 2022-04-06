@@ -10,8 +10,16 @@ import io.qameta.allure.Step;
 import java.util.List;
 import java.util.StringJoiner;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserManagementSteps extends BaseSteps {
+
+  @Autowired
+  private UsersListPage usersListPage;
+  @Autowired
+  private UserEditAddPage userEditAddPage;
+  @Autowired
+  private AdminBasePage adminBasePage;
 
   @Step
   public String fillUserField(UserManagementSteps.UserField userField) {
@@ -19,27 +27,27 @@ public class UserManagementSteps extends BaseSteps {
     switch (userField) {
       case LOGIN_NAME:
         valueToReturn = Utilities.generateLoginName();
-        userEditAddPage().typeLoginName(valueToReturn);
+        userEditAddPage.typeLoginName(valueToReturn);
         break;
       case PASSWORD:
         valueToReturn = Utilities.generatePassword();
-        userEditAddPage().typePassword(valueToReturn);
+        userEditAddPage.typePassword(valueToReturn);
         break;
       case EMAIL:
         valueToReturn = Utilities.generateEmail();
-        userEditAddPage().typeEmail(valueToReturn);
+        userEditAddPage.typeEmail(valueToReturn);
         break;
       case SURNAME:
         valueToReturn = Utilities.generateSurname();
-        userEditAddPage().typeSurname(valueToReturn);
+        userEditAddPage.typeSurname(valueToReturn);
         break;
       case FIRST_NAME:
         valueToReturn = Utilities.generateName();
-        userEditAddPage().typeFirstName(valueToReturn);
+        userEditAddPage.typeFirstName(valueToReturn);
         break;
       case MIDDLE_NAME:
         valueToReturn = Utilities.generateName();
-        userEditAddPage().typeMiddleName(valueToReturn);
+        userEditAddPage.typeMiddleName(valueToReturn);
         break;
       default:
         throw new IllegalArgumentException(
@@ -50,65 +58,65 @@ public class UserManagementSteps extends BaseSteps {
 
   @Step
   public void clickUsers() {
-    adminBasePage().clickUsers();
+    adminBasePage.clickUsers();
   }
 
   @Step
   public void clickCreateUser() {
-    adminBasePage().clickCreateUser();
+    adminBasePage.clickCreateUser();
   }
 
   @Step
   public String getFirstUserLoginName() {
-    return usersListPage().getAllUsersHyperlinksList().get(0).getText();
+    return usersListPage.getAllUsersHyperlinksList().get(0).getText();
   }
 
   @Step
   public void clickSearchButton() {
-    usersListPage().clickSearchButton();
+    usersListPage.clickSearchButton();
   }
 
   @Step
   public void clickSaveButton() {
-    userEditAddPage().clickSaveButton();
+    userEditAddPage.clickSaveButton();
   }
 
   @Step
   public void clickBackToChat() {
-    userEditAddPage().clickToTheListOfItems();
+    userEditAddPage.clickToTheListOfItems();
   }
 
   @Step
   public void clickLastUser() {
-    scroll(usersListPage().getLastUserFromList());
-    List<WebElement> usersList = usersListPage().getAllUsersHyperlinksList();
+    scroll(usersListPage.getLastUserFromList());
+    List<WebElement> usersList = usersListPage.getAllUsersHyperlinksList();
 
     usersList.get(usersList.size() - 1).click();
   }
 
   @Step
   public void searchUserByLoginName(String loginName) {
-    usersListPage().typeSearchTerm(loginName);
+    usersListPage.typeSearchTerm(loginName);
     clickSearchButton();
   }
 
   @Step
   public void deleteAddedUsers() {
-    scroll(usersListPage().getLastUserFromList());
-    usersListPage().removeLastUser();
+    scroll(usersListPage.getLastUserFromList());
+    usersListPage.removeLastUser();
   }
 
   @Step
   public void verifyIfFoundUserByLoginName() {
-    assertThat(usersListPage().getAllUsersHyperlinksList().size())
+    assertThat(usersListPage.getAllUsersHyperlinksList().size())
         .as("User should be found by login name")
         .isGreaterThan(0);
   }
 
   @Step
   public void verifyLastUserFields(String userData) {
-    scroll(usersListPage().getLastUserFromList());
-    String lastUser = usersListPage().getLastUserFromList().getText();
+    scroll(usersListPage.getLastUserFromList());
+    String lastUser = usersListPage.getLastUserFromList().getText();
 
     assertThat(lastUser)
         .as("User \"%s\" has wrong data, should contain %s", lastUser, userData)
@@ -117,15 +125,15 @@ public class UserManagementSteps extends BaseSteps {
 
   @Step
   public void verifyIfUserWasDeleted() {
-    assertThat(usersListPage().messageDeleteIsDisplayed())
+    assertThat(usersListPage.messageDeleteIsDisplayed())
         .as("Deletion message should be displayed")
         .isTrue();
   }
 
   @Step
   public void verifyIfFirstUserAndAdminHaveCorrectData() {
-    String firstUser = usersListPage().getUser_qq().getText();
-    String admin = usersListPage().getUser_admin().getText();
+    String firstUser = usersListPage.getUser_qq().getText();
+    String admin = usersListPage.getUser_admin().getText();
 
     assertThat(firstUser)
         .as("First user \"%s\" should have data: %s.", firstUser, getUserData())
@@ -152,33 +160,33 @@ public class UserManagementSteps extends BaseSteps {
   @Step
   public void verifyIfCanNotCreateUserWithoutLoginName() {
     String correctAction = "Create a user";
-    assertThat(userEditAddPage().getActionHeader())
+    assertThat(userEditAddPage.getActionHeader())
         .as("Action should be \" %s \", but was \" %s \"", correctAction,
-            userEditAddPage().getActionHeader())
+            userEditAddPage.getActionHeader())
         .isEqualTo(correctAction);
   }
 
   @Step
   public void verifyIfCanNotCreateUserWithoutPassword() {
     String correctAction = "Create a user";
-    assertThat(userEditAddPage().getActionHeader())
+    assertThat(userEditAddPage.getActionHeader())
         .as("Action should be \" %s \", but was \" %s \"", correctAction,
-            userEditAddPage().getActionHeader())
+            userEditAddPage.getActionHeader())
         .isEqualTo(correctAction);
 
-    assertThat(userEditAddPage().avatarIsDisplayed()).as("Avatar should be displayed").isTrue();
+    assertThat(userEditAddPage.avatarIsDisplayed()).as("Avatar should be displayed").isTrue();
 
-    String onePart = userEditAddPage().getNoPasswordMessageFirstPart();
-    String secondPart = userEditAddPage().getNoPasswordMessageSecondPart();
-    String displayed = userEditAddPage().getNoPasswordDisplayedCommunicat();
+    String onePart = userEditAddPage.getNoPasswordMessageFirstPart();
+    String secondPart = userEditAddPage.getNoPasswordMessageSecondPart();
+    String displayed = userEditAddPage.getNoPasswordDisplayedCommunicat();
 
-    assertThat(userEditAddPage().getNoPasswordDisplayedCommunicat())
+    assertThat(userEditAddPage.getNoPasswordDisplayedCommunicat())
         .as("Message about no password should contains %s and %s, but contains %s",
             onePart, secondPart, displayed)
         .contains(onePart)
         .contains(secondPart);
 
-    assertThat(userEditAddPage().tableWithErrorsIsDisplayed())
+    assertThat(userEditAddPage.tableWithErrorsIsDisplayed())
         .as("Table with errors should be displayed")
         .isTrue();
   }
@@ -203,18 +211,6 @@ public class UserManagementSteps extends BaseSteps {
     adminData.add(testData.getAdminMiddleName());
 
     return adminData.toString();
-  }
-
-  UsersListPage usersListPage() {
-    return getPage(UsersListPage.class);
-  }
-
-  UserEditAddPage userEditAddPage() {
-    return getPage(UserEditAddPage.class);
-  }
-
-  AdminBasePage adminBasePage() {
-    return getPage(AdminBasePage.class);
   }
 
   public enum UserField {

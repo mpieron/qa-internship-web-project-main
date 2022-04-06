@@ -1,9 +1,6 @@
 package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
-import com.griddynamics.qa.vikta.uitesting.sample.config.TestSetupConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AddressEditAddPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AddressesListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
@@ -11,10 +8,17 @@ import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
 import java.util.StringJoiner;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class AddressSteps extends BaseSteps {
+
+  @Autowired
+  private HomePage homePage;
+  @Autowired
+  private AddressEditAddPage addressEditAddPage;
+  @Autowired
+  private AddressesListPage addressesListPage;
 
   private enum AddressField {
     STREET,
@@ -31,27 +35,27 @@ public class AddressSteps extends BaseSteps {
     switch (addressField) {
       case STREET:
         valueToReturn = Utilities.generateStreetAddress();
-        addressEditAddPage().typeInStreet(valueToReturn);
+        addressEditAddPage.typeInStreet(valueToReturn);
         break;
       case ADDITIONAL_STREET_INFO:
         valueToReturn = Utilities.generateAdditionalStreetInfoAddress();
-        addressEditAddPage().typeInStreetAdditional(valueToReturn);
+        addressEditAddPage.typeInStreetAdditional(valueToReturn);
         break;
       case CITY:
         valueToReturn = Utilities.generateCityAddress();
-        addressEditAddPage().typeInCityName(valueToReturn);
+        addressEditAddPage.typeInCityName(valueToReturn);
         break;
       case REGION:
         valueToReturn = Utilities.generateCountryAddress();
-        addressEditAddPage().typeInRegionName(valueToReturn);
+        addressEditAddPage.typeInRegionName(valueToReturn);
         break;
       case POSTAL_CODE:
         valueToReturn = Utilities.generatePostalCodeAddress();
-        addressEditAddPage().typeInPostalCode(valueToReturn);
+        addressEditAddPage.typeInPostalCode(valueToReturn);
         break;
       case NICKNAME:
         valueToReturn = Utilities.generateNickname();
-        addressEditAddPage().typeInAddressNickname(valueToReturn);
+        addressEditAddPage.typeInAddressNickname(valueToReturn);
         break;
       default:
         throw new IllegalArgumentException(
@@ -63,37 +67,37 @@ public class AddressSteps extends BaseSteps {
 
   @Step
   public void clickAtAddressesTab() {
-    homePage().clickAddressesBottom();
+    homePage.clickAddressesBottom();
   }
 
   @Step
   public void clickAddAddressTab() {
-    homePage().clickAddAddressBottom();
+    homePage.clickAddAddressBottom();
   }
 
   @Step
   public void clickAtSecondAddressHyperlink() {
-    addressesListPage().clickAtSecondAddressHyperlink();
+    addressesListPage.clickAtSecondAddressHyperlink();
   }
 
   @Step
   public void clickSaveButton() {
-    addressEditAddPage().clickSaveButton();
+    addressEditAddPage.clickSaveButton();
   }
 
   @Step
   public void clickDeleteOrResetButton() {
-    addressEditAddPage().clickDeleteOrResetButton();
+    addressEditAddPage.clickDeleteOrResetButton();
   }
 
   @Step
   public void clickToTheListOfAddresses() {
-    addressEditAddPage().clickToTheListOfItems();
+    addressEditAddPage.clickToTheListOfItems();
   }
 
   @Step
   public void verifyFirstAddressNicknameIsCorrect() {
-    assertThat(addressesListPage().getFirstAddressFromList().getText())
+    assertThat(addressesListPage.getFirstAddressFromList().getText())
       .as("Default address nickname is not correct.")
       .contains(testData.getNickname());
   }
@@ -112,7 +116,7 @@ public class AddressSteps extends BaseSteps {
 
   @Step
   public void verifyIfChangedAllFieldsCorrectly(String addressInfo) {
-    String addressOnPage = addressesListPage().getSecondAddressFromList().getText().substring(2);
+    String addressOnPage = addressesListPage.getSecondAddressFromList().getText().substring(2);
     assertThat(addressOnPage)
       .as("Address wasn't changed correctly. Should be %s, but was %s", addressInfo, addressOnPage)
       .isEqualTo(addressInfo);
@@ -120,7 +124,7 @@ public class AddressSteps extends BaseSteps {
 
   @Step
   public void verifyIfAddedAddressCorrectly(String addressInfo) {
-    String addedAddress = addressesListPage().getLastAddressFromList().getText().substring(2);
+    String addedAddress = addressesListPage.getLastAddressFromList().getText().substring(2);
     assertThat(addedAddress)
       .as("Address wasn't added correctly. Should be %s, was %s", addedAddress, addressInfo)
       .isEqualTo(addressInfo);
@@ -128,19 +132,19 @@ public class AddressSteps extends BaseSteps {
 
   @Step
   public void deleteAddedAddresses() {
-    List<WebElement> allAddressesHyperlinksList = addressesListPage()
+    List<WebElement> allAddressesHyperlinksList = addressesListPage
       .getAllAddressesHyperlinksList();
 
     for (int i = 1; i < allAddressesHyperlinksList.size(); i++) {
       allAddressesHyperlinksList.get(i).click();
-      addressEditAddPage().clickDeleteOrResetButton();
-      addressEditAddPage().clickToTheListOfItems();
+      addressEditAddPage.clickDeleteOrResetButton();
+      addressEditAddPage.clickToTheListOfItems();
     }
   }
 
   @Step
   public void verifyIfAddressWasDeleted() {
-    List<WebElement> allAddressesHyperlinksList = addressesListPage()
+    List<WebElement> allAddressesHyperlinksList = addressesListPage
       .getAllAddressesHyperlinksList();
 
     assertThat(allAddressesHyperlinksList.size()).as("Address wasn't deleted").isEqualTo(1);
@@ -148,20 +152,8 @@ public class AddressSteps extends BaseSteps {
 
   @Step
   public void verifyIfAllFieldsOnAddPageAreEmpty() {
-    assertThat(addressEditAddPage().getAllFields())
+    assertThat(addressEditAddPage.getAllFields())
       .as("There is not empty field!")
       .allSatisfy(contents -> assertThat(contents.getText()).isEmpty());
-  }
-
-  private HomePage homePage() {
-    return getPage(HomePage.class);
-  }
-
-  private AddressEditAddPage addressEditAddPage() {
-    return getPage(AddressEditAddPage.class);
-  }
-
-  private AddressesListPage addressesListPage() {
-    return getPage(AddressesListPage.class);
   }
 }
