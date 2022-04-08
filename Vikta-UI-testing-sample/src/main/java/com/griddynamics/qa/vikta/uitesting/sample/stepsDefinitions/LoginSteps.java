@@ -2,18 +2,31 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.auxiliary.DriverManager;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.LoginPage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import io.qameta.allure.Step;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Login functionality related steps.
  */
-public class LoginSteps extends BaseSteps {
+public class LoginSteps extends GenericWebActions {
 
   @Autowired
   LoginPage loginPage;
+  @Autowired
+  private DriverManager driverManager;
+  @Autowired
+  private TestDataConfiguration testData;
+
+  protected WebDriver getDriver(){
+    return driverManager.get();
+  }
+
 
   @Step
   public void openLoginPage() {

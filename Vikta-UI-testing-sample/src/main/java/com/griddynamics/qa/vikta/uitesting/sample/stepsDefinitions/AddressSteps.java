@@ -1,9 +1,12 @@
 package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AddressEditAddPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AddressesListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
@@ -11,7 +14,7 @@ import java.util.StringJoiner;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AddressSteps extends BaseSteps {
+public class AddressSteps extends GenericWebActions {
 
   @Autowired
   private HomePage homePage;
@@ -19,6 +22,8 @@ public class AddressSteps extends BaseSteps {
   private AddressEditAddPage addressEditAddPage;
   @Autowired
   private AddressesListPage addressesListPage;
+  @Autowired
+  private TestDataConfiguration testData;
 
   private enum AddressField {
     STREET,

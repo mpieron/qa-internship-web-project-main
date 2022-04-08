@@ -2,16 +2,18 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AdminBasePage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CategoriesListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CategoryEditAddPage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class CategorySteps extends BaseSteps {
+public class CategorySteps extends GenericWebActions {
 
   @Autowired
   CategoriesListPage categoryListPage;
@@ -19,7 +21,8 @@ public class CategorySteps extends BaseSteps {
   CategoryEditAddPage categoryEditAddPage;
   @Autowired
   AdminBasePage adminBasePage;
-
+  @Autowired
+  private TestDataConfiguration testData;
 
   @Step
   public String fillNecessaryCategoryField(CategorySteps.NecessaryCategoryField categoryField) {

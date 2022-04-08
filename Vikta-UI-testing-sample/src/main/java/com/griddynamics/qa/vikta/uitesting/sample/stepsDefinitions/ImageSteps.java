@@ -5,13 +5,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AdminBasePage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ImageEditAddPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ImagesListPage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ImageSteps extends BaseSteps {
+public class ImageSteps extends GenericWebActions {
 
   @Autowired
   AdminBasePage adminBasePage;

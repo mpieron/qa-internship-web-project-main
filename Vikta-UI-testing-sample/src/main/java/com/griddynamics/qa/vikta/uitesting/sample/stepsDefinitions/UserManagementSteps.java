@@ -2,9 +2,11 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AdminBasePage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.UserEditAddPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.UsersListPage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.StringJoiner;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class UserManagementSteps extends BaseSteps {
+public class UserManagementSteps extends GenericWebActions {
 
   @Autowired
   private UsersListPage usersListPage;
@@ -20,6 +22,8 @@ public class UserManagementSteps extends BaseSteps {
   private UserEditAddPage userEditAddPage;
   @Autowired
   private AdminBasePage adminBasePage;
+  @Autowired
+  private TestDataConfiguration testData;
 
   @Step
   public String fillUserField(UserManagementSteps.UserField userField) {

@@ -2,19 +2,32 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.auxiliary.DriverManager;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.RegistrationPage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Registration functionality related steps.
  */
-public class RegistrationSteps extends BaseSteps {
+public class RegistrationSteps extends GenericWebActions {
 
   @Autowired
   private RegistrationPage registrationPage;
+  @Autowired
+  private DriverManager driverManager;
+  @Autowired
+  private TestDataConfiguration testData;
+
+  protected WebDriver getDriver(){
+    return driverManager.get();
+  }
+
 
   private static String SUCCESSFUL_REGISTRATION_MESSAGE_PREFIX =
       "User has been registered successfully: ";

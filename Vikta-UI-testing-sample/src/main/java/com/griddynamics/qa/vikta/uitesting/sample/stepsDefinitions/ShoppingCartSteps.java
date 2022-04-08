@@ -5,11 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ImageDetailsPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ShoppingCartPage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import io.qameta.allure.Step;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ShoppingCartSteps extends BaseSteps {
+public class ShoppingCartSteps extends GenericWebActions {
 
   @Autowired
   private HomePage homePage;
