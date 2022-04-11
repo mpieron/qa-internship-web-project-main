@@ -7,10 +7,11 @@ import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ImageDetailsPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ShoppingCartPage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import io.qameta.allure.Step;
+import org.checkerframework.checker.units.qual.A;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ShoppingCartSteps extends GenericWebActions {
+public class ShoppingCartSteps{
 
   @Autowired
   private HomePage homePage;
@@ -18,6 +19,8 @@ public class ShoppingCartSteps extends GenericWebActions {
   private ShoppingCartPage shoppingCartPage;
   @Autowired
   private ImageDetailsPage imageDetailsPage;
+  @Autowired
+  private GenericWebActions genericWebActions;
 
   @Step
   public void addFirstImageToShoppingCart() {
@@ -69,7 +72,7 @@ public class ShoppingCartSteps extends GenericWebActions {
 
   @Step
   public void verifyIfAddedImageToShoppingCart() {
-    getWait().until(ExpectedConditions.visibilityOf(shoppingCartPage.getShoppingCart()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(shoppingCartPage.getShoppingCart()));
     assertThat(shoppingCartPage.getShoppingCart().isDisplayed())
         .as("Basket icon should be displayed")
         .isTrue();

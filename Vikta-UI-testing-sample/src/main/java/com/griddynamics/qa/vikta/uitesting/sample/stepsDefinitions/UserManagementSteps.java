@@ -14,7 +14,7 @@ import java.util.StringJoiner;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class UserManagementSteps extends GenericWebActions {
+public class UserManagementSteps{
 
   @Autowired
   private UsersListPage usersListPage;
@@ -24,6 +24,8 @@ public class UserManagementSteps extends GenericWebActions {
   private AdminBasePage adminBasePage;
   @Autowired
   private TestDataConfiguration testData;
+  @Autowired
+  private GenericWebActions genericWebActions;
 
   @Step
   public String fillUserField(UserManagementSteps.UserField userField) {
@@ -92,7 +94,7 @@ public class UserManagementSteps extends GenericWebActions {
 
   @Step
   public void clickLastUser() {
-    scroll(usersListPage.getLastUserFromList());
+    genericWebActions.scroll(usersListPage.getLastUserFromList());
     List<WebElement> usersList = usersListPage.getAllUsersHyperlinksList();
 
     usersList.get(usersList.size() - 1).click();
@@ -106,7 +108,7 @@ public class UserManagementSteps extends GenericWebActions {
 
   @Step
   public void deleteAddedUsers() {
-    scroll(usersListPage.getLastUserFromList());
+    genericWebActions.scroll(usersListPage.getLastUserFromList());
     usersListPage.removeLastUser();
   }
 
@@ -119,7 +121,7 @@ public class UserManagementSteps extends GenericWebActions {
 
   @Step
   public void verifyLastUserFields(String userData) {
-    scroll(usersListPage.getLastUserFromList());
+    genericWebActions.scroll(usersListPage.getLastUserFromList());
     String lastUser = usersListPage.getLastUserFromList().getText();
 
     assertThat(lastUser)

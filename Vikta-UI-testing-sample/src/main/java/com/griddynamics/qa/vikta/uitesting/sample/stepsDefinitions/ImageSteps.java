@@ -12,7 +12,7 @@ import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ImageSteps extends GenericWebActions {
+public class ImageSteps {
 
   @Autowired
   AdminBasePage adminBasePage;
@@ -20,6 +20,8 @@ public class ImageSteps extends GenericWebActions {
   ImagesListPage imagesListPage;
   @Autowired
   ImageEditAddPage imageEditAddPage;
+  @Autowired
+  GenericWebActions genericWebActions;
 
 
   @Step
@@ -87,7 +89,7 @@ public class ImageSteps extends GenericWebActions {
 
   @Step
   public void verifyLastImageUrlAndTitle(String url, String title) {
-    scroll(imagesListPage.getLastImageFromList());
+    genericWebActions.scroll(imagesListPage.getLastImageFromList());
 
     String lastImage = imagesListPage.getLastImageFromList().getText();
 
@@ -102,7 +104,7 @@ public class ImageSteps extends GenericWebActions {
 
   @Step
   public void deleteAddedImages() {
-    scroll(imagesListPage.getLastImageFromList());
+    genericWebActions.scroll(imagesListPage.getLastImageFromList());
     imagesListPage.removeLastImage();
   }
 
@@ -115,7 +117,7 @@ public class ImageSteps extends GenericWebActions {
 
   @Step
   public void clickLastImage() {
-    scroll(imagesListPage.getLastImageFromList());
+    genericWebActions.scroll(imagesListPage.getLastImageFromList());
     List<WebElement> imagesList = imagesListPage.getAllImagesHyperlinksList();
 
     imagesList.get(imagesList.size() - 1).click();

@@ -7,6 +7,7 @@ import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.LoginPage;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import io.qameta.allure.Step;
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Login functionality related steps.
  */
-public class LoginSteps extends GenericWebActions {
+
+public class LoginSteps{
 
   @Autowired
   LoginPage loginPage;
@@ -22,15 +24,16 @@ public class LoginSteps extends GenericWebActions {
   private DriverManager driverManager;
   @Autowired
   private TestDataConfiguration testData;
+  @Autowired
+  private GenericWebActions genericWebActions;
 
   protected WebDriver getDriver(){
     return driverManager.get();
   }
 
-
   @Step
   public void openLoginPage() {
-    getDriver().get(properties.getLoginPageUrl());
+    getDriver().get(genericWebActions.getProperties().getLoginPageUrl());
   }
 
   @Step
@@ -50,22 +53,22 @@ public class LoginSteps extends GenericWebActions {
 
   @Step
   public void verifyCurrentPageIsHomePageForUser(String userName) {
-    verifyCurrentPageIsHomePageForTheUser(userName, UserType.USER);
+    genericWebActions.verifyCurrentPageIsHomePageForTheUser(userName, GenericWebActions.UserType.USER);
   }
 
   @Step
   public void verifyCurrentPageIsHomePageForTheRegularUser() {
-    verifyCurrentPageIsHomePageForTheUser(testData.getUserName(), UserType.USER);
+    genericWebActions.verifyCurrentPageIsHomePageForTheUser(testData.getUserName(), GenericWebActions.UserType.USER);
   }
 
   @Step
   public void verifyCurrentPageIsHomePageForTheAdmin() {
-    verifyCurrentPageIsHomePageForTheUser(testData.getAdminName(), UserType.ADMIN);
+    genericWebActions.verifyCurrentPageIsHomePageForTheUser(testData.getAdminName(), GenericWebActions.UserType.ADMIN);
   }
 
   @Step
   public void verifyErrorMessage(String text) {
-    getWait().until(ExpectedConditions.visibilityOf(loginPage.getErrorWebElement()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(loginPage.getErrorWebElement()));
     // Have a look at https://assertj.github.io/doc/
     assertThat(loginPage.getErrorMessage().trim())
         .as("Error message was nor shown or had unexpected content.")

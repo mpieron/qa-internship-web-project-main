@@ -13,7 +13,7 @@ import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class CategorySteps extends GenericWebActions {
+public class CategorySteps{
 
   @Autowired
   CategoriesListPage categoryListPage;
@@ -23,6 +23,8 @@ public class CategorySteps extends GenericWebActions {
   AdminBasePage adminBasePage;
   @Autowired
   private TestDataConfiguration testData;
+  @Autowired
+  private GenericWebActions genericWebActions;
 
   @Step
   public String fillNecessaryCategoryField(CategorySteps.NecessaryCategoryField categoryField) {
@@ -75,7 +77,7 @@ public class CategorySteps extends GenericWebActions {
 
   @Step
   public void clickLastCategory() {
-    scroll(categoryListPage.getLastCategoryFromList());
+    genericWebActions.scroll(categoryListPage.getLastCategoryFromList());
     List<WebElement> categoriesList = categoryListPage.getAllCategoriesHyperlinksList();
 
     categoriesList.get(categoriesList.size() - 1).click();
@@ -89,7 +91,7 @@ public class CategorySteps extends GenericWebActions {
 
   @Step
   public void deleteAddedCategories() {
-    scroll(categoryListPage.getLastCategoryFromList());
+    genericWebActions.scroll(categoryListPage.getLastCategoryFromList());
     categoryListPage.removeLastCategory();
   }
 
@@ -102,7 +104,7 @@ public class CategorySteps extends GenericWebActions {
 
   @Step
   public void verifyLastCategoryTitleAndPath(String title, String path) {
-    scroll(categoryListPage.getLastCategoryFromList());
+    genericWebActions.scroll(categoryListPage.getLastCategoryFromList());
     String lastCategory = categoryListPage.getLastCategoryFromList().getText();
 
     assertThat(lastCategory)

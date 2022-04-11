@@ -14,7 +14,7 @@ import java.util.StringJoiner;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class CardSteps extends GenericWebActions {
+public class CardSteps {
 
   @Autowired
   private HomePage homePage;

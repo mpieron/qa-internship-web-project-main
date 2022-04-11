@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GenericWebActions {
 
     @Autowired
-    protected TestSetupConfiguration properties;
+    private TestSetupConfiguration properties;
     @Autowired
     private DriverManager driverManager;
     private WebDriverWait wait;
@@ -38,6 +38,10 @@ public class GenericWebActions {
             this.wait = new WebDriverWait(getDriver(), properties.getWaitTimeout());
         }
         return wait;
+    }
+
+    public TestSetupConfiguration getProperties(){
+        return properties;
     }
 
     @Step

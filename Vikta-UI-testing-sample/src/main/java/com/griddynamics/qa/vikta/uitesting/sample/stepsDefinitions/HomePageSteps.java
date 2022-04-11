@@ -18,12 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Home page related step Definitions
  */
-public class HomePageSteps extends GenericWebActions {
+public class HomePageSteps {
 
   @Autowired
   private HomePage homePage;
   @Autowired
   private DriverManager driverManager;
+  @Autowired
+  private GenericWebActions genericWebActions;
 
   protected WebDriver getDriver(){
     return driverManager.get();
@@ -32,7 +34,7 @@ public class HomePageSteps extends GenericWebActions {
 
   @Step
   public void openHomePage() {
-    getDriver().get(properties.getBaseUrl());
+    getDriver().get(genericWebActions.getProperties().getBaseUrl());
   }
 
   @Step
@@ -72,7 +74,7 @@ public class HomePageSteps extends GenericWebActions {
 
   @Step
   public void verifyImagesFoundByTitle(String title) {
-    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagesTitlesFromCurrentPage().size()).isGreaterThan(0);
 
@@ -83,14 +85,14 @@ public class HomePageSteps extends GenericWebActions {
 
   @Step
   public void verifyImagesFoundByTags() {
-    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagesTitlesFromCurrentPage().size()).isGreaterThan(0);
   }
 
   @Step
   public void verifyImagesFoundByPriceFrom(String price) {
-    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagePricesFromCurrentPage())
         .as("Found image item that's price is lower that search")
@@ -103,7 +105,7 @@ public class HomePageSteps extends GenericWebActions {
 
   @Step
   public void verifyImagesFoundByPriceTo(String price) {
-    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagePricesFromCurrentPage())
         .as("Found image item that's price is greater that search")
@@ -116,7 +118,7 @@ public class HomePageSteps extends GenericWebActions {
 
   @Step
   public void verifySearchedCategory(String categoryName) {
-    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getSelectedCategoryTitle().getText())
         .as("Wrong category found")
