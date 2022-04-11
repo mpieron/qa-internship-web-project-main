@@ -2,11 +2,15 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.auxiliary.DriverManager;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
 import java.util.Random;
+
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +18,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Home page related step Definitions
  */
-public class HomePageSteps extends BaseSteps {
+public class HomePageSteps {
 
   @Autowired
   private HomePage homePage;
+  @Autowired
+  private DriverManager driverManager;
+  @Autowired
+  private GenericWebActions genericWebActions;
+
+  protected WebDriver getDriver(){
+    return driverManager.get();
+  }
+
 
   @Step
   public void openHomePage() {
-    getDriver().get(properties.getBaseUrl());
+    getDriver().get(genericWebActions.getProperties().getBaseUrl());
   }
 
   @Step
@@ -61,7 +74,7 @@ public class HomePageSteps extends BaseSteps {
 
   @Step
   public void verifyImagesFoundByTitle(String title) {
-    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagesTitlesFromCurrentPage().size()).isGreaterThan(0);
 
@@ -72,14 +85,14 @@ public class HomePageSteps extends BaseSteps {
 
   @Step
   public void verifyImagesFoundByTags() {
-    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagesTitlesFromCurrentPage().size()).isGreaterThan(0);
   }
 
   @Step
   public void verifyImagesFoundByPriceFrom(String price) {
-    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagePricesFromCurrentPage())
         .as("Found image item that's price is lower that search")
@@ -92,7 +105,7 @@ public class HomePageSteps extends BaseSteps {
 
   @Step
   public void verifyImagesFoundByPriceTo(String price) {
-    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getImagePricesFromCurrentPage())
         .as("Found image item that's price is greater that search")
@@ -105,7 +118,7 @@ public class HomePageSteps extends BaseSteps {
 
   @Step
   public void verifySearchedCategory(String categoryName) {
-    getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(homePage.getSelectedCategoryTitle()));
 
     assertThat(homePage.getSelectedCategoryTitle().getText())
         .as("Wrong category found")

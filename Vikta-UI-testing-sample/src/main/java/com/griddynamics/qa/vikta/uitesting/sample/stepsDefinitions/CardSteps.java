@@ -2,9 +2,11 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CardEditAddPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CardsListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.HomePage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
@@ -12,8 +14,7 @@ import java.util.StringJoiner;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-public class CardSteps extends BaseSteps {
+public class CardSteps {
 
   @Autowired
   private HomePage homePage;
@@ -21,6 +22,8 @@ public class CardSteps extends BaseSteps {
   private CardEditAddPage cardEditAddPage;
   @Autowired
   private CardsListPage cardsListPage;
+  @Autowired
+  private TestDataConfiguration testData;
 
   private enum CardField {
     CARD_NUMBER,

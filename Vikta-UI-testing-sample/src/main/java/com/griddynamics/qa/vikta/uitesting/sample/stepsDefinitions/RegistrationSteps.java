@@ -2,19 +2,34 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.auxiliary.DriverManager;
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.RegistrationPage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Registration functionality related steps.
  */
-public class RegistrationSteps extends BaseSteps {
+public class RegistrationSteps{
 
   @Autowired
   private RegistrationPage registrationPage;
+  @Autowired
+  private DriverManager driverManager;
+  @Autowired
+  private TestDataConfiguration testData;
+  @Autowired
+  private GenericWebActions genericWebActions;
+
+  protected WebDriver getDriver(){
+    return driverManager.get();
+  }
+
 
   private static String SUCCESSFUL_REGISTRATION_MESSAGE_PREFIX =
       "User has been registered successfully: ";
@@ -24,7 +39,7 @@ public class RegistrationSteps extends BaseSteps {
 
   @Step
   public void openRegistrationPage() {
-    getDriver().get(properties.getRegistrationPageUrl());
+    getDriver().get(genericWebActions.getProperties().getRegistrationPageUrl());
   }
 
   @Step
@@ -78,15 +93,15 @@ public class RegistrationSteps extends BaseSteps {
 
   @Step
   public void verifyCurrentPageIsRegistration() {
-    assertCurrentPageUrl(
-        properties.getRegistrationPageUrl(),
+    genericWebActions.assertCurrentPageUrl(
+            genericWebActions.getProperties().getRegistrationPageUrl(),
         "Registration page was expected to be the current one."
     );
   }
 
   @Step
   public void verifySuccessfulRegistrationMessageIsDisplayed() {
-    getWait().until(ExpectedConditions.visibilityOf(registrationPage.getMessageWebElement()));
+    genericWebActions.getWait().until(ExpectedConditions.visibilityOf(registrationPage.getMessageWebElement()));
     // Have a look at https://assertj.github.io/doc/
     assertThat(registrationPage.getMessageText().trim())
         .as("Successful registration message was nor shown or had unexpected content.")
@@ -95,7 +110,7 @@ public class RegistrationSteps extends BaseSteps {
 
   @Step
   public void verifyFailedRegistrationMessageIsDisplayed() {
-    getWait()
+    genericWebActions.getWait()
         .until(ExpectedConditions.visibilityOf(registrationPage.getFailedRegistrationMessageWebElement()));
     assertThat(registrationPage.getRegisteredUserExistMessageText().trim())
         .as("Failed registration message was nor shown or had unexpected content.")

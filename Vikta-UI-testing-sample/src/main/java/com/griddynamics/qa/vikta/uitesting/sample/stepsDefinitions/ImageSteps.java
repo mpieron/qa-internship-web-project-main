@@ -5,13 +5,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AdminBasePage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ImageEditAddPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.ImagesListPage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ImageSteps extends BaseSteps {
+public class ImageSteps {
 
   @Autowired
   AdminBasePage adminBasePage;
@@ -19,6 +20,8 @@ public class ImageSteps extends BaseSteps {
   ImagesListPage imagesListPage;
   @Autowired
   ImageEditAddPage imageEditAddPage;
+  @Autowired
+  GenericWebActions genericWebActions;
 
 
   @Step
@@ -86,7 +89,7 @@ public class ImageSteps extends BaseSteps {
 
   @Step
   public void verifyLastImageUrlAndTitle(String url, String title) {
-    scroll(imagesListPage.getLastImageFromList());
+    genericWebActions.scroll(imagesListPage.getLastImageFromList());
 
     String lastImage = imagesListPage.getLastImageFromList().getText();
 
@@ -101,7 +104,7 @@ public class ImageSteps extends BaseSteps {
 
   @Step
   public void deleteAddedImages() {
-    scroll(imagesListPage.getLastImageFromList());
+    genericWebActions.scroll(imagesListPage.getLastImageFromList());
     imagesListPage.removeLastImage();
   }
 
@@ -114,7 +117,7 @@ public class ImageSteps extends BaseSteps {
 
   @Step
   public void clickLastImage() {
-    scroll(imagesListPage.getLastImageFromList());
+    genericWebActions.scroll(imagesListPage.getLastImageFromList());
     List<WebElement> imagesList = imagesListPage.getAllImagesHyperlinksList();
 
     imagesList.get(imagesList.size() - 1).click();

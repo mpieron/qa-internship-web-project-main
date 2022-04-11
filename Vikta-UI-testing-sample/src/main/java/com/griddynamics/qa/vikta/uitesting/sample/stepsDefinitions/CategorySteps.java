@@ -2,16 +2,18 @@ package com.griddynamics.qa.vikta.uitesting.sample.stepsDefinitions;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import com.griddynamics.qa.vikta.uitesting.sample.config.TestDataConfiguration;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.AdminBasePage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CategoriesListPage;
 import com.griddynamics.qa.vikta.uitesting.sample.pageObjects.CategoryEditAddPage;
+import com.griddynamics.qa.vikta.uitesting.sample.utils.GenericWebActions;
 import com.griddynamics.qa.vikta.uitesting.sample.utils.Utilities;
 import io.qameta.allure.Step;
 import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class CategorySteps extends BaseSteps {
+public class CategorySteps{
 
   @Autowired
   CategoriesListPage categoryListPage;
@@ -19,7 +21,10 @@ public class CategorySteps extends BaseSteps {
   CategoryEditAddPage categoryEditAddPage;
   @Autowired
   AdminBasePage adminBasePage;
-
+  @Autowired
+  private TestDataConfiguration testData;
+  @Autowired
+  private GenericWebActions genericWebActions;
 
   @Step
   public String fillNecessaryCategoryField(CategorySteps.NecessaryCategoryField categoryField) {
@@ -72,7 +77,7 @@ public class CategorySteps extends BaseSteps {
 
   @Step
   public void clickLastCategory() {
-    scroll(categoryListPage.getLastCategoryFromList());
+    genericWebActions.scroll(categoryListPage.getLastCategoryFromList());
     List<WebElement> categoriesList = categoryListPage.getAllCategoriesHyperlinksList();
 
     categoriesList.get(categoriesList.size() - 1).click();
@@ -86,7 +91,7 @@ public class CategorySteps extends BaseSteps {
 
   @Step
   public void deleteAddedCategories() {
-    scroll(categoryListPage.getLastCategoryFromList());
+    genericWebActions.scroll(categoryListPage.getLastCategoryFromList());
     categoryListPage.removeLastCategory();
   }
 
@@ -99,7 +104,7 @@ public class CategorySteps extends BaseSteps {
 
   @Step
   public void verifyLastCategoryTitleAndPath(String title, String path) {
-    scroll(categoryListPage.getLastCategoryFromList());
+    genericWebActions.scroll(categoryListPage.getLastCategoryFromList());
     String lastCategory = categoryListPage.getLastCategoryFromList().getText();
 
     assertThat(lastCategory)
